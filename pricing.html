@@ -970,7 +970,12 @@
                     <div class="progress-bar-fill" style="width:30%"></div>
                 </div>
                 <p style="font-size:0.82rem;color:#64748b">Hệ thống tự động xác nhận sau khi bạn thanh toán thành công</p>
-                <button onclick="closePaymentModal()" style="margin-top:16px;background:none;border:none;color:#94a3b8;font-size:0.83rem;cursor:pointer">Hủy giao dịch</button>
+                <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #cbd5e1">
+                    <button type="button" class="btn btn-outline" id="btn-demo-confirm" onclick="confirmDemoPayment()" style="font-size:0.82rem;padding:7px 14px;color:#059669;border:1.5px solid #86efac;background:#f0fdf4;border-radius:8px;font-weight:700;cursor:pointer">
+                        <i class='bx bx-check-shield'></i> Xác nhận thanh toán thử nghiệm (Demo)
+                    </button>
+                </div>
+                <button onclick="closePaymentModal()" style="margin-top:14px;background:none;border:none;color:#94a3b8;font-size:0.83rem;cursor:pointer">Hủy giao dịch</button>
             </div>
 
             <!-- Step 3: Success -->
@@ -1021,6 +1026,23 @@
         let pollingInterval = null;
         let currentPaymentId = null;
 
+        // ── Robust Auth Helper: checks all known token keys ──
+        function getAuthToken() {
+            return localStorage.getItem('kt_sub_access_token') ||
+                   localStorage.getItem('kt_access_token') ||
+                   sessionStorage.getItem('kt_sub_access_token') ||
+                   sessionStorage.getItem('kt_access_token') ||
+                   '';
+        }
+
+        function getStoredUser() {
+            try {
+                const raw = localStorage.getItem('kt_sub_user_cache') || localStorage.getItem('kt_user');
+                if (raw) return JSON.parse(raw);
+            } catch (_) {}
+            return null;
+        }
+
         function switchTab(tab) {
             document.getElementById('tab-content-plans').style.display = tab === 'plans' ? '' : 'none';
             document.getElementById('tab-content-topup').style.display = tab === 'topup' ? '' : 'none';
@@ -1030,10 +1052,17 @@
 
         function openPaymentModal(sku, name, price, quotaSec) {
             // Check auth
-            const token = localStorage.getItem('kt_access_token');
+            const token = getAuthToken();
             if (!token) {
-                if (confirm('Bạn cần đăng nhập để thanh toán.\nBấm OK để chuyển đến trang đăng nhập.')) {
-                    window.location.href = 'login.html';
+                // Remember order so user does not need to choose package again after logging in
+                const pending = { sku, name, price, quotaSec };
+                sessionStorage.setItem('kt_pending_order', JSON.stringify(pending));
+
+                // Prefer in-page login modal popup (no page reload)
+                if (typeof openSiteAuthModal === 'function') {
+                    openSiteAuthModal('login');
+                } else {
+                    window.location.href = `login.html?redirect=${encodeURIComponent('pricing.html?auto_buy=' + sku)}`;
                 }
                 return;
             }
@@ -1084,8 +1113,16 @@
         }
 
         async function submitPayment() {
-            const token = localStorage.getItem('kt_access_token');
-            if (!token) { window.location.href = 'login.html'; return; }
+            const token = getAuthToken();
+            if (!token) {
+                sessionStorage.setItem('kt_pending_order', JSON.stringify(currentOrder));
+                if (typeof openSiteAuthModal === 'function') {
+                    openSiteAuthModal('login');
+                } else {
+                    window.location.href = `login.html?redirect=${encodeURIComponent('pricing.html?auto_buy=' + currentOrder.sku)}`;
+                }
+                return;
+            }
 
             const btn = document.getElementById('pay-submit-btn');
             btn.disabled = true;
@@ -1114,13 +1151,26 @@
                 currentPaymentId = data.payment_id;
                 showStep(2);
                 document.getElementById('step2-subtitle').textContent =
-                    selectedPaymentMethod === 'payos' ? 'Quét mã QR bằng ứng dụng ngân hàng bất kỳ' :
+                    selectedPaymentMethod === 'payos' ? 'Quét mã VietQR bằng bất kỳ ứng dụng ngân hàng' :
                     selectedPaymentMethod === 'momo' ? 'Quét mã bằng ứng dụng MoMo' : 'Nhấn nút để chuyển đến trang thanh toán';
+
+                // Display QR code image
+                const qrContainer = document.getElementById('qr-container');
+                if (qrContainer) {
+                    const qrUrl = data.qr_code || `https://img.vietqr.io/image/MB-0348238888-compact.png?amount=${currentOrder.price}&addInfo=${encodeURIComponent(data.payment_ref || 'KT')}&accountName=KINETIC%20TECH`;
+                    qrContainer.innerHTML = `
+                        <img src="${qrUrl}" alt="VietQR Thanh Toán" style="max-width: 220px; width: 100%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); margin: 0 auto; display: block;">
+                        <div style="font-size:0.85rem;color:#1e293b;margin-top:10px;font-weight:700">Mã GD: <code style="color:#2563eb;font-size:0.92rem">${data.payment_ref || currentPaymentId.substring(0,8).toUpperCase()}</code></div>
+                        <div style="font-size:0.8rem;color:#64748b;margin-top:2px">Quét bằng ứng dụng ngân hàng hoặc MoMo</div>
+                    `;
+                }
 
                 if (data.checkout_url) {
                     const link = document.getElementById('payment-direct-link');
-                    link.href = data.checkout_url;
-                    link.style.display = '';
+                    if (link) {
+                        link.href = data.checkout_url;
+                        link.style.display = '';
+                    }
                 }
 
                 // Start polling for payment status
@@ -1135,10 +1185,41 @@
             }
         }
 
+        async function confirmDemoPayment() {
+            if (!currentPaymentId) return;
+            const token = getAuthToken();
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/billing/confirm-demo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ payment_id: currentPaymentId })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    if (pollingInterval) clearInterval(pollingInterval);
+                    document.getElementById('success-msg').textContent = data.message || 'Thanh toán demo thành công!';
+                    document.getElementById('success-tx-id').textContent = data.payment_ref || currentPaymentId.substring(0, 12).toUpperCase();
+                    document.getElementById('success-quota').textContent =
+                        currentOrder.quotaSec === 0 ? '∞ Không giới hạn' : `+${Math.round((data.quota_added_seconds || currentOrder.quotaSec) / 60)} phút`;
+                    showStep(3);
+                    loadUserPlan();
+                } else {
+                    alert(data.detail || 'Không thể xác nhận demo.');
+                }
+            } catch (e) {
+                alert('Lỗi kết nối: ' + e.message);
+            }
+        }
+
         function startPolling(paymentId) {
-            const token = localStorage.getItem('kt_access_token');
+            const token = getAuthToken();
             let attempts = 0;
             const maxAttempts = 60; // 5 minutes
+
+            if (pollingInterval) clearInterval(pollingInterval);
 
             pollingInterval = setInterval(async () => {
                 attempts++;
@@ -1151,7 +1232,7 @@
 
                 try {
                     const res = await fetch(`${API_BASE}/api/v1/billing/payment/${paymentId}`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
+                        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
                     });
                     const data = await res.json();
 
@@ -1165,11 +1246,15 @@
                         showStep(3);
 
                         // Refresh local user token
-                        const meRes = await fetch(`${API_BASE}/api/v1/auth/me`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const currentTok = getAuthToken();
+                        const meRes = await fetch(`${API_BASE}/api/v1/auth/me`, { headers: { 'Authorization': `Bearer ${currentTok}` } });
                         if (meRes.ok) {
                             const me = await meRes.json();
                             localStorage.setItem('kt_user', JSON.stringify(me));
+                            localStorage.setItem('kt_sub_user_cache', JSON.stringify(me));
+                            window.dispatchEvent(new CustomEvent('kt:auth-changed', { detail: { user: me } }));
                         }
+                        loadUserPlan();
                     } else if (data.status === 'failed') {
                         clearInterval(pollingInterval);
                         document.getElementById('error-msg').textContent = 'Giao dịch bị từ chối. Vui lòng thử lại.';
@@ -1189,37 +1274,107 @@
 
         // ── Load user plan info ──
         async function loadUserPlan() {
-            const token = localStorage.getItem('kt_access_token');
-            if (!token) return;
+            const token = getAuthToken();
+            const stored = getStoredUser();
 
-            try {
-                const res = await fetch(`${API_BASE}/api/v1/auth/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!res.ok) return;
-                const user = await res.json();
+            const wrap = document.getElementById('plan-notice-wrap');
+            if (!token && !stored) {
+                if (wrap) wrap.style.display = 'none';
+                return;
+            }
 
-                const wrap = document.getElementById('plan-notice-wrap');
+            // Immediately show cached user info if available
+            if (stored && wrap) {
                 wrap.style.display = '';
-
                 const planLabels = { free: 'Gói Free', pro: 'Gói Pro ⭐', premium: 'Gói Premium VIP 💎' };
                 document.getElementById('notice-plan-name').textContent =
-                    `Tài khoản: ${user.display_name} — ${planLabels[user.plan] || 'Gói Free'}`;
+                    `Tài khoản: ${stored.display_name || stored.email} — ${planLabels[stored.plan] || 'Gói Free'}`;
 
-                const remaining = user.quota_remaining_seconds;
+                const remaining = stored.quota_remaining_seconds !== undefined ? stored.quota_remaining_seconds : 3600;
                 const mins = Math.floor(remaining / 60);
                 const secs = remaining % 60;
                 document.getElementById('notice-quota-text').innerHTML =
                     `Còn lại <strong>${mins}:${secs.toString().padStart(2, '0')}</strong> phút · <a href="subtitle-extractor.html">Quay lại bóc sub →</a>`;
-            } catch (e) { /* Not logged in */ }
+            }
+
+            // Fetch latest from API
+            if (token) {
+                try {
+                    const res = await fetch(`${API_BASE}/api/v1/auth/me`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!res.ok) return;
+                    const user = await res.json();
+                    localStorage.setItem('kt_user', JSON.stringify(user));
+                    localStorage.setItem('kt_sub_user_cache', JSON.stringify(user));
+
+                    if (wrap) {
+                        wrap.style.display = '';
+                        const planLabels = { free: 'Gói Free', pro: 'Gói Pro ⭐', premium: 'Gói Premium VIP 💎' };
+                        document.getElementById('notice-plan-name').textContent =
+                            `Tài khoản: ${user.display_name} — ${planLabels[user.plan] || 'Gói Free'}`;
+
+                        const remaining = user.quota_remaining_seconds !== undefined ? user.quota_remaining_seconds : 3600;
+                        const mins = Math.floor(remaining / 60);
+                        const secs = remaining % 60;
+                        document.getElementById('notice-quota-text').innerHTML =
+                            `Còn lại <strong>${mins}:${secs.toString().padStart(2, '0')}</strong> phút · <a href="subtitle-extractor.html">Quay lại bóc sub →</a>`;
+                    }
+                } catch (e) { /* Network or not logged in */ }
+            }
         }
 
-        loadUserPlan();
+        // ── Auto-Resume Order After Login ──
+        function checkAndRestorePendingOrder() {
+            const token = getAuthToken();
+            if (!token) return;
+
+            // Check if there was a pending order saved in sessionStorage
+            const pendingStr = sessionStorage.getItem('kt_pending_order');
+            if (pendingStr) {
+                try {
+                    const pending = JSON.parse(pendingStr);
+                    sessionStorage.removeItem('kt_pending_order');
+                    openPaymentModal(pending.sku, pending.name, pending.price, pending.quotaSec);
+                    return;
+                } catch (_) {}
+            }
+
+            // Also check URL query params for ?auto_buy=sku
+            const urlParams = new URLSearchParams(window.location.search);
+            const autoBuySku = urlParams.get('auto_buy');
+            if (autoBuySku) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+                const knownPlans = {
+                    'pro': { sku: 'pro_monthly', name: 'Gói Pro (1 tháng)', price: 49000, quotaSec: 36000 },
+                    'pro_monthly': { sku: 'pro_monthly', name: 'Gói Pro (1 tháng)', price: 49000, quotaSec: 36000 },
+                    'premium': { sku: 'premium_monthly', name: 'Gói Premium VIP (1 tháng)', price: 99000, quotaSec: 0 },
+                    'premium_monthly': { sku: 'premium_monthly', name: 'Gói Premium VIP (1 tháng)', price: 99000, quotaSec: 0 },
+                    'topup_1h': { sku: 'topup_1h', name: 'Mua thêm 1 giờ bóc sub', price: 9000, quotaSec: 3600 },
+                    'topup_5h': { sku: 'topup_5h', name: 'Mua thêm 5 giờ bóc sub', price: 35000, quotaSec: 18000 },
+                    'topup_20h': { sku: 'topup_20h', name: 'Mua thêm 20 giờ bóc sub', price: 99000, quotaSec: 72000 }
+                };
+                const p = knownPlans[autoBuySku];
+                if (p) {
+                    openPaymentModal(p.sku, p.name, p.price, p.quotaSec);
+                }
+            }
+        }
+
+        // Listen for authentication changes from in-page modal or other tabs
+        window.addEventListener('kt:auth-changed', function () {
+            loadUserPlan();
+            checkAndRestorePendingOrder();
+        });
 
         // Close modal on backdrop click
         document.getElementById('payment-modal').addEventListener('click', function(e) {
             if (e.target === this) closePaymentModal();
         });
+
+        // Run on boot
+        loadUserPlan();
+        checkAndRestorePendingOrder();
     </script>
 </body>
 </html>

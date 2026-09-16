@@ -91,17 +91,29 @@
 
     function setStoredAuth(user, access, refresh) {
         try { localStorage.removeItem('kt_sub_remaining_seconds_v2'); } catch (_) {}
-        if (user) localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
-        if (access) localStorage.setItem(AUTH_TOKEN_KEY, access);
-        if (refresh) localStorage.setItem(AUTH_REFRESH_KEY, refresh);
+        if (user) {
+            localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+            localStorage.setItem('kt_user', JSON.stringify(user));
+        }
+        if (access) {
+            localStorage.setItem(AUTH_TOKEN_KEY, access);
+            localStorage.setItem('kt_access_token', access);
+        }
+        if (refresh) {
+            localStorage.setItem(AUTH_REFRESH_KEY, refresh);
+            localStorage.setItem('kt_refresh_token', refresh);
+        }
         window.dispatchEvent(new CustomEvent('kt:auth-changed', { detail: { user: user } }));
     }
 
     function clearStoredAuth() {
         try { localStorage.removeItem('kt_sub_remaining_seconds_v2'); } catch (_) {}
         localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem('kt_access_token');
         localStorage.removeItem(AUTH_REFRESH_KEY);
+        localStorage.removeItem('kt_refresh_token');
         localStorage.removeItem(AUTH_USER_KEY);
+        localStorage.removeItem('kt_user');
         window.dispatchEvent(new CustomEvent('kt:auth-changed', { detail: { user: null } }));
     }
 
