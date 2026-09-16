@@ -1018,7 +1018,7 @@ const server = http.createServer((req, res) => {
     fs.createReadStream(filePath).pipe(res);
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`\n========================================================`);
     console.log(`🚀 Kinetic Tech Server running on: http://localhost:${PORT}`);
     console.log(`🎬 Subtitle Extractor tool:        http://localhost:${PORT}/subtitle-extractor.html`);
