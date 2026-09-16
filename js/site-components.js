@@ -49,6 +49,7 @@
         'file-converter.html':     { d: 'Chuyển đổi định dạng file trực tuyến: ảnh, PDF, Word, Excel. Không cần cài phần mềm.' },
         'pdf-extractor.html':      { d: 'Trích xuất văn bản và tách trang PDF trực tuyến. Miễn phí, bảo mật, không cần đăng ký.' },
         'subtitle-extractor.html': { d: 'Bóc sub video và audio tự động bằng AI Whisper. Tách phụ đề, gán timestamp chính xác, xuất file SRT, VTT, TXT với 1 giờ miễn phí cho tài khoản mới.' },
+        'pricing.html':            { d: 'Bảng giá và gói cước bóc sub video AI của Kinetic Tech. Mua thêm giờ bóc phụ đề chỉ từ 9,000đ. Nâng cấp Pro tự động qua PayOS, VNPay, MoMo.' },
         'compound-interest.html':  { d: 'Tính lãi suất kép và kế hoạch tiết kiệm tích lũy trực tuyến. Xem biểu đồ tăng trưởng tiền gốc và tiền lãi qua từng năm.' },
         'budget-planner.html':     { d: 'Quản lý ngân sách và chi tiêu sinh viên theo quy tắc 50/30/20. Tối ưu thu chi, cảnh báo thâm hụt tài chính.' },
         'room-splitter.html':      { d: 'Chia tiền phòng trọ, hóa đơn điện nước theo công tơ, wifi, rác cho sinh viên. Tạo tin nhắn hóa đơn gửi Zalo/Messenger.' },
@@ -142,6 +143,13 @@
                                 <div class="dropdown-menu-item-text">
                                     <div class="dropdown-menu-item-title">Bóc Subtitle AI</div>
                                     <div class="dropdown-menu-item-desc">Tách phụ đề video tự động (1h free)</div>
+                                </div>
+                            </a>
+                            <a href="pricing.html" class="dropdown-menu-item">
+                                <i class='bx bx-crown' style="color: #f59e0b;"></i>
+                                <div class="dropdown-menu-item-text">
+                                    <div class="dropdown-menu-item-title">Bảng Giá &amp; Nâng Cấp Pro</div>
+                                    <div class="dropdown-menu-item-desc">Mua thêm giờ bóc sub AI &amp; gói VIP</div>
                                 </div>
                             </a>
                             <a href="index.html" class="dropdown-menu-item">
@@ -562,6 +570,7 @@
                 </button>
                 <div class="navbar-links" id="navLinks">
                     <a href="index.html" class="${isAct('index.html')}"><i class='bx bx-home-alt'></i> Trang chủ</a>
+                    <a href="pricing.html" class="${isAct('pricing.html')}"><i class='bx bx-crown' style="color: #f59e0b;"></i> Bảng giá</a>
                     <a href="about.html" class="${isAct('about.html')}"><i class='bx bx-info-circle'></i> Giới thiệu</a>
                     <a href="contact.html" class="${isAct('contact.html')}"><i class='bx bx-envelope'></i> Liên hệ</a>
                     <div class="navbar-auth" id="navAuthSlot"></div>
@@ -650,6 +659,7 @@
                     '</div>' +
                     '<div class="footer-col">' +
                         '<h4>Thông tin</h4><ul>' +
+                        '<li><a href="pricing.html">Bảng giá &amp; Gói cước</a></li>' +
                         '<li><a href="about.html">Giới thiệu</a></li>' +
                         '<li><a href="contact.html">Liên hệ</a></li>' +
                         '<li><a href="privacy-policy.html">Chính sách Bảo mật</a></li>' +

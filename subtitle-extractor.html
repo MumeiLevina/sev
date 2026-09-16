@@ -521,6 +521,9 @@
                         </div>
                     </div>
 
+                    <!-- Upgrade Banner (auto-triggered when quota is 0 or low) -->
+                    <div id="upgrade-banner" style="display: none; margin-bottom: 20px;"></div>
+
                     <!-- Drop Zone -->
                     <div id="subDropZone" class="dropzone-container">
                         <i class='bx bxs-cloud-upload dropzone-icon'></i>
@@ -841,7 +844,7 @@
                         <span class="pricing-tag">PHỔ BIẾN NHẤT</span>
                         <div>
                             <h4 style="margin: 0; font-size: 1.1rem; color: #2563eb;">Gói Chuyên Nghiệp (Pro)</h4>
-                            <div class="pricing-price">99.000đ <small>/ tháng</small></div>
+                            <div class="pricing-price">49.000đ <small>/ tháng</small></div>
                             <p style="font-size: 0.8rem; color: #64748b;">Cho YouTuber, TikToker & Biên tập viên</p>
                             <ul class="pricing-features">
                                 <li><i class='bx bx-check'></i> <strong>10 giờ (600 phút)</strong> sử dụng</li>
@@ -851,16 +854,16 @@
                                 <li><i class='bx bx-check'></i> Lưu trữ lịch sử không giới hạn</li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-primary btn-select-upgrade" data-plan="pro" style="width: 100%; font-weight: 700; background: #2563eb;">
-                            Nâng Cấp Gói Pro
-                        </button>
+                        <a href="pricing.html" class="btn btn-primary" style="width: 100%; font-weight: 700; background: #2563eb; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                            <i class='bx bx-credit-card'></i> Nâng Cấp Gói Pro (49k)
+                        </a>
                     </div>
 
                     <!-- PREMIUM VIP CARD -->
                     <div class="pricing-card">
                         <div>
                             <h4 style="margin: 0; font-size: 1.1rem; color: #7c3aed;">Gói Doanh Nghiệp (VIP)</h4>
-                            <div class="pricing-price">249.000đ <small>/ tháng</small></div>
+                            <div class="pricing-price">99.000đ <small>/ tháng</small></div>
                             <p style="font-size: 0.8rem; color: #64748b;">Cho Studio & Đội ngũ sản xuất video</p>
                             <ul class="pricing-features">
                                 <li><i class='bx bx-check'></i> <strong>Không giới hạn (Unlimited)</strong></li>
@@ -870,19 +873,29 @@
                                 <li><i class='bx bx-check'></i> Hỗ trợ kỹ thuật 24/7 riêng biệt</li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-primary btn-select-upgrade" data-plan="premium" style="width: 100%; font-weight: 700; background: linear-gradient(135deg, #7c3aed, #4f46e5);">
-                            Nâng Cấp VIP Unlimited
-                        </button>
+                        <a href="pricing.html" class="btn btn-primary" style="width: 100%; font-weight: 700; background: linear-gradient(135deg, #7c3aed, #4f46e5); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                            <i class='bx bx-crown'></i> Nâng Cấp VIP (99k)
+                        </a>
                     </div>
                 </div>
 
+                <!-- Fast Topup / PayOS QR Notice -->
+                <div style="margin-top: 20px; text-align: center; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px 16px;">
+                    <p style="margin: 0 0 10px; font-size: 0.88rem; color: #1e40af; font-weight: 600;">
+                        💡 Bạn chỉ muốn mua thêm giờ lẻ (1h = 9k / 5h = 35k) hoặc quét mã VietQR tự động?
+                    </p>
+                    <a href="pricing.html" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 11px 20px; font-weight: 700; font-size: 0.92rem; background: linear-gradient(135deg, #2563eb, #4f46e5); color: #fff; text-decoration: none; border-radius: 9px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+                        <i class='bx bx-qr-scan'></i> Mở Bảng Giá & Quét QR Code Thanh Toán →
+                    </a>
+                </div>
+
                 <!-- Payment Methods info -->
-                <div style="margin-top: 24px; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 16px;">
-                    <span style="font-size: 0.82rem; color: #64748b;">Hỗ trợ thanh toán tiện lợi qua:</span>
+                <div style="margin-top: 20px; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 14px;">
+                    <span style="font-size: 0.82rem; color: #64748b;">Hỗ trợ thanh toán bảo mật 100% qua:</span>
                     <div style="display: flex; justify-content: center; gap: 14px; margin-top: 8px; font-size: 0.86rem; font-weight: 600; color: #475569;">
+                        <span><i class='bx bx-qr-scan' style="color: #2563eb;"></i> PayOS VietQR</span>
                         <span><i class='bx bx-wallet' style="color: #ec4899;"></i> Ví MoMo</span>
-                        <span><i class='bx bx-qr-scan' style="color: #0284c7;"></i> VNPay QR</span>
-                        <span><i class='bx bx-credit-card' style="color: #10b981;"></i> Thẻ ATM / Visa / Master</span>
+                        <span><i class='bx bx-credit-card' style="color: #10b981;"></i> VNPay / Thẻ ATM</span>
                     </div>
                 </div>
             </div>
@@ -890,6 +903,7 @@
     </div>
 
     <!-- Client-side logic for Subtitle Extractor -->
+    <script src="js/billing.js"></script>
     <script src="js/subtitle-extractor.js"></script>
     <script src="js/site-components.js"></script>
 </body>

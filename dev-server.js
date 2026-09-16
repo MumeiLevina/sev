@@ -925,18 +925,366 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    if (pathname === '/api/v1/billing/quota' && req.method === 'GET') {
-        const remaining = Math.max(0, serverQuota.limitSeconds - serverQuota.usedSeconds);
+    // ═══════════════════════════════════════════════════
+    // BILLING API ROUTE: GET /api/v1/billing/plans
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/plans' && req.method === 'GET') {
         return sendJson(res, 200, {
-            plan: serverQuota.limitSeconds > 3600 ? 'pro' : 'free',
-            quota_limit_seconds: serverQuota.limitSeconds,
-            quota_used_seconds: serverQuota.usedSeconds,
+            plans: [
+                {
+                    sku: 'free',
+                    name: 'Free',
+                    price: 0,
+                    quota_seconds: 3600,
+                    features: ['60 phút miễn phí', 'AI Whisper', 'Xuất SRT/VTT/TXT']
+                },
+                {
+                    sku: 'pro_monthly',
+                    name: 'Pro',
+                    price: 49000,
+                    quota_seconds: 36000,
+                    features: ['600 phút/tháng', 'Hàng đợi ưu tiên', 'Video tới 200MB', 'Lịch sử không giới hạn']
+                },
+                {
+                    sku: 'premium_monthly',
+                    name: 'Premium VIP',
+                    price: 99000,
+                    quota_seconds: 0, // 0 = unlimited
+                    features: ['Không giới hạn', 'VIP Priority', 'Video tới 500MB', 'Hỗ trợ 24/7']
+                },
+                {
+                    sku: 'topup_1h',
+                    name: 'Mua thêm 1 giờ',
+                    price: 9000,
+                    quota_seconds: 3600,
+                    features: ['Không hết hạn', 'Dùng lúc nào cũng được']
+                },
+                {
+                    sku: 'topup_5h',
+                    name: 'Mua thêm 5 giờ',
+                    price: 35000,
+                    quota_seconds: 18000,
+                    features: ['Không hết hạn', 'Tiết kiệm 22%']
+                },
+                {
+                    sku: 'topup_20h',
+                    name: 'Mua thêm 20 giờ',
+                    price: 99000,
+                    quota_seconds: 72000,
+                    features: ['Không hết hạn', 'Tiết kiệm 45%']
+                }
+            ]
+        });
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING API ROUTE: GET /api/v1/billing/quota (legacy compat)
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/quota' && req.method === 'GET') {
+        const authUser = getAuthUser(req);
+        const used = authUser ? authUser.quota_used_seconds : serverQuota.usedSeconds;
+        const limit = authUser ? authUser.quota_limit_seconds : serverQuota.limitSeconds;
+        const remaining = Math.max(0, limit - used);
+        return sendJson(res, 200, {
+            plan: authUser ? (authUser.plan || 'free') : (limit > 3600 ? 'pro' : 'free'),
+            quota_limit_seconds: limit,
+            quota_used_seconds: used,
             quota_remaining_seconds: remaining,
-            percentage_used: Math.round((serverQuota.usedSeconds / serverQuota.limitSeconds) * 100),
+            quota_remaining_minutes: Math.round(remaining / 60),
+            percentage_used: limit > 0 ? Math.round((used / limit) * 100) : 0,
             can_transcribe: remaining > 0
         });
     }
 
+    // ═══════════════════════════════════════════════════
+    // BILLING API ROUTE: POST /api/v1/billing/create-payment
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/create-payment' && req.method === 'POST') {
+        const authUser = getAuthUser(req);
+        if (!authUser) return sendJson(res, 401, { detail: 'Vui lòng đăng nhập để tiếp tục thanh toán.' });
+
+        let bodyStr = '';
+        req.on('data', c => bodyStr += c);
+        req.on('end', async () => {
+            try {
+                const data = JSON.parse(bodyStr || '{}');
+                const { sku, payment_method, amount, quota_seconds, description } = data;
+
+                if (!sku || !payment_method || !amount) {
+                    return sendJson(res, 400, { detail: 'Thiếu thông tin đơn hàng (sku, payment_method, amount).' });
+                }
+
+                const paymentId = crypto.randomUUID();
+                const orderCode = Date.now(); // Unique numeric order code for PayOS
+                const paymentRef = `KT-${paymentId.substring(0, 8).toUpperCase()}`;
+
+                // Store pending payment
+                pendingPayments.set(paymentId, {
+                    id: paymentId,
+                    order_code: orderCode,
+                    payment_ref: paymentRef,
+                    user_email: authUser.email,
+                    sku,
+                    payment_method,
+                    amount,
+                    quota_seconds: quota_seconds || 0,
+                    description,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                });
+
+                console.log(`[Payment] Created payment ${paymentRef} for user ${authUser.email}: ${sku} ${amount}đ via ${payment_method}`);
+
+                // ── Try to create real PayOS payment link ──
+                const PAYOS_CLIENT_ID = process.env.PAYOS_CLIENT_ID || envVars.PAYOS_CLIENT_ID;
+                const PAYOS_API_KEY = process.env.PAYOS_API_KEY || envVars.PAYOS_API_KEY;
+                const PAYOS_CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY || envVars.PAYOS_CHECKSUM_KEY;
+                const BASE_URL = process.env.BASE_URL || envVars.BASE_URL || 'https://kinetictech.icu';
+
+                let checkoutUrl = null;
+                let qrCode = null;
+
+                if (PAYOS_CLIENT_ID && PAYOS_API_KEY && PAYOS_CHECKSUM_KEY && payment_method === 'payos') {
+                    try {
+                        // Generate PayOS checksum (HMAC-SHA256)
+                        const checksumData = `amount=${amount}&cancelUrl=${BASE_URL}/pricing.html?payment=cancelled&description=${description}&orderCode=${orderCode}&returnUrl=${BASE_URL}/pricing.html?payment=success`;
+                        const checksum = crypto
+                            .createHmac('sha256', PAYOS_CHECKSUM_KEY)
+                            .update(checksumData)
+                            .digest('hex');
+
+                        const payosRes = await fetch('https://api-merchant.payos.vn/v2/payment-requests', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-client-id': PAYOS_CLIENT_ID,
+                                'x-api-key': PAYOS_API_KEY
+                            },
+                            body: JSON.stringify({
+                                orderCode,
+                                amount,
+                                description: (description || sku).substring(0, 25),
+                                cancelUrl: `${BASE_URL}/pricing.html?payment=cancelled`,
+                                returnUrl: `${BASE_URL}/pricing.html?payment=success&pid=${paymentId}`,
+                                signature: checksum,
+                                buyerName: authUser.display_name || authUser.email.split('@')[0],
+                                buyerEmail: authUser.email
+                            })
+                        });
+
+                        const payosData = await payosRes.json();
+                        if (payosData.code === '00' && payosData.data) {
+                            checkoutUrl = payosData.data.checkoutUrl;
+                            qrCode = payosData.data.qrCode;
+                            pendingPayments.get(paymentId).payos_order_code = orderCode;
+                            console.log(`[PayOS] Payment link created: ${checkoutUrl}`);
+                        } else {
+                            console.warn(`[PayOS] API returned error: ${payosData.desc || JSON.stringify(payosData)}`);
+                        }
+                    } catch (payosErr) {
+                        console.warn(`[PayOS] Failed to create payment link: ${payosErr.message}`);
+                    }
+                }
+
+                // Fallback sandbox/demo mode
+                if (!checkoutUrl) {
+                    checkoutUrl = `https://pay.payos.vn/web/${paymentRef}?demo=1`;
+                    console.log(`[Payment] Running in demo mode — no real gateway configured. Payment ID: ${paymentId}`);
+                }
+
+                return sendJson(res, 200, {
+                    payment_id: paymentId,
+                    payment_ref: paymentRef,
+                    checkout_url: checkoutUrl,
+                    qr_code: qrCode,
+                    amount,
+                    description,
+                    status: 'pending',
+                    expires_in_minutes: 15,
+                    note: !PAYOS_CLIENT_ID ? 'Demo mode: Configure PAYOS_CLIENT_ID in .env to enable real payments.' : null
+                });
+
+            } catch (e) {
+                console.error('[Payment Create Error]:', e);
+                return sendJson(res, 400, { detail: 'Dữ liệu không hợp lệ.' });
+            }
+        });
+        return;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING API ROUTE: GET /api/v1/billing/payment/:id
+    // ═══════════════════════════════════════════════════
+    const paymentStatusMatch = pathname.match(/^\/api\/v1\/billing\/payment\/([^\/]+)$/);
+    if (paymentStatusMatch && req.method === 'GET') {
+        const paymentId = paymentStatusMatch[1];
+        const payment = pendingPayments.get(paymentId);
+        if (!payment) {
+            return sendJson(res, 404, { detail: 'Không tìm thấy giao dịch này.' });
+        }
+        const quotaMin = payment.quota_seconds === 0 ? null : Math.round(payment.quota_seconds / 60);
+        return sendJson(res, 200, {
+            payment_id: paymentId,
+            payment_ref: payment.payment_ref,
+            status: payment.status,
+            amount: payment.amount,
+            sku: payment.sku,
+            quota_added_seconds: payment.status === 'completed' ? payment.quota_seconds : 0,
+            quota_added_minutes: payment.status === 'completed' ? quotaMin : 0,
+            created_at: payment.created_at,
+            completed_at: payment.completed_at || null
+        });
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING API ROUTE: GET /api/v1/billing/transactions
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/transactions' && req.method === 'GET') {
+        const authUser = getAuthUser(req);
+        if (!authUser) return sendJson(res, 401, { detail: 'Yêu cầu đăng nhập.' });
+
+        const userTxns = [];
+        for (const [, p] of pendingPayments) {
+            if (p.user_email === authUser.email) {
+                userTxns.push({
+                    payment_id: p.id,
+                    payment_ref: p.payment_ref,
+                    sku: p.sku,
+                    description: p.description,
+                    amount: p.amount,
+                    payment_method: p.payment_method,
+                    status: p.status,
+                    created_at: p.created_at,
+                    completed_at: p.completed_at || null
+                });
+            }
+        }
+
+        // Sort newest first
+        userTxns.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        return sendJson(res, 200, { transactions: userTxns, total: userTxns.length });
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING WEBHOOK: POST /api/v1/billing/webhook/payos
+    // PayOS automatically calls this when payment is confirmed
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/webhook/payos' && req.method === 'POST') {
+        let bodyStr = '';
+        req.on('data', c => bodyStr += c);
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(bodyStr || '{}');
+                console.log('[PayOS Webhook] Received:', JSON.stringify(data).substring(0, 200));
+
+                // Verify PayOS webhook signature
+                const PAYOS_CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY || envVars.PAYOS_CHECKSUM_KEY;
+                if (PAYOS_CHECKSUM_KEY && data.signature) {
+                    const webhookData = data.data || {};
+                    const rawStr = Object.keys(webhookData).sort()
+                        .map(k => `${k}=${webhookData[k]}`).join('&');
+                    const expectedSig = crypto.createHmac('sha256', PAYOS_CHECKSUM_KEY)
+                        .update(rawStr).digest('hex');
+
+                    if (data.signature !== expectedSig) {
+                        console.warn('[PayOS Webhook] Invalid signature — possible spoofing attempt!');
+                        return sendJson(res, 400, { error: 'Invalid signature' });
+                    }
+                }
+
+                const orderCode = data.data?.orderCode;
+                const webhookStatus = data.code === '00' ? 'completed' : 'failed';
+
+                // Find matching payment by orderCode
+                for (const [pid, payment] of pendingPayments) {
+                    if (payment.payos_order_code === orderCode || payment.payment_ref === `KT-${String(orderCode).substring(0, 8).toUpperCase()}`) {
+                        if (webhookStatus === 'completed') {
+                            activatePayment(pid, payment);
+                        } else {
+                            payment.status = 'failed';
+                        }
+                        break;
+                    }
+                }
+
+                return sendJson(res, 200, { code: '00', desc: 'success' });
+            } catch (e) {
+                console.error('[PayOS Webhook Error]:', e);
+                return sendJson(res, 400, { error: 'Webhook processing error' });
+            }
+        });
+        return;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING WEBHOOK: POST /api/v1/billing/webhook/vnpay
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/webhook/vnpay' && req.method === 'POST') {
+        let bodyStr = '';
+        req.on('data', c => bodyStr += c);
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(bodyStr || '{}');
+                console.log('[VNPay Webhook] Received:', JSON.stringify(data).substring(0, 200));
+                const paymentRef = data.vnp_TxnRef;
+                const responseCode = data.vnp_ResponseCode;
+
+                for (const [pid, payment] of pendingPayments) {
+                    if (payment.payment_ref === paymentRef) {
+                        if (responseCode === '00') {
+                            activatePayment(pid, payment);
+                        } else {
+                            payment.status = 'failed';
+                        }
+                        break;
+                    }
+                }
+                return sendJson(res, 200, { RspCode: '00', Message: 'Confirm Success' });
+            } catch (e) {
+                console.error('[VNPay Webhook Error]:', e);
+                return sendJson(res, 200, { RspCode: '99', Message: 'Unknown error' });
+            }
+        });
+        return;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING DEMO: POST /api/v1/billing/confirm-demo
+    // Manual payment confirmation for testing (dev only)
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/billing/confirm-demo' && req.method === 'POST') {
+        const authUser = getAuthUser(req);
+        if (!authUser) return sendJson(res, 401, { detail: 'Yêu cầu đăng nhập.' });
+
+        let bodyStr = '';
+        req.on('data', c => bodyStr += c);
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(bodyStr || '{}');
+                const payment = pendingPayments.get(data.payment_id);
+                if (!payment || payment.user_email !== authUser.email) {
+                    return sendJson(res, 404, { detail: 'Không tìm thấy giao dịch.' });
+                }
+                if (payment.status === 'completed') {
+                    return sendJson(res, 200, { message: 'Giao dịch này đã được xác nhận rồi.' });
+                }
+                activatePayment(data.payment_id, payment);
+                console.log(`[Demo Payment] Manually confirmed payment ${payment.payment_ref} for ${authUser.email}`);
+                return sendJson(res, 200, {
+                    message: `✅ Demo: Đã xác nhận thanh toán ${payment.payment_ref}. Quota đã được cộng!`,
+                    payment_ref: payment.payment_ref,
+                    quota_added_seconds: payment.quota_seconds
+                });
+            } catch (e) {
+                return sendJson(res, 400, { detail: 'Dữ liệu không hợp lệ.' });
+            }
+        });
+        return;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // BILLING API ROUTE: POST /api/v1/billing/upgrade (legacy compat)
+    // ═══════════════════════════════════════════════════
     if (pathname === '/api/v1/billing/upgrade' && req.method === 'POST') {
         let bodyStr = '';
         req.on('data', c => bodyStr += c);
@@ -944,12 +1292,9 @@ const server = http.createServer((req, res) => {
             try {
                 const data = JSON.parse(bodyStr || '{}');
                 const targetPlan = (data.plan || 'pro').toLowerCase();
-                if (targetPlan === 'pro') {
-                    serverQuota.limitSeconds = 36000; // 10 hours
-                } else if (targetPlan === 'premium') {
-                    serverQuota.limitSeconds = 360000; // 100 hours
-                }
-                serverQuota.usedSeconds = 0; // Reset usage on upgrade
+                if (targetPlan === 'pro') serverQuota.limitSeconds = 36000;
+                else if (targetPlan === 'premium') serverQuota.limitSeconds = 360000;
+                serverQuota.usedSeconds = 0;
                 return sendJson(res, 200, {
                     message: `Nâng cấp thành công gói ${targetPlan.toUpperCase()}`,
                     plan: targetPlan,

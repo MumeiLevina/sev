@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Giá & Nâng Cấp Gói | Kinetic Tech</title>
+    <meta name="description" content="Nâng cấp gói Pro hoặc mua thêm giờ bóc phụ đề AI của Kinetic Tech. Thanh toán nhanh qua PayOS, VNPay, MoMo. Giá chỉ từ 9,000đ." />
+    <link rel="canonical" href="https://kinetictech.icu/pricing.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kinetic Tech" />
+    <meta property="og:url" content="https://kinetictech.icu/pricing.html" />
+    <meta property="og:title" content="Bảng Giá & Nâng Cấp Gói | Kinetic Tech" />
+    <meta property="og:description" content="Mua thêm giờ bóc sub AI, nâng cấp Pro chỉ từ 9,000đ. Thanh toán qua PayOS, VNPay, MoMo." />
+    <meta property="og:image" content="https://kinetictech.icu/banner.png" />
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        /* ════════════════════════════════════════════════
+           PRICING PAGE STYLES
+        ════════════════════════════════════════════════ */
+        .pricing-hero {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            padding: 72px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .pricing-hero h1 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .pricing-hero h1 span {
+            background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pricing-hero p {
+            color: #a5b4fc;
+            font-size: 1.1rem;
+            max-width: 560px;
+            margin: 0 auto 32px;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            color: #e2e8f0;
+        }
+        .hero-stat strong {
+            display: block;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #a5f3fc;
+        }
+        .hero-stat span {
+            font-size: 0.82rem;
+            color: #94a3b8;
+        }
+
+        /* ── Tab Switcher ── */
+        .tab-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin: 48px auto 40px;
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 50px;
+            padding: 4px;
+            width: fit-content;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .tab-btn {
+            padding: 10px 28px;
+            border-radius: 46px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.25s ease;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+        }
+
+        /* ── Pricing Cards Grid ── */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+        @media (max-width: 900px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+        }
+        .pricing-card {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 32px 28px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .pricing-card.featured {
+            border-color: #6366f1;
+            background: linear-gradient(145deg, #fafafa, #f0f0ff);
+            box-shadow: 0 8px 32px rgba(99,102,241,0.15);
+        }
+        .card-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 5px 18px;
+            border-radius: 20px;
+            white-space: nowrap;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .plan-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+        .plan-price {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        .plan-price .amount {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #111827;
+            line-height: 1;
+        }
+        .plan-price .currency {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .plan-price .period {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        .plan-quota {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+        .plan-quota strong {
+            color: #111827;
+        }
+        .plan-cta {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            margin-bottom: 24px;
+            transition: all 0.2s ease;
+        }
+        .plan-cta.free-cta {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .plan-cta.free-cta:hover {
+            background: #e2e8f0;
+        }
+        .plan-cta.pro-cta {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+        }
+        .plan-cta.pro-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(99,102,241,0.5);
+        }
+        .plan-cta.premium-cta {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(236,72,153,0.35);
+        }
+        .plan-cta.premium-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(236,72,153,0.45);
+        }
+        .plan-features { list-style: none; }
+        .plan-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: 0.9rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .plan-features li:last-child { border-bottom: none; }
+        .plan-features li i {
+            color: #10b981;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .plan-features li.disabled {
+            color: #94a3b8;
+        }
+        .plan-features li.disabled i {
+            color: #cbd5e1;
+        }
+
+        /* ── Topup / Buy Hours Section ── */
+        .topup-section {
+            background: linear-gradient(145deg, #f8faff, #eff6ff);
+            border-top: 1px solid #e2e8f0;
+            padding: 72px 24px;
+        }
+        .topup-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        .topup-section .sub {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+        .topup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        @media (max-width: 700px) {
+            .topup-grid { grid-template-columns: 1fr; max-width: 380px; }
+        }
+        .topup-card {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+        .topup-card:hover, .topup-card.selected {
+            border-color: #6366f1;
+            box-shadow: 0 8px 28px rgba(99,102,241,0.15);
+            transform: translateY(-3px);
+        }
+        .topup-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 12px; right: 14px;
+            background: #6366f1;
+            color: #fff;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            font-size: 0.72rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .topup-card.best-value {
+            border-color: #f59e0b;
+        }
+        .topup-badge {
+            position: absolute;
+            top: -11px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 3px 14px;
+            border-radius: 20px;
+        }
+        .topup-hours {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #111827;
+            line-height: 1;
+        }
+        .topup-unit {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        .topup-price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #6366f1;
+        }
+        .topup-per {
+            font-size: 0.78rem;
+            color: #94a3b8;
+        }
+        .topup-cta-btn {
+            margin-top: 32px;
+            display: block;
+            max-width: 380px;
+            margin: 32px auto 0;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.35);
+            transition: all 0.2s ease;
+        }
+        .topup-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99,102,241,0.45);
+        }
+        .topup-cta-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── Payment Gateway Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box {
+            background: #fff;
+            border-radius: 24px;
+            max-width: 520px;
+            width: 100%;
+            padding: 36px;
+            position: relative;
+            animation: slideUp 0.25s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-close {
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 36px; height: 36px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: #e2e8f0; }
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+        .modal-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+        .modal-order-summary {
+            background: linear-gradient(135deg, #f0f0ff, #faf5ff);
+            border: 1px solid #d8b4fe;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+        .order-row .label { color: #64748b; }
+        .order-row .value { font-weight: 600; color: #111827; }
+        .order-total {
+            border-top: 1px solid #d8b4fe;
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+        .order-total .value {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #6366f1;
+        }
+
+        /* Payment Methods */
+        .payment-methods-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 12px;
+        }
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .payment-method-btn {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            cursor: pointer;
+            background: #fff;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .payment-method-btn:hover, .payment-method-btn.selected {
+            border-color: #6366f1;
+            background: #f5f3ff;
+        }
+        .payment-method-btn .pm-icon {
+            width: 38px;
+            height: 26px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .pm-payos { background: #e0f2fe; color: #0369a1; font-size: 0.6rem; }
+        .pm-vnpay { background: #fff1f2; color: #be123c; font-size: 0.6rem; }
+        .pm-momo { background: #fdf2f8; color: #a21caf; font-size: 0.6rem; }
+        .pm-stripe { background: #eff6ff; color: #1d4ed8; font-size: 0.6rem; }
+        .payment-method-btn .pm-name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #334155;
+        }
+        .payment-method-btn .pm-sub {
+            font-size: 0.72rem;
+            color: #94a3b8;
+        }
+
+        /* Pay button */
+        .pay-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .pay-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(99,102,241,0.5); }
+        .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .pay-note {
+            text-align: center;
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 12px;
+        }
+
+        /* ── Payment Status Modal (QR / Pending / Success) ── */
+        .status-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+        .status-icon.pending { background: #fef3c7; }
+        .status-icon.success { background: #dcfce7; }
+        .status-icon.error { background: #fee2e2; }
+        .qr-container {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(145deg, #f0f0ff, #e8e8ff);
+            border-radius: 12px;
+            margin: 0 auto 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #6366f1;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        .qr-placeholder i { font-size: 2rem; }
+        .progress-bar-wrap {
+            background: #f1f5f9;
+            border-radius: 50px;
+            height: 6px;
+            margin: 16px 0 8px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            animation: pulse-progress 2s ease-in-out infinite;
+        }
+        @keyframes pulse-progress {
+            0%, 100% { width: 30%; opacity: 1; }
+            50% { width: 70%; opacity: 0.7; }
+        }
+
+        /* ── FAQ Section ── */
+        .faq-section {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 72px 24px;
+        }
+        .faq-section h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 40px;
+        }
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .faq-q {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 18px 0;
+            font-size: 0.97rem;
+            font-weight: 600;
+            color: #111827;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .faq-q i { color: #6366f1; font-size: 1.1rem; flex-shrink: 0; }
+        .faq-a {
+            display: none;
+            padding: 0 0 18px;
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.7;
+        }
+        .faq-item.open .faq-a { display: block; }
+        .faq-item.open .faq-q i { transform: rotate(45deg); }
+
+        /* ── Guarantee Banner ── */
+        .guarantee-banner {
+            background: linear-gradient(135deg, #0f0c29, #302b63);
+            padding: 64px 24px;
+            text-align: center;
+            color: #fff;
+        }
+        .guarantee-banner h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .guarantee-banner p {
+            color: #a5b4fc;
+            max-width: 520px;
+            margin: 0 auto 28px;
+        }
+        .guarantee-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .g-badge {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .g-badge i { color: #a5f3fc; }
+
+        /* ── Current User Banner ── */
+        .user-current-plan {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 24px 0;
+        }
+        .plan-notice {
+            background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+            border: 1.5px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .plan-notice .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .plan-notice i { font-size: 1.4rem; color: #3b82f6; }
+        .plan-notice .text strong { color: #1e40af; font-size: 0.95rem; }
+        .plan-notice .text p { font-size: 0.84rem; color: #64748b; margin-top: 2px; }
+        .plan-notice a {
+            font-size: 0.85rem;
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (via site-components.js) -->
+    <div id="site-header"></div>
+
+    <!-- ── Hero ── -->
+    <section class="pricing-hero">
+        <h1>Chọn gói phù hợp<br><span>với nhu cầu của bạn</span></h1>
+        <p>Bóc phụ đề video bằng AI Whisper chuẩn xác nhất. Bắt đầu miễn phí, nâng cấp khi cần.</p>
+        <div class="hero-stats">
+            <div class="hero-stat"><strong>90+</strong><span>Ngôn ngữ hỗ trợ</span></div>
+            <div class="hero-stat"><strong>99%</strong><span>Độ chính xác</span></div>
+            <div class="hero-stat"><strong>~30s</strong><span>Tốc độ xử lý/phút</span></div>
+        </div>
+    </section>
+
+    <!-- ── User Plan Notice ── -->
+    <div class="user-current-plan" id="plan-notice-wrap" style="display:none">
+        <div class="plan-notice">
+            <div class="info">
+                <i class='bx bx-user-circle'></i>
+                <div class="text">
+                    <strong id="notice-plan-name">Tài khoản của bạn: Gói Free</strong>
+                    <p id="notice-quota-text">Còn lại 60:00 phút &bull; <a href="subtitle-extractor.html">Quay lại bóc sub</a></p>
+                </div>
+            </div>
+            <a href="subtitle-extractor.html" style="font-size:0.85rem; color:#6366f1; font-weight:600; text-decoration:underline">
+                ← Bóc sub ngay
+            </a>
+        </div>
+    </div>
+
+    <!-- ── Tab Switcher ── -->
+    <div class="tab-switcher">
+        <button class="tab-btn active" id="tab-plans" onclick="switchTab('plans')">📦 Gói Đăng Ký</button>
+        <button class="tab-btn" id="tab-topup" onclick="switchTab('topup')">⚡ Mua Thêm Giờ</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         TAB 1: SUBSCRIPTION PLANS
+    ═══════════════════════════════════════ -->
+    <section id="tab-content-plans">
+        <div class="pricing-grid">
+            <!-- FREE -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">
+                    <span class="amount">0</span>
+                    <span class="currency">đ</span>
+                    <span class="period">/tháng</span>
+                </div>
+                <p class="plan-quota">Tặng <strong>1 giờ (60 phút)</strong> khi đăng ký</p>
+                <button class="plan-cta free-cta" onclick="window.location.href='login.html'">
+                    Bắt đầu miễn phí
+                </button>
+                <ul class="plan-features">
+                    <li><i class='bx bx-check-circle'></i> 60 phút bóc sub miễn phí</li>
+                    <li><i class='bx bx-check-circle'></i> Độ chính xác AI Whisper</li>
+                    <li><i class='bx bx-check-circle'></i> Xuất SRT, VTT, TXT</li>
+                    <li><i class='bx bx-check-circle'></i> Hỗ trợ 90+ ngôn ngữ</li>
+                    <li><i class='bx bx-check-circle'></i> Video tối đa 100MB</li>
+                    <li class="disabled"><i class='bx bx-x-circle'></i> Hàng đợi ưu tiên</li>
+                    <li class="disabled"><i class='bx bx-x-circle'></i> File tới 500MB</li>
+                </ul>
+            </div>
+
+            <!-- PRO (featured) -->
+            <div class="pricing-card featured">
+                <div class="card-badge">⭐ Phổ biến nhất</div>
+                <div class="plan-name" style="color:#7c3aed">Pro</div>
+                <div class="plan-price">
+                    <span class="amount">49<small style="font-size:1.5rem">K</small></span>
+                    <span class="period">/tháng</span>
+                </div>
+                <p class="plan-quota"><strong>10 giờ (600 phút)</strong> bóc sub tốc độ cao</p>
+                <button class="plan-cta pro-cta" id="btn-buy-pro" onclick="openPaymentModal('pro_monthly', 'Gói Pro (1 tháng)', 49000, 36000)">
+                    🚀 Nâng cấp lên Pro
+                </button>
+                <ul class="plan-features">
+                    <li><i class='bx bx-check-circle'></i> <strong>600 phút</strong> bóc sub mỗi tháng</li>
+                    <li><i class='bx bx-check-circle'></i> Hàng đợi ưu tiên cấp 1</li>
+                    <li><i class='bx bx-check-circle'></i> Video lên tới 200MB</li>
+                    <li><i class='bx bx-check-circle'></i> Tự động ngắt câu thông minh</li>
+                    <li><i class='bx bx-check-circle'></i> Lưu lịch sử không giới hạn</li>
+                    <li><i class='bx bx-check-circle'></i> Hỗ trợ song ngữ cơ bản</li>
+                    <li><i class='bx bx-check-circle'></i> Tổng hợp từ nhiều tệp</li>
+                </ul>
+            </div>
+
+            <!-- PREMIUM -->
+            <div class="pricing-card">
+                <div class="plan-name" style="color:#db2777">Premium VIP</div>
+                <div class="plan-price">
+                    <span class="amount">99<small style="font-size:1.5rem">K</small></span>
+                    <span class="period">/tháng</span>
+                </div>
+                <p class="plan-quota"><strong>Không giới hạn</strong> thời lượng sử dụng</p>
+                <button class="plan-cta premium-cta" onclick="openPaymentModal('premium_monthly', 'Gói Premium VIP (1 tháng)', 99000, 0)">
+                    💎 Đăng ký Premium
+                </button>
+                <ul class="plan-features">
+                    <li><i class='bx bx-check-circle'></i> <strong>Không giới hạn</strong> thời lượng</li>
+                    <li><i class='bx bx-check-circle'></i> Xử lý song song đa luồng</li>
+                    <li><i class='bx bx-check-circle'></i> Hàng đợi VIP Priority</li>
+                    <li><i class='bx bx-check-circle'></i> Video lên tới 500MB</li>
+                    <li><i class='bx bx-check-circle'></i> 100+ ngôn ngữ đa giọng điệu</li>
+                    <li><i class='bx bx-check-circle'></i> API access riêng biệt</li>
+                    <li><i class='bx bx-check-circle'></i> Hỗ trợ kỹ thuật 24/7</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         TAB 2: TOPUP / BUY HOURS
+    ═══════════════════════════════════════ -->
+    <section id="tab-content-topup" style="display:none; padding: 0 24px 80px;">
+        <div class="topup-section" style="border-radius:24px; max-width:1100px; margin:0 auto;">
+            <h2>⚡ Mua thêm giờ</h2>
+            <p class="sub">Không cần đăng ký tháng — mua đúng lượng bạn cần, dùng mãi không hết hạn</p>
+
+            <div class="topup-grid">
+                <div class="topup-card" onclick="selectTopup(this, 'topup_1h', 'Mua thêm 1 giờ bóc sub', 9000, 3600)">
+                    <div class="topup-hours">1</div>
+                    <div class="topup-unit">giờ bóc sub</div>
+                    <div class="topup-price">9,000đ</div>
+                    <div class="topup-per">9,000đ / giờ</div>
+                </div>
+                <div class="topup-card best-value" onclick="selectTopup(this, 'topup_5h', 'Mua thêm 5 giờ bóc sub', 35000, 18000)">
+                    <div class="topup-badge">Tiết kiệm 22%</div>
+                    <div class="topup-hours">5</div>
+                    <div class="topup-unit">giờ bóc sub</div>
+                    <div class="topup-price">35,000đ</div>
+                    <div class="topup-per">7,000đ / giờ</div>
+                </div>
+                <div class="topup-card" onclick="selectTopup(this, 'topup_20h', 'Mua thêm 20 giờ bóc sub', 99000, 72000)">
+                    <div class="topup-badge" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">Tiết kiệm 45%</div>
+                    <div class="topup-hours">20</div>
+                    <div class="topup-unit">giờ bóc sub</div>
+                    <div class="topup-price">99,000đ</div>
+                    <div class="topup-per">4,950đ / giờ</div>
+                </div>
+            </div>
+
+            <button class="topup-cta-btn" id="topup-pay-btn" disabled onclick="payTopup()">
+                <i class='bx bx-credit-card'></i> Thanh toán ngay
+            </button>
+        </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <div class="faq-section">
+        <h2>Câu hỏi thường gặp</h2>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <button class="faq-q">Quota mua thêm giờ có hết hạn không? <i class='bx bx-plus'></i></button>
+            <div class="faq-a">Không. Giờ bóc sub bạn mua thêm <strong>không bao giờ hết hạn</strong>. Bạn có thể dùng khi nào tùy thích, không bị giới hạn thời gian hay tháng.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <button class="faq-q">Gói Pro/Premium có tự động gia hạn không? <i class='bx bx-plus'></i></button>
+            <div class="faq-a">Hiện tại <strong>không có tự động gia hạn</strong>. Sau 30 ngày, gói sẽ về Free và bạn cần gia hạn thủ công. Quota chưa dùng hết của tháng trước <strong>không chuyển sang tháng sau</strong>.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <button class="faq-q">Có hoàn tiền nếu tôi không hài lòng không? <i class='bx bx-plus'></i></button>
+            <div class="faq-a">Có. Trong vòng <strong>24 giờ</strong> sau khi thanh toán và chưa sử dụng quá 10% quota, bạn có thể yêu cầu hoàn tiền 100% qua email <strong>support@kinetictech.icu</strong>.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <button class="faq-q">Thanh toán qua những cổng nào? <i class='bx bx-plus'></i></button>
+            <div class="faq-a">Kinetic Tech hỗ trợ <strong>PayOS (VietQR, thẻ ATM nội địa), VNPay, MoMo</strong> và <strong>Stripe</strong> (thẻ Visa/Mastercard quốc tế). Thanh toán an toàn, mã hóa 256-bit SSL.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <button class="faq-q">Sau khi thanh toán, quota có được cộng ngay không? <i class='bx bx-plus'></i></button>
+            <div class="faq-a">Có. Hệ thống webhook tự động xác nhận giao dịch và <strong>cộng quota ngay lập tức</strong> trong vòng vài giây sau khi thanh toán thành công.</div>
+        </div>
+    </div>
+
+    <!-- ── Guarantee Banner ── -->
+    <section class="guarantee-banner">
+        <h2>🔒 Thanh toán an toàn & bảo mật</h2>
+        <p>Mọi giao dịch được xử lý qua các cổng thanh toán uy tín, mã hóa TLS 1.3 và chứng nhận PCI-DSS.</p>
+        <div class="guarantee-badges">
+            <div class="g-badge"><i class='bx bxs-lock-alt'></i> SSL 256-bit</div>
+            <div class="g-badge"><i class='bx bxs-shield-alt-2'></i> PCI-DSS Compliant</div>
+            <div class="g-badge"><i class='bx bx-refresh'></i> Hoàn tiền trong 24h</div>
+            <div class="g-badge"><i class='bx bx-support'></i> Hỗ trợ 24/7</div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         PAYMENT MODAL
+    ═══════════════════════════════════════ -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-box" id="payment-modal-box">
+            <button class="modal-close" onclick="closePaymentModal()">✕</button>
+
+            <!-- Step 1: Choose Payment Method -->
+            <div id="modal-step-1">
+                <div class="modal-title">🛒 Xác nhận đơn hàng</div>
+                <div class="modal-subtitle" id="modal-product-subtitle">Gói Pro – 1 tháng sử dụng</div>
+
+                <div class="modal-order-summary">
+                    <div class="order-row">
+                        <span class="label">Sản phẩm</span>
+                        <span class="value" id="order-product-name">Gói Pro (1 tháng)</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Thời hạn</span>
+                        <span class="value" id="order-duration">30 ngày</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Quota tặng kèm</span>
+                        <span class="value" id="order-quota">600 phút</span>
+                    </div>
+                    <div class="order-row order-total">
+                        <span class="label" style="font-weight:700;color:#111">Tổng thanh toán</span>
+                        <span class="value" id="order-total-price">49,000đ</span>
+                    </div>
+                </div>
+
+                <p class="payment-methods-label">Chọn phương thức thanh toán</p>
+                <div class="payment-methods-grid">
+                    <button class="payment-method-btn selected" id="pm-payos" onclick="selectPaymentMethod('payos', this)">
+                        <div class="pm-icon pm-payos">PAY<br>OS</div>
+                        <div>
+                            <div class="pm-name">PayOS</div>
+                            <div class="pm-sub">VietQR · ATM · Thẻ Quốc Tế</div>
+                        </div>
+                    </button>
+                    <button class="payment-method-btn" id="pm-vnpay" onclick="selectPaymentMethod('vnpay', this)">
+                        <div class="pm-icon pm-vnpay">VN<br>PAY</div>
+                        <div>
+                            <div class="pm-name">VNPay</div>
+                            <div class="pm-sub">QR · ATM nội địa</div>
+                        </div>
+                    </button>
+                    <button class="payment-method-btn" id="pm-momo" onclick="selectPaymentMethod('momo', this)">
+                        <div class="pm-icon pm-momo">Mo<br>Mo</div>
+                        <div>
+                            <div class="pm-name">MoMo</div>
+                            <div class="pm-sub">Ví điện tử MoMo</div>
+                        </div>
+                    </button>
+                    <button class="payment-method-btn" id="pm-stripe" onclick="selectPaymentMethod('stripe', this)">
+                        <div class="pm-icon pm-stripe">STR<br>IPE</div>
+                        <div>
+                            <div class="pm-name">Stripe</div>
+                            <div class="pm-sub">Visa · Mastercard quốc tế</div>
+                        </div>
+                    </button>
+                </div>
+
+                <button class="pay-btn" id="pay-submit-btn" onclick="submitPayment()">
+                    <i class='bx bx-lock-alt'></i>
+                    <span id="pay-btn-text">Thanh toán an toàn 49,000đ</span>
+                </button>
+                <p class="pay-note">🔒 Mã hóa SSL 256-bit · Không lưu thông tin thẻ · Hoàn tiền trong 24h</p>
+            </div>
+
+            <!-- Step 2: QR / Redirect Pending -->
+            <div id="modal-step-2" style="display:none; text-align:center">
+                <div class="status-icon pending">⏳</div>
+                <div class="modal-title">Đang chờ thanh toán...</div>
+                <div class="modal-subtitle" id="step2-subtitle">Quét mã QR hoặc truy cập link bên dưới</div>
+                <div class="qr-container" id="qr-container">
+                    <div class="qr-placeholder">
+                        <i class='bx bx-qr'></i>
+                        <span>Mã QR thanh toán<br>sẽ hiển thị ở đây</span>
+                    </div>
+                    <div style="font-size:0.8rem;color:#64748b;margin-top:8px">Quét bằng ứng dụng ngân hàng · MoMo · PayOS</div>
+                </div>
+                <div id="payment-link-area" style="margin:12px 0">
+                    <a id="payment-direct-link" href="#" target="_blank" style="color:#6366f1;font-weight:700;font-size:0.9rem">
+                        <i class='bx bx-link-external'></i> Mở trang thanh toán
+                    </a>
+                </div>
+                <div class="progress-bar-wrap">
+                    <div class="progress-bar-fill" style="width:30%"></div>
+                </div>
+                <p style="font-size:0.82rem;color:#64748b">Hệ thống tự động xác nhận sau khi bạn thanh toán thành công</p>
+                <button onclick="closePaymentModal()" style="margin-top:16px;background:none;border:none;color:#94a3b8;font-size:0.83rem;cursor:pointer">Hủy giao dịch</button>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div id="modal-step-3" style="display:none; text-align:center">
+                <div class="status-icon success" style="font-size:2.5rem">🎉</div>
+                <div class="modal-title" style="color:#059669">Thanh toán thành công!</div>
+                <div class="modal-subtitle" id="success-msg">Quota đã được cộng vào tài khoản của bạn.</div>
+                <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:20px;margin:20px 0;text-align:left">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                        <span style="color:#64748b;font-size:0.88rem">Mã giao dịch</span>
+                        <span id="success-tx-id" style="font-family:monospace;font-size:0.85rem;color:#111">TXN-XXXXXXX</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between">
+                        <span style="color:#64748b;font-size:0.88rem">Quota mới</span>
+                        <span id="success-quota" style="font-weight:700;color:#059669">+600 phút</span>
+                    </div>
+                </div>
+                <button class="pay-btn" style="background:linear-gradient(135deg,#059669,#10b981)" onclick="window.location.href='subtitle-extractor.html'">
+                    <i class='bx bx-video'></i> Bắt đầu bóc sub ngay
+                </button>
+                <p class="pay-note" style="margin-top:12px">Biên lai đã được gửi tới email của bạn</p>
+            </div>
+
+            <!-- Step 4: Error -->
+            <div id="modal-step-4" style="display:none; text-align:center">
+                <div class="status-icon error">❌</div>
+                <div class="modal-title" style="color:#dc2626">Thanh toán thất bại</div>
+                <div class="modal-subtitle" id="error-msg">Giao dịch không thành công. Vui lòng thử lại.</div>
+                <button class="pay-btn" style="margin-top:20px;background:linear-gradient(135deg,#6366f1,#8b5cf6)" onclick="showStep(1)">
+                    Thử lại
+                </button>
+                <button onclick="closePaymentModal()" style="margin-top:12px;display:block;width:100%;background:none;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px;cursor:pointer;color:#64748b;font-weight:600">
+                    Hủy bỏ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="site-footer"></div>
+    <script src="js/site-components.js"></script>
+    <script src="js/billing.js"></script>
+    <script>
+        // ── Pricing Page Logic ──
+        const API_BASE = '';
+        let currentOrder = { sku: '', name: '', price: 0, quotaSec: 0, duration: '30 ngày' };
+        let selectedPaymentMethod = 'payos';
+        let selectedTopupCard = null;
+        let pollingInterval = null;
+        let currentPaymentId = null;
+
+        function switchTab(tab) {
+            document.getElementById('tab-content-plans').style.display = tab === 'plans' ? '' : 'none';
+            document.getElementById('tab-content-topup').style.display = tab === 'topup' ? '' : 'none';
+            document.getElementById('tab-plans').classList.toggle('active', tab === 'plans');
+            document.getElementById('tab-topup').classList.toggle('active', tab === 'topup');
+        }
+
+        function openPaymentModal(sku, name, price, quotaSec) {
+            // Check auth
+            const token = localStorage.getItem('kt_access_token');
+            if (!token) {
+                if (confirm('Bạn cần đăng nhập để thanh toán.\nBấm OK để chuyển đến trang đăng nhập.')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            currentOrder = { sku, name, price, quotaSec };
+            const quotaMin = quotaSec === 0 ? '∞' : `${Math.round(quotaSec / 60)} phút`;
+            const duration = sku.includes('monthly') ? '30 ngày' : 'Không hết hạn';
+
+            document.getElementById('order-product-name').textContent = name;
+            document.getElementById('order-duration').textContent = duration;
+            document.getElementById('order-quota').textContent = quotaMin;
+            document.getElementById('order-total-price').textContent = formatPrice(price);
+            document.getElementById('pay-btn-text').textContent = `Thanh toán an toàn ${formatPrice(price)}`;
+            document.getElementById('modal-product-subtitle').textContent = `${name} — ${formatPrice(price)}`;
+
+            showStep(1);
+            document.getElementById('payment-modal').classList.add('open');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.remove('open');
+            if (pollingInterval) clearInterval(pollingInterval);
+        }
+
+        function showStep(n) {
+            [1, 2, 3, 4].forEach(i => {
+                document.getElementById(`modal-step-${i}`).style.display = i === n ? '' : 'none';
+            });
+        }
+
+        function selectPaymentMethod(method, btn) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-method-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function selectTopup(card, sku, name, price, quotaSec) {
+            document.querySelectorAll('.topup-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedTopupCard = { sku, name, price, quotaSec };
+            document.getElementById('topup-pay-btn').disabled = false;
+        }
+
+        function payTopup() {
+            if (!selectedTopupCard) return;
+            const { sku, name, price, quotaSec } = selectedTopupCard;
+            openPaymentModal(sku, name, price, quotaSec);
+        }
+
+        async function submitPayment() {
+            const token = localStorage.getItem('kt_access_token');
+            if (!token) { window.location.href = 'login.html'; return; }
+
+            const btn = document.getElementById('pay-submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Đang tạo thanh toán...';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/billing/create-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        sku: currentOrder.sku,
+                        payment_method: selectedPaymentMethod,
+                        amount: currentOrder.price,
+                        quota_seconds: currentOrder.quotaSec,
+                        description: currentOrder.name
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.detail || 'Tạo thanh toán thất bại');
+
+                currentPaymentId = data.payment_id;
+                showStep(2);
+                document.getElementById('step2-subtitle').textContent =
+                    selectedPaymentMethod === 'payos' ? 'Quét mã QR bằng ứng dụng ngân hàng bất kỳ' :
+                    selectedPaymentMethod === 'momo' ? 'Quét mã bằng ứng dụng MoMo' : 'Nhấn nút để chuyển đến trang thanh toán';
+
+                if (data.checkout_url) {
+                    const link = document.getElementById('payment-direct-link');
+                    link.href = data.checkout_url;
+                    link.style.display = '';
+                }
+
+                // Start polling for payment status
+                startPolling(currentPaymentId);
+
+            } catch (err) {
+                document.getElementById('error-msg').textContent = err.message;
+                showStep(4);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="bx bx-lock-alt"></i> <span id="pay-btn-text">Thanh toán an toàn ${formatPrice(currentOrder.price)}</span>`;
+            }
+        }
+
+        function startPolling(paymentId) {
+            const token = localStorage.getItem('kt_access_token');
+            let attempts = 0;
+            const maxAttempts = 60; // 5 minutes
+
+            pollingInterval = setInterval(async () => {
+                attempts++;
+                if (attempts > maxAttempts) {
+                    clearInterval(pollingInterval);
+                    document.getElementById('error-msg').textContent = 'Hết thời gian chờ thanh toán. Vui lòng kiểm tra email hoặc thử lại.';
+                    showStep(4);
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`${API_BASE}/api/v1/billing/payment/${paymentId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const data = await res.json();
+
+                    if (data.status === 'completed') {
+                        clearInterval(pollingInterval);
+                        document.getElementById('success-msg').textContent =
+                            `Đã cộng ${data.quota_added_minutes} phút vào tài khoản của bạn!`;
+                        document.getElementById('success-tx-id').textContent = data.payment_ref || paymentId.substring(0, 12).toUpperCase();
+                        document.getElementById('success-quota').textContent =
+                            data.quota_added_seconds === 0 ? '∞ Không giới hạn' : `+${data.quota_added_minutes} phút`;
+                        showStep(3);
+
+                        // Refresh local user token
+                        const meRes = await fetch(`${API_BASE}/api/v1/auth/me`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (meRes.ok) {
+                            const me = await meRes.json();
+                            localStorage.setItem('kt_user', JSON.stringify(me));
+                        }
+                    } else if (data.status === 'failed') {
+                        clearInterval(pollingInterval);
+                        document.getElementById('error-msg').textContent = 'Giao dịch bị từ chối. Vui lòng thử lại.';
+                        showStep(4);
+                    }
+                } catch (e) { /* Network error — keep polling */ }
+            }, 5000); // Poll every 5 seconds
+        }
+
+        function formatPrice(n) {
+            return n.toLocaleString('vi-VN') + 'đ';
+        }
+
+        function toggleFaq(item) {
+            item.classList.toggle('open');
+        }
+
+        // ── Load user plan info ──
+        async function loadUserPlan() {
+            const token = localStorage.getItem('kt_access_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return;
+                const user = await res.json();
+
+                const wrap = document.getElementById('plan-notice-wrap');
+                wrap.style.display = '';
+
+                const planLabels = { free: 'Gói Free', pro: 'Gói Pro ⭐', premium: 'Gói Premium VIP 💎' };
+                document.getElementById('notice-plan-name').textContent =
+                    `Tài khoản: ${user.display_name} — ${planLabels[user.plan] || 'Gói Free'}`;
+
+                const remaining = user.quota_remaining_seconds;
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                document.getElementById('notice-quota-text').innerHTML =
+                    `Còn lại <strong>${mins}:${secs.toString().padStart(2, '0')}</strong> phút · <a href="subtitle-extractor.html">Quay lại bóc sub →</a>`;
+            } catch (e) { /* Not logged in */ }
+        }
+
+        loadUserPlan();
+
+        // Close modal on backdrop click
+        document.getElementById('payment-modal').addEventListener('click', function(e) {
+            if (e.target === this) closePaymentModal();
+        });
+    </script>
+</body>
+</html>

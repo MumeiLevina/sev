@@ -314,6 +314,11 @@
             sidebarRemainingBar.style.width = `${pct}%`;
             sidebarRemainingBar.style.background = quotaRemainingBar ? quotaRemainingBar.style.background : 'linear-gradient(90deg, #10b981, #3b82f6)';
         }
+
+        // Trigger dynamic upgrade banner when quota is depleted or low
+        if (window.KT_BILLING && typeof window.KT_BILLING.showUpgradeBanner === 'function') {
+            window.KT_BILLING.showUpgradeBanner(remSec);
+        }
     }
 
     function showDeductNotice(type, htmlMessage) {
