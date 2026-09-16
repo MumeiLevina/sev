@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính điểm SAT | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">TÍNH ĐIỂM SAT</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Công Cụ Tính Điểm SAT</h1>
+                    <p class="text-muted">Tính điểm Digital SAT (400 - 1600), ước lượng phần trăm xếp hạng Percentile và quy đổi từ số câu đúng.</p>
+                </div>
+
+            <div class="tool-container glass-panel">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" id="btn-score-calc" onclick="switchSatTab('score-calc')">Tính Tổng Điểm & Percentile</button>
+                    <button class="tab-btn" id="btn-raw-convert" onclick="switchSatTab('raw-convert')">Đổi Từ Số Câu Đúng</button>
+                </div>
+
+                <!-- Tab 1: Direct Score Calculation -->
+                <div id="tab-score-calc" class="tab-pane active">
+                    <form id="satScoreForm">
+                        <div class="form-group">
+                            <label class="form-label flex justify-between">
+                                <span><i class='bx bx-book-open'></i> Reading & Writing (Đọc & Viết)</span>
+                                <span id="rwScoreDisplay" style="color: var(--primary); font-weight: 700;">600</span>
+                            </label>
+                            <input type="range" id="rwScore" min="200" max="800" step="10" value="600" class="form-control" style="padding: 0;">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label flex justify-between">
+                                <span><i class='bx bx-math'></i> Math (Toán học)</span>
+                                <span id="mathScoreDisplay" style="color: var(--primary); font-weight: 700;">650</span>
+                            </label>
+                            <input type="range" id="mathScore" min="200" max="800" step="10" value="650" class="form-control" style="padding: 0;">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class='bx bx-calculator'></i> Xem Phân Tích Điểm
+                        </button>
+                    </form>
+
+                    <div id="satResult" class="result-box active" style="margin-top: 24px;">
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">Tổng điểm SAT của bạn:</p>
+                        <div id="satTotalScore" class="result-value" style="font-size: 3.2rem; color: #6366f1;">1250</div>
+                        <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+                            <span class="badge badge-primary" id="satPercentileBadge">Top 81% thí sinh (81st Percentile)</span>
+                            <span class="badge badge-success" id="satCompetitiveness">Cạnh tranh Tốt</span>
+                        </div>
+                        <div class="callout callout-info" id="satAdvice" style="text-align: left; margin-top: 15px;">
+                            Mức điểm này đạt ngưỡng xét tuyển nhiều trường Đại học Top tại Việt Nam (NEU, FTU, BK, VNU) và học bổng du học Mỹ tầm trung.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Raw to Scaled Conversion -->
+                <div id="tab-raw-convert" class="tab-pane">
+                    <form id="satRawForm">
+                        <div class="callout callout-info" style="font-size: 0.88rem; margin-top: 0;">
+                            Bài thi Digital SAT gồm 54 câu Reading & Writing (2 module) và 44 câu Math (2 module).
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Số câu đúng Reading & Writing (Tối đa 54 câu)</label>
+                            <input type="number" id="rwRaw" class="form-control" min="0" max="54" value="" required placeholder="Nhập số câu đúng (0 - 54)">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Số câu đúng Math (Tối đa 44 câu)</label>
+                            <input type="number" id="mathRaw" class="form-control" min="0" max="44" value="" required placeholder="Nhập số câu đúng (0 - 44)">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class='bx bx-refresh'></i> Quy Đổi Điểm Scaled
+                        </button>
+                    </form>
+
+                    <div id="satRawResult" class="result-box" style="margin-top: 24px;">
+                        <p style="color: var(--text-muted);">Điểm Digital SAT ước lượng:</p>
+                        <div id="rawEstimatedTotal" class="result-value">--</div>
+                        <div class="flex justify-between" style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: 8px; margin-top: 10px; color: #1e293b; font-weight: 500;">
+                            <span>Reading & Writing: <strong id="estRwScore" style="color: #004bb5; font-weight: 700;">--</strong> / 800</span>
+                            <span>Math: <strong id="estMathScore" style="color: #004bb5; font-weight: 700;">--</strong> / 800</span>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">* Điểm thực tế phụ thuộc độ khó của từng Module (Adaptive Testing) của College Board.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Công cụ giáo dục -->
+        <aside class="tool-category-sidebar">
+            <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+            <ul class="tool-sidebar-links">
+                <li><a href="sat.html" class="active">Công cụ tính điểm SAT</a></li>
+                <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - 600 Câu</a></li>
+                <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                <li><a href="fraction.html">Máy tính phân số</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <footer class="minimal-footer">
+        <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+    </footer>
+</div>
+
+    <script src="js/sat.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

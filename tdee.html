@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tính Chỉ Số TDEE - Tổng Năng Lượng Tiêu Hao Hàng Ngày | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">TDEE</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Công Cụ Tính Chỉ Số TDEE</h1>
+                <p class="text-muted">Tổng lượng calo (Total Daily Energy Expenditure) cơ thể tiêu hao mỗi ngày dựa trên cường độ sinh hoạt và tập luyện.</p>
+            </div>
+
+            <!-- Health Tabs Navigation -->
+            <div class="health-tabs">
+                <a href="bmi.html" class="health-tab-link"><i class='bx bx-body'></i> Tính BMI</a>
+                <a href="bmr.html" class="health-tab-link"><i class='bx bx-flame'></i> Tính BMR</a>
+                <a href="tdee.html" class="health-tab-link active"><i class='bx bx-run'></i> Tính TDEE</a>
+                <a href="calorie.html" class="health-tab-link"><i class='bx bx-dish'></i> Calo Cần Nạp</a>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <form id="tdeeForm">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-user'></i> Giới tính</label>
+                            <select id="tdeeGender" class="form-control">
+                                <option value="male">Nam giới</option>
+                                <option value="female">Nữ giới</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-calendar'></i> Độ tuổi</label>
+                            <input type="number" id="tdeeAge" class="form-control" value="" placeholder="VD: 20" min="10" max="120" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-ruler'></i> Chiều cao (cm)</label>
+                            <input type="number" id="tdeeHeight" class="form-control" value="" placeholder="VD: 170" min="80" max="250" step="0.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-dumbbell'></i> Cân nặng (kg)</label>
+                            <input type="number" id="tdeeWeight" class="form-control" value="" placeholder="VD: 60" min="20" max="300" step="0.5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class='bx bx-walk'></i> Mức độ vận động thể chất hàng tuần</label>
+                        <select id="tdeeActivity" class="form-control" style="padding: 14px;">
+                            <option value="1.2">Ít hoặc không vận động (Nhân viên văn phòng, học sinh chỉ ngồi học)</option>
+                            <option value="1.375" selected>Vận động nhẹ (Tập thể dục, đi bộ nhẹ nhàng 1 – 3 ngày / tuần)</option>
+                            <option value="1.55">Vận động vừa phải (Tập gym, chơi thể thao vừa 3 – 5 ngày / tuần)</option>
+                            <option value="1.725">Vận động nhiều (Tập luyện cường độ cao 6 – 7 ngày / tuần)</option>
+                            <option value="1.9">Vận động cực nhiều (Vận động viên chuyên nghiệp, lao động thể lực nặng)</option>
+                        </select>
+                    </div>
+                </form>
+
+                <!-- TDEE Result Display -->
+                <div class="result-box active" style="margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
+                    <span style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Tổng calo tiêu thụ mỗi ngày (TDEE)</span>
+                    <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 10px 0;">
+                        <span id="tdeeValDisplay" style="font-size: 3.8rem; font-weight: 800; color: #004bb5; line-height: 1;">---</span>
+                        <span style="font-size: 1.4rem; color: #004bb5; font-weight: 600;">kcal / ngày</span>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 4px;">
+                        Nếu bạn ăn đúng <strong><span id="tdeeValSub">---</span> kcal/ngày</strong>, cân nặng của bạn sẽ được giữ nguyên ổn định.
+                    </p>
+
+                    <!-- Quick Target Preview -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; text-align: left;">
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #bbf7d0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: #166534; font-weight: 600;"><i class='bx bx-minus-circle'></i> Giảm cân chuẩn (-0.5kg/tuần)</span>
+                            <div id="tdeeLoseVal" style="font-size: 1.3rem; font-weight: 700; color: #16a34a; margin-top: 4px;">--- kcal</div>
+                        </div>
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;"><i class='bx bx-check-circle'></i> Duy trì cân nặng hiện tại</span>
+                            <div id="tdeeMaintainVal" style="font-size: 1.3rem; font-weight: 700; color: #0284c7; margin-top: 4px;">--- kcal</div>
+                        </div>
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #fed7aa; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: #c2410c; font-weight: 600;"><i class='bx bx-plus-circle'></i> Tăng cân / Tăng cơ</span>
+                            <div id="tdeeGainVal" style="font-size: 1.3rem; font-weight: 700; color: #ea580c; margin-top: 4px;">--- kcal</div>
+                        </div>
+                    </div>
+
+                    <!-- Button to calculate Calorie Intake & Macros -->
+                    <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 12px;">
+                        <a href="calorie.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 18px;">
+                            Bước tiếp theo: Phân bổ Calo & Tỷ lệ Macros chi tiết <i class='bx bx-right-arrow-alt'></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- TDEE across different activity levels table -->
+                <div style="margin-top: 36px; text-align: left;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-slider-alt'></i> So Sánh Calo Tiêu Hao Theo Mọi Cấp Độ Vận Động
+                    </h3>
+                    <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background: #f1f5f9; color: #334155; text-align: left; font-weight: 700;">
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Cấp Độ Hoạt Động</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Hệ Số</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Calo Tiêu Hao / Ngày</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tdeeActivityTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Sức Khoẻ & Thể Hình -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Sức khoẻ & Thể hình</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="bmi.html">Công cụ tính BMI</a></li>
+                    <li><a href="bmr.html">Công cụ tính chỉ số BMR</a></li>
+                    <li><a href="tdee.html" class="active">Công cụ tính chỉ số TDEE</a></li>
+                    <li><a href="calorie.html">Công cụ tính lượng Calo cần nạp</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/health-hub.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const genderEl = document.getElementById('tdeeGender');
+            const ageEl = document.getElementById('tdeeAge');
+            const heightEl = document.getElementById('tdeeHeight');
+            const weightEl = document.getElementById('tdeeWeight');
+            const activityEl = document.getElementById('tdeeActivity');
+
+            // Load saved data if present
+            const saved = getHealthData();
+            if (saved) {
+                genderEl.value = saved.gender || 'male';
+                if (saved.age) ageEl.value = saved.age;
+                if (saved.height) heightEl.value = saved.height;
+                if (saved.weight) weightEl.value = saved.weight;
+                activityEl.value = saved.activity || '1.375';
+            }
+
+            function updateTDEE() {
+                const w = parseFloat(weightEl.value) || 0;
+                const h = parseFloat(heightEl.value) || 0;
+                const a = parseInt(ageEl.value) || 0;
+                const g = genderEl.value;
+                const act = parseFloat(activityEl.value) || 1.375;
+
+                if (h <= 0 || w <= 0 || a <= 0) {
+                    document.getElementById('tdeeValDisplay').textContent = '---';
+                    document.getElementById('tdeeValSub').textContent = '---';
+                    document.getElementById('tdeeLoseVal').textContent = '--- kcal';
+                    document.getElementById('tdeeMaintainVal').textContent = '--- kcal';
+                    document.getElementById('tdeeGainVal').textContent = '--- kcal';
+                    const tbody = document.getElementById('tdeeActivityTableBody');
+                    if (tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 16px; color: var(--text-muted);">Vui lòng nhập thông tin để xem bảng phân tích</td></tr>';
+                    return;
+                }
+
+                saveHealthData({ gender: g, age: a, height: h, weight: w, activity: act });
+
+                const bmr = calculateBMR(g, w, h, a, 'mifflin');
+                const tdee = calculateTDEE(bmr, act);
+
+                document.getElementById('tdeeValDisplay').textContent = tdee.toLocaleString('vi-VN');
+                document.getElementById('tdeeValSub').textContent = tdee.toLocaleString('vi-VN');
+                document.getElementById('tdeeLoseVal').textContent = (tdee - 500).toLocaleString('vi-VN') + ' kcal';
+                document.getElementById('tdeeMaintainVal').textContent = tdee.toLocaleString('vi-VN') + ' kcal';
+                document.getElementById('tdeeGainVal').textContent = (tdee + 500).toLocaleString('vi-VN') + ' kcal';
+
+                // Render comparison table
+                const acts = [
+                    { name: 'Ít hoặc không vận động (ngồi nhiều)', mult: 1.2 },
+                    { name: 'Vận động nhẹ (tập 1-3 ngày/tuần)', mult: 1.375 },
+                    { name: 'Vận động vừa phải (tập 3-5 ngày/tuần)', mult: 1.55 },
+                    { name: 'Vận động nhiều (tập 6-7 ngày/tuần)', mult: 1.725 },
+                    { name: 'Vận động cực nhiều (VĐV thể thao)', mult: 1.9 }
+                ];
+
+                const tbody = document.getElementById('tdeeActivityTableBody');
+                tbody.innerHTML = acts.map(item => {
+                    const isSelected = Math.abs(item.mult - act) < 0.01;
+                    const val = Math.round(bmr * item.mult);
+                    return `
+                        <tr style="border-bottom: 1px solid #e2e8f0; ${isSelected ? 'background: #eff6ff; font-weight: 700;' : ''}">
+                            <td style="padding: 12px 16px; color: ${isSelected ? '#004bb5' : '#1e293b'};">
+                                ${item.name} ${isSelected ? '<span style="color: #2563eb; font-size: 0.8rem; font-weight: 700;">(Đang chọn)</span>' : ''}
+                            </td>
+                            <td style="padding: 12px 16px; color: #64748b;">x${item.mult}</td>
+                            <td style="padding: 12px 16px; color: ${isSelected ? '#004bb5' : '#059669'}; font-weight: 700;">
+                                ${val.toLocaleString('vi-VN')} kcal
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            genderEl.addEventListener('change', updateTDEE);
+            ageEl.addEventListener('input', updateTDEE);
+            heightEl.addEventListener('input', updateTDEE);
+            weightEl.addEventListener('input', updateTDEE);
+            activityEl.addEventListener('change', updateTDEE);
+
+            updateTDEE();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

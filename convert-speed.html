@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Vận Tốc & Tốc Độ (km/h, m/s, mph, Knot) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">TỐC ĐỘ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Chuyển Đổi Vận Tốc & Tốc Độ (km/h – m/s – mph – Knot)</h1>
+                    <p class="text-muted">Quy đổi giữa các đơn vị tốc độ đường bộ, hàng không, hàng hải và vật lý: Kilômét/giờ (km/h), Mét/giây (m/s), Dặm/giờ (mph), Hải lý (Knot), Mach.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <!-- Interactive Converter Box -->
+                    <div class="converter-box">
+                        <div class="converter-flow">
+                            <!-- From input -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập vận tốc</label>
+                                <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập vận tốc..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                                <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                                <select id="selectFrom" class="form-control"></select>
+                            </div>
+
+                            <!-- Swap Button -->
+                            <div class="swap-btn-container">
+                                <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                    <i class='bx bx-transfer-alt'></i>
+                                </button>
+                            </div>
+
+                            <!-- To select -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                                <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                            </div>
+                        </div>
+
+                        <!-- Main Conversion Result Card -->
+                        <div class="conversion-result-card">
+                            <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                            <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #38bdf8; margin: 8px 0; word-break: break-all;">---</div>
+                            <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Mét/giây (m/s)</div>
+
+                            <div id="formulaText" class="conversion-formula-box">
+                                Nhập vận tốc để xem kết quả quy đổi
+                            </div>
+
+                            <div style="margin-top: 14px;">
+                                <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                    <i class='bx bx-copy'></i> Sao chép kết quả
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-unit live grid -->
+                    <div style="text-align: left; margin-top: 32px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-grid-alt'></i> Bảng So Sánh Các Đơn Vị Tốc Độ & Vận Tốc
+                        </h3>
+                        <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                    </div>
+
+                    <!-- Practical Speed Comparison Table -->
+                    <div style="text-align: left; margin-top: 28px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-tachometer'></i> So Sánh Tốc Độ Thực Tế Trong Đời Sống
+                        </h3>
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Đối tượng di chuyển</th>
+                                    <th>Tốc độ (km/h)</th>
+                                    <th>Tốc độ (m/s)</th>
+                                    <th>Tốc độ (mph)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Người đi bộ thong thả</strong></td>
+                                    <td>4 – 5 km/h</td>
+                                    <td>1.1 – 1.4 m/s</td>
+                                    <td>2.5 – 3.1 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kỷ lục chạy nước rút Usain Bolt</strong></td>
+                                    <td>44.72 km/h</td>
+                                    <td>12.42 m/s</td>
+                                    <td>27.78 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Xe đạp thể thao</strong></td>
+                                    <td>20 – 35 km/h</td>
+                                    <td>5.6 – 9.7 m/s</td>
+                                    <td>12.4 – 21.7 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Xe máy lưu thông trong đô thị</strong></td>
+                                    <td>40 – 50 km/h</td>
+                                    <td>11.1 – 13.9 m/s</td>
+                                    <td>24.9 – 31.1 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ô tô chạy cao tốc Việt Nam</strong></td>
+                                    <td>100 – 120 km/h</td>
+                                    <td>27.8 – 33.3 m/s</td>
+                                    <td>62.1 – 74.6 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tàu cao tốc Shinkansen (Nhật Bản)</strong></td>
+                                    <td>320 km/h</td>
+                                    <td>88.9 m/s</td>
+                                    <td>198.8 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Máy bay chở khách Boeing / Airbus</strong></td>
+                                    <td>850 – 920 km/h</td>
+                                    <td>236 – 255 m/s</td>
+                                    <td>528 – 571 mph</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tốc độ âm thanh trong không khí (Mach 1)</strong></td>
+                                    <td>1,225 km/h</td>
+                                    <td>340.3 m/s</td>
+                                    <td>761.2 mph</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Kiến Thức & Quy Đổi Vận Tốc Trong Học Tập</h2>
+                        <p>Vận tốc là một đại lượng vật lý mô tả mức độ nhanh hay chậm của chuyển động cùng với hướng của nó. Trong chương trình Vật lý phổ thông và cơ học kỹ thuật đại học, việc đổi nhanh giữa các đơn vị <strong>km/h</strong> và <strong>m/s</strong> là kỹ năng cơ bản xuất hiện trong hầu hết các đề thi.</p>
+                        
+                        <h3>1. Mẹo đổi nhanh km/h ↔ m/s trong thi cử</h3>
+                        <ul>
+                            <li><strong>Đổi từ km/h sang m/s:</strong> Lấy giá trị chia cho <strong>3.6</strong> (Ví dụ: 36 km/h = 36 / 3.6 = 10 m/s; 72 km/h = 72 / 3.6 = 20 m/s).</li>
+                            <li><strong>Đổi từ m/s sang km/h:</strong> Lấy giá trị nhân với <strong>3.6</strong> (Ví dụ: 15 m/s = 15 × 3.6 = 54 km/h).</li>
+                            <li><strong>Vì sao có con số 3.6?</strong> Vì 1 km = 1,000 m và 1 giờ = 3,600 giây. Do đó 1 km/h = 1,000 m / 3,600 s = 1/3.6 m/s.</li>
+                        </ul>
+
+                        <h3>2. Các đơn vị tốc độ đặc biệt</h3>
+                        <ul>
+                            <li><strong>Dặm trên giờ (mph - Miles per hour):</strong> Đơn vị giới hạn tốc độ tiêu chuẩn trên biển báo đường bộ tại Mỹ, Anh và một số quốc gia nói tiếng Anh. 1 mph ≈ 1.60934 km/h.</li>
+                            <li><strong>Hải lý trên giờ (Knot - gút):</strong> Đơn vị tốc độ chuẩn quốc tế được dùng trong hàng hải (tàu thuyền) và hàng không (máy bay). 1 knot = 1 hải lý/giờ = 1.852 km/h.</li>
+                            <li><strong>Số Mach:</strong> Tỷ số giữa vận tốc của vật thể và vận tốc âm thanh trong cùng môi trường. Vượt quá Mach 1 gọi là tốc độ siêu thanh (Supersonic).</li>
+                        </ul>
+
+                        <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: Tốc độ giới hạn cao tốc tối đa ở Việt Nam là bao nhiêu?</strong><br>
+                            Trả lời: Hiện nay trên các tuyến cao tốc đạt chuẩn tại Việt Nam, tốc độ tối đa cho phép thông thường là <strong>120 km/h</strong> (khoảng 33.3 m/s hoặc 74.6 mph), và một số tuyến đường 2 làn xe là 80 - 90 km/h.</p>
+                            <p><strong>Hỏi: 1 knot bằng bao nhiêu km/h?</strong><br>
+                            Trả lời: 1 Knot (hải lý/giờ) chính xác bằng <strong>1.852 km/h</strong> (hoặc khoảng 0.5144 m/s).</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html" class="active">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('speed', {
+                defaultFrom: 'km_h',
+                defaultTo: 'm_s'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

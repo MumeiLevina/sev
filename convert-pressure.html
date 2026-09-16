@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển đổi áp suất: Bar và Pascal (Pa) - Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">ÁP SUẤT</span>
+        </div>
+
+        <!-- Main Tool Two-Column Wrapper -->
+        <div class="tool-page-wrapper">
+            <!-- Left Column: Tool Box & Article Content -->
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Chuyển Đổi Áp Suất (Bar – Pascal – PSI – Atm)</h1>
+                    <p class="text-muted">Quy đổi giữa các đơn vị áp suất kỹ thuật, lốp xe và khí quyển: Bar, Pascal (Pa), Kilopascal (kPa), Megapascal (MPa), PSI, Atmosphere (atm), mmHg.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <!-- Interactive Converter Box -->
+                    <div class="converter-box">
+                        <div class="converter-flow">
+                            <!-- From input -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập áp suất</label>
+                                <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập giá trị áp suất..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                                <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                                <select id="selectFrom" class="form-control"></select>
+                            </div>
+
+                            <!-- Swap Button -->
+                            <div class="swap-btn-container">
+                                <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                    <i class='bx bx-transfer-alt'></i>
+                                </button>
+                            </div>
+
+                            <!-- To select -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                                <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                            </div>
+                        </div>
+
+                        <!-- Main Conversion Result Card -->
+                        <div class="conversion-result-card">
+                            <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                            <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #38bdf8; margin: 8px 0; word-break: break-all;">---</div>
+                            <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Pascal (Pa)</div>
+
+                            <div id="formulaText" class="conversion-formula-box">
+                                Nhập giá trị áp suất để xem kết quả quy đổi
+                            </div>
+
+                            <div style="margin-top: 14px;">
+                                <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                    <i class='bx bx-copy'></i> Sao chép kết quả
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-unit live grid -->
+                    <div style="text-align: left; margin-top: 32px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-grid-alt'></i> Bảng So Sánh Các Đơn Vị Áp Suất
+                        </h3>
+                        <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Comprehensive Editorial Content for AdSense & Learning -->
+                <section class="tool-explanation-section">
+                    <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Các Đơn Vị Đo Áp Suất</h2>
+                    <p>Áp suất là một đại lượng vật lý đặc trưng cho độ lớn của áp lực tác dụng vuông góc lên một đơn vị diện tích bề mặt (công thức tổng quát <code>P = F / S</code>). Trong Hệ đo lường quốc tế (SI), đơn vị đo áp suất chuẩn là <strong>Pascal (Pa)</strong>, đặt theo tên nhà bác học người Pháp Blaise Pascal. Bên cạnh Pascal, nhiều ngành kỹ thuật, y tế và đời sống hàng ngày sử dụng các đơn vị khác như Bar, PSI, Atmosphere hay mmHg.</p>
+
+                    <h3>1. Bảng đối chiếu các đơn vị đo áp suất thông dụng</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Đơn vị</th>
+                                    <th>Ký hiệu</th>
+                                    <th>Hệ thống / Lĩnh vực</th>
+                                    <th>Quy đổi sang Pascal (Pa)</th>
+                                    <th>Ứng dụng thực tế</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Pascal</strong></td>
+                                    <td>Pa</td>
+                                    <td>Hệ mét chuẩn SI (1 N/m²)</td>
+                                    <td>1 Pa</td>
+                                    <td>Tính toán âm học, động lực học chất lưu, áp suất gió tác dụng lên công trình</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilopascal</strong></td>
+                                    <td>kPa</td>
+                                    <td>Hệ mét SI (10³ Pa)</td>
+                                    <td>1,000 Pa</td>
+                                    <td>Báo cáo khí tượng dự báo thời tiết, áp suất đường ống nước dân dụng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Megapascal</strong></td>
+                                    <td>MPa</td>
+                                    <td>Hệ mét SI (10⁶ Pa)</td>
+                                    <td>1,000,000 Pa (10 bar)</td>
+                                    <td>Cường độ chịu nén bê tông (mác bê tông M250, M300), ứng suất thép xây dựng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bar</strong></td>
+                                    <td>bar</td>
+                                    <td>Kỹ thuật công nghiệp</td>
+                                    <td>100,000 Pa (10⁵ Pa)</td>
+                                    <td>Máy nén khí, bình chữa cháy, lặn biển (cứ lặn sâu 10m nước áp suất tăng 1 bar)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Atmosphere tiêu chuẩn</strong></td>
+                                    <td>atm</td>
+                                    <td>Khí quyển học / Hóa học</td>
+                                    <td>101,325 Pa (~1.013 bar)</td>
+                                    <td>Áp suất khí quyển tiêu chuẩn tại mực nước biển, điều kiện tiêu chuẩn phản ứng hóa học</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>PSI</strong></td>
+                                    <td>psi (lbf/in²)</td>
+                                    <td>Hệ Anh – Mỹ / Giao thông</td>
+                                    <td>6,894.76 Pa (~0.0689 bar)</td>
+                                    <td>Đo áp suất lốp xe máy, ô tô, áp suất bình khí nén thể thao</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Milimét thủy ngân</strong></td>
+                                    <td>mmHg / Torr</td>
+                                    <td>Y tế & Khoa học chân không</td>
+                                    <td>133.322 Pa</td>
+                                    <td>Đo chỉ số huyết áp tim mạch (chuẩn 120/80 mmHg), áp suất khoang chân không</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Bảng tham chiếu áp suất lốp xe và y tế thực tế</h3>
+                    <ul>
+                        <li><strong>Áp suất lốp xe máy thông dụng:</strong> Hầu hết xe máy phổ thông tại Việt Nam (Honda Vision, Air Blade, Wave, Yamaha Grande...) yêu cầu áp suất lốp trước khoảng <span class="formula-highlight">29 PSI (~2.0 bar / 2.0 kg/cm²)</span> và lốp sau khoảng <span class="formula-highlight">33 PSI (~2.25 bar / 2.3 kg/cm²)</span> khi đi 2 người. Đi lốp non hơi sẽ gây tốn xăng và trượt bánh khi phanh gấp.</li>
+                        <li><strong>Áp suất lốp ô tô 4 - 7 chỗ:</strong> Thường dao động từ <span class="formula-highlight">30 đến 35 PSI (~2.1 - 2.4 bar)</span> tùy theo khuyến nghị dán ở khung cửa bên ghế lái.</li>
+                        <li><strong>Chỉ số huyết áp người trưởng thành (mmHg):</strong> Huyết áp tối ưu là <code>dưới 120/80 mmHg</code> (Tâm thu dưới 120 mmHg và Tâm trương dưới 80 mmHg). Khi huyết áp vượt quá 140/90 mmHg là dấu hiệu cảnh báo tiền cao huyết áp cần thăm khám.</li>
+                        <li><strong>Công thức quy đổi nhanh bỏ túi:</strong> <span class="formula-highlight">1 Bar ≈ 14.5 PSI ≈ 100 kPa ≈ 0.987 atm ≈ 1.02 kg/cm²</span>.</li>
+                    </ul>
+
+                    <h3>3. Câu hỏi thường gặp về áp suất (FAQ)</h3>
+                    <div style="margin-top: 10px;">
+                        <p><strong>Hỏi: 1 Bar bằng bao nhiêu PSI và bao nhiêu kg/cm²?</strong><br>
+                        Trả lời: 1 Bar chính xác bằng <strong>14.5038 PSI</strong> và xấp xỉ bằng <strong>1.0197 kg/cm²</strong> (ở các tiệm sửa xe máy tại Việt Nam, thợ bơm xe thường gọi tắt kg/cm² là "ký hơi" hay "cân hơi", tức là bơm 2.2 kg hơi nghĩa là ~2.2 bar ≈ 32 PSI).</p>
+
+                        <p><strong>Hỏi: Tại sao khi lặn xuống hồ bơi sâu hoặc đi máy bay cất cánh thì tai lại bị đau, ù tai?</strong><br>
+                        Trả lời: Do sự chênh lệch áp suất giữa tai giữa và môi trường bên ngoài. Theo công thức áp suất thủy tĩnh <code>P = d × h</code>, cứ lặn sâu xuống nước 10m thì áp suất sẽ tăng thêm 1 atm (1 bar). Áp suất nước nén lên màng nhĩ gây đau tức. Hiện tượng nuốt nước bọt giúp mở vòi Eustache để cân bằng lại áp suất hai bên màng nhĩ.</p>
+
+                        <p><strong>Hỏi: Đơn vị Torr và mmHg có khác nhau không?</strong><br>
+                        Trả lời: Trong thực tế ứng dụng thông thường, 1 Torr được xem là tương đương 1 mmHg (chênh lệch chỉ khoảng 0.000014%). Đơn vị Torr được đặt theo tên Evangelista Torricelli, nhà khoa học phát minh ra phong vũ biểu thủy ngân đầu tiên.</p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links (Image 2) -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html" class="active">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('pressure', {
+                defaultFrom: 'bar',
+                defaultTo: 'pa'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

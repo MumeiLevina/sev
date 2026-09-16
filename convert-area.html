@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Héc Ta – Mét Vuông Và Mét (Diện Tích) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">DIỆN TÍCH</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Héc Ta – Mét Vuông và Mét</h1>
+                <p class="text-muted">Quy đổi diện tích giữa Héc-ta (ha), Mét vuông (m²), km², cm² và tính toán chiều dài cạnh hình vuông tương đương bằng Mét.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập diện tích</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập diện tích..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #10b981; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Mét vuông (m²)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập diện tích để xem kết quả quy đổi
+                        </div>
+
+                        <!-- Equivalent Square Side in Meters -->
+                        <div style="margin-top: 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 16px; display: inline-block;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Tương đương thửa đất hình vuông có cạnh: </span>
+                            <strong id="sideLengthMeter" style="color: #0284c7; font-size: 1rem;">--- mét</strong>
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng Quy Đổi Đồng Thời Các Đơn Vị Diện Tích
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                    <!-- Reference notes -->
+                    <div style="text-align: left; margin-top: 28px;">
+                        <div class="callout callout-info">
+                            <strong>Công thức tính & hình dung trực quan nhanh:</strong><br>
+                            • <strong>1 Héc-ta (ha) = 10,000 m² = 0.01 km² = 100 Are (a) ≈ 2.471 Mẫu Anh (Acre)</strong>.<br>
+                            • Một sân bóng đá tiêu chuẩn FIFA có diện tích khoảng <strong>0.714 ha (~7,140 m²)</strong>, nghĩa là 1 héc-ta rộng gấp ~1.4 lần sân bóng đá.<br>
+                            • Cạnh hình vuông tương đương được tính bằng $\sqrt{\text{diện tích theo m²}}$ (ví dụ 1 ha tương đương thửa đất vuông cạnh $100m \times 100m$).
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Kiến Thức Toàn Diện Về Đơn Vị Đo Diện Tích</h2>
+                        <p><strong>Diện tích (Area)</strong> là đại lượng biểu thị phạm vi bề mặt của một hình phẳng hai chiều trong không gian. Trong các ngành kỹ thuật, xây dựng, kiến trúc, khảo sát trắc địa và quy hoạch đô thị, việc quy đổi chính xác giữa các đơn vị diện tích quốc tế là yêu cầu cơ bản.</p>
+
+                        <h3>1. Bảng đối chiếu các đơn vị diện tích quốc tế</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Đơn vị diện tích</th>
+                                        <th>Ký hiệu</th>
+                                        <th>Hệ thống</th>
+                                        <th>Quy đổi ra Mét vuông (m²)</th>
+                                        <th>Hình dung thực tế</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Centimét vuông</strong></td>
+                                        <td>cm²</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>0.0001 m²</td>
+                                        <td>Khoảng diện tích một con tem bưu chính hoặc móng tay</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mét vuông</strong></td>
+                                        <td>m²</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>Đơn vị gốc (1 m²)</td>
+                                        <td>Diện tích sàn phòng ngủ, căn hộ chung cư, văn phòng</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>A (Are)</strong></td>
+                                        <td>a</td>
+                                        <td>Hệ mét</td>
+                                        <td>100 m²</td>
+                                        <td>Thửa đất vuông cạnh 10m x 10m, diện tích lô đất nhà phố</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Héc-ta (Hectare)</strong></td>
+                                        <td>ha</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>10,000 m² (0.01 km²)</td>
+                                        <td>Khu công nghiệp, trang trại nông nghiệp, trường đại học</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kilômét vuông</strong></td>
+                                        <td>km²</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>1,000,000 m² (100 ha)</td>
+                                        <td>Diện tích quận huyện, thành phố, diện tích quốc gia</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Square Foot (Feet vuông)</strong></td>
+                                        <td>sq ft hoặc ft²</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>0.092903 m²</td>
+                                        <td>Đơn vị niêm yết giá thuê căn hộ, diện tích sàn tại Mỹ, Singapore</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mẫu Anh (Acre)</strong></td>
+                                        <td>ac</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>4,046.856 m² (≈ 0.4047 ha)</td>
+                                        <td>Diện tích trang trại, đất rừng, sân golf ở các nước phương Tây</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Square Mile (Dặm vuông)</strong></td>
+                                        <td>sq mi</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>2,589,988 m² (2.59 km²)</td>
+                                        <td>Diện tích bang, công viên quốc gia tại Mỹ, Canada</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>2. Công thức tính diện tích hình học phẳng thường dùng</h3>
+                        <ul>
+                            <li><strong>Hình chữ nhật:</strong> <span class="formula-highlight">S = dài × rộng</span></li>
+                            <li><strong>Hình vuông:</strong> <span class="formula-highlight">S = a²</span> (với a là độ dài một cạnh).</li>
+                            <li><strong>Hình tròn:</strong> <span class="formula-highlight">S = π × r²</span> (với r là bán kính hình tròn, π ≈ 3.14159).</li>
+                            <li><strong>Hình tam giác:</strong> <span class="formula-highlight">S = (đáy × chiều cao) / 2</span></li>
+                            <li><strong>Hình thang:</strong> <span class="formula-highlight">S = ((đáy lớn + đáy nhỏ) × chiều cao) / 2</span></li>
+                        </ul>
+
+                        <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: 1 hecta bằng bao nhiêu sào đất Việt Nam?</strong><br>
+                            Trả lời: Ở miền Bắc, 1 sào = 360 m² nên 1 ha ≈ <strong>27.78 sào Bắc Bộ</strong>. Ở miền Trung, 1 sào = 500 m² nên 1 ha = <strong>20 sào Trung Bộ</strong>. Ở miền Nam, 1 công = 1.000 m² nên 1 ha = <strong>10 công Nam Bộ</strong>.</p>
+
+                            <p><strong>Hỏi: 1 Acre bằng bao nhiêu mét vuông?</strong><br>
+                            Trả lời: 1 Mẫu Anh (Acre) bằng chính xác <strong>4,046.8564224 m²</strong>, xấp xỉ bằng 0.4047 hecta (tức khoảng 40% diện tích 1 héc-ta).</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html" class="active">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('area', {
+                defaultFrom: 'ha',
+                defaultTo: 'm2'
+            });
+
+            // Calculate equivalent square side in meters
+            const inputVal = document.getElementById('inputVal');
+            const selectFrom = document.getElementById('selectFrom');
+            const sideEl = document.getElementById('sideLengthMeter');
+
+            function updateSquareSide() {
+                if (!inputVal || !inputVal.value.trim() || isNaN(parseFloat(inputVal.value))) {
+                    if (sideEl) sideEl.textContent = '--- mét';
+                    return;
+                }
+                const val = parseFloat(inputVal.value);
+                const fromKey = selectFrom.value;
+                const unit = CONVERTER_DEFINITIONS.area.units[fromKey];
+                if (!unit) return;
+                const sqMeters = val * unit.toBase;
+                if (sqMeters >= 0) {
+                    const side = Math.sqrt(sqMeters);
+                    sideEl.textContent = formatValue(side) + ' mét';
+                }
+            }
+
+            inputVal.addEventListener('input', updateSquareSide);
+            selectFrom.addEventListener('change', updateSquareSide);
+            document.getElementById('btnSwap').addEventListener('click', updateSquareSide);
+            updateSquareSide();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

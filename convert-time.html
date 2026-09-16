@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Phút – Tuần – Giờ – Thế Kỷ (Thời Gian) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">THỜI GIAN</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Phút – Tuần – Giờ – Thế Kỷ</h1>
+                <p class="text-muted">Quy đổi thời gian linh hoạt giữa Phút, Giờ, Tuần, Thế kỷ, Giây, Ngày, Tháng, Năm và phân rã thời gian trực quan.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập giá trị thời gian</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập thời gian..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #10b981; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Giờ (h)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập thời gian để xem kết quả quy đổi
+                        </div>
+
+                        <!-- Time Decomposition -->
+                        <div style="margin-top: 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 16px; display: inline-block;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Phân rã thời gian: </span>
+                            <strong id="timeDecomposeRes" style="color: #0284c7; font-size: 1rem;">---</strong>
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng So Sánh Toàn Bộ Các Đơn Vị Thời Gian
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                <!-- Notes -->
+                <div style="text-align: left; margin-top: 28px;">
+                    <div class="callout callout-info">
+                        <strong>Quy ước thời gian chuẩn quốc tế:</strong><br>
+                        • <strong>1 Giờ = 60 phút = 3,600 giây</strong> | <strong>1 Ngày = 24 giờ = 1,440 phút = 86,400 giây</strong>.<br>
+                        • <strong>1 Tuần = 7 ngày = 168 giờ = 10,080 phút</strong>.<br>
+                        • <strong>1 Thập kỷ = 10 năm</strong> | <strong>1 Thế kỷ = 100 năm ≈ 36,525 ngày</strong> | <strong>1 Thiên niên kỷ = 1,000 năm</strong>.
+                    </div>
+                </div>
+
+                <!-- Comprehensive Editorial Content for AdSense & Learning -->
+                <section class="tool-explanation-section">
+                    <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Các Đơn Vị Đo Thời Gian</h2>
+                    <p>Thời gian là một trong 7 đại lượng vật lý cơ bản nhất của Hệ đo lường quốc tế (SI). Khác với các hệ đo lường thập phân thông thường (bội số của 10), hệ thống đo thời gian chịu ảnh hưởng sâu sắc từ lịch sử thiên văn học cổ đại, kết hợp giữa hệ thập lục phân (cơ số 60 của người Babylon cổ) và chu kỳ chuyển động của Trái Đất quanh Mặt Trời cũng như tự quay quanh trục.</p>
+
+                    <h3>1. Bảng đối chiếu các đơn vị thời gian thông dụng</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Đơn vị</th>
+                                    <th>Ký hiệu</th>
+                                    <th>Hệ thống / Quy chuẩn</th>
+                                    <th>Quy đổi chuẩn sang Giây (s)</th>
+                                    <th>Ứng dụng thực tế</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Mili giây</strong></td>
+                                    <td>ms</td>
+                                    <td>Hệ mét SI (10⁻³ s)</td>
+                                    <td>0.001 s</td>
+                                    <td>Độ trễ mạng (Ping mạng), tốc độ phản hồi màn hình gaming, chụp ảnh tốc độ cao</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Giây</strong></td>
+                                    <td>s</td>
+                                    <td>Đơn vị cơ bản SI</td>
+                                    <td>1 s</td>
+                                    <td>Đơn vị chuẩn quốc tế trong vật lý, lập trình, đồng hồ bấm giờ thể thao</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phút</strong></td>
+                                    <td>min</td>
+                                    <td>Quốc tế</td>
+                                    <td>60 s</td>
+                                    <td>Đo thời lượng bài học, thời gian tập thể dục, bước nhảy thời gian nấu nướng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Giờ</strong></td>
+                                    <td>h / hr</td>
+                                    <td>Quốc tế</td>
+                                    <td>3,600 s (60 min)</td>
+                                    <td>Tính ca làm việc, chấm công, thời lượng chuyến bay, thời gian ngủ mỗi ngày</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ngày</strong></td>
+                                    <td>day / d</td>
+                                    <td>Thiên văn / Dân sự</td>
+                                    <td>86,400 s (24 h)</td>
+                                    <td>1 chu kỳ tự quay của Trái Đất, hạn nộp bài tập, kỳ hạn vay mượn</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tuần</strong></td>
+                                    <td>week / wk</td>
+                                    <td>Lịch dân sự</td>
+                                    <td>604,800 s (7 ngày = 168 h)</td>
+                                    <td>Kế hoạch làm việc, thời khóa biểu học kỳ, chu kỳ lương tuần</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tháng (TB)</strong></td>
+                                    <td>month / mo</td>
+                                    <td>Dương lịch Gregory</td>
+                                    <td>~2,629,746 s (30.44 ngày)</td>
+                                    <td>Kỳ thanh toán tiền nhà trọ, gói cước 4G/WiFi, tính lãi suất tiết kiệm ngân hàng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Năm</strong></td>
+                                    <td>year / yr</td>
+                                    <td>Dương lịch</td>
+                                    <td>31,536,000 s (365 ngày)</td>
+                                    <td>Tính tuổi tác, niên khóa đại học, thời hạn bảo hành thiết bị điện tử</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thập kỷ</strong></td>
+                                    <td>decade</td>
+                                    <td>Lịch sử / Xã hội</td>
+                                    <td>10 năm (~3,652.5 ngày)</td>
+                                    <td>Đánh giá các mốc phát triển công nghệ, xu hướng văn hóa âm nhạc, thời trang</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thế kỷ</strong></td>
+                                    <td>century</td>
+                                    <td>Lịch sử / Địa chất</td>
+                                    <td>100 năm (~36,525 ngày)</td>
+                                    <td>Các thời kỳ lịch sử văn minh nhân loại, dự báo biến đổi khí hậu</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Các quy tắc tính toán thời gian đặc biệt cần ghi nhớ</h3>
+                    <ul>
+                        <li><strong>Quy tắc xác định Năm Nhuận (Leap Year):</strong> Dương lịch quy định năm nhuận là năm chia hết cho 4. Tuy nhiên, nếu năm đó chia hết cho 100 thì bắt buộc phải chia hết cho 400 mới là năm nhuận. Ví dụ: Năm 2000 và 2024 là năm nhuận (366 ngày, tháng 2 có 29 ngày), trong khi năm 1900 hay 2100 không phải năm nhuận (chỉ có 365 ngày).</li>
+                        <li><strong>Đổi Giờ : Phút sang Thập phân (Tính lương ca làm):</strong> Để tính tiền làm thêm giờ, bạn chia số phút cho 60. Ví dụ: Làm ca <code>1 giờ 45 phút</code> = <span class="formula-highlight">1 + 45/60 = 1.75 giờ</span>. Nếu lương 30,000đ/giờ thì số tiền nhận được là: 1.75 × 30,000 = 52,500đ.</li>
+                        <li><strong>Khái niệm Unix Epoch Time trong Công Nghệ Thông Tin:</strong> Trong lập trình phần mềm, hệ điều hành Linux và cơ sở dữ liệu thường lưu mốc thời gian dưới dạng số giây (hoặc mili-giây) trôi qua tính từ thời điểm gốc <code>00:00:00 UTC ngày 01/01/1970</code>.</li>
+                    </ul>
+
+                    <h3>3. Câu hỏi thường gặp về thời gian (FAQ)</h3>
+                    <div style="margin-top: 10px;">
+                        <p><strong>Hỏi: Tại sao 1 phút lại có 60 giây và 1 giờ có 60 phút thay vì 10 hay 100?</strong><br>
+                        Trả lời: Đây là di sản từ nền văn minh Lưỡng Hà (Sumer & Babylon) hơn 4,000 năm trước. Họ sử dụng hệ cơ số 60 (sexagesimal) bởi vì số 60 là một con số cực kỳ thuận tiện trong thương mại và tính toán khi chia hết cho nhiều số nguyên nhất: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30. Mặt khác, người Ai Cập cổ đại đã chia ngày thành 12 giờ sáng và 12 giờ tối dựa trên các chòm sao, tạo nên hệ thống 24 giờ một ngày.</p>
+
+                        <p><strong>Hỏi: Thế kỷ 21 bắt đầu vào năm 2000 hay năm 2001?</strong><br>
+                        Trả lời: Theo chuẩn Lịch Gregory và Viện Đo lường Tiêu chuẩn Quốc tế, thế kỷ 21 chính thức bắt đầu vào ngày <strong>01/01/2001</strong> và sẽ kết thúc vào ngày <strong>31/12/2100</strong>. Lý do là vì trong lịch dương không có "Năm 0", thế kỷ đầu tiên bắt đầu từ năm 1 đến hết năm 100.</p>
+
+                        <p><strong>Hỏi: 1 năm có bao nhiêu tuần và bao nhiêu giờ?</strong><br>
+                        Trả lời: 1 năm thông thường có 365 ngày = <strong>52 tuần lẻ 1 ngày</strong> = <strong>8,760 giờ</strong> = <strong>525,600 phút</strong>. Đối với năm nhuận (366 ngày), sẽ có 52 tuần lẻ 2 ngày = 8,784 giờ = 527,040 phút.</p>
+                    </div>
+                </section>
+            </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links (Image 2) -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html" class="active">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('time', {
+                defaultFrom: 'min',
+                defaultTo: 'hour'
+            });
+
+            // Time Decomposition logic
+            const inputVal = document.getElementById('inputVal');
+            const selectFrom = document.getElementById('selectFrom');
+            const decompEl = document.getElementById('timeDecomposeRes');
+
+            function updateDecomposition() {
+                if (!inputVal || !inputVal.value.trim() || isNaN(parseFloat(inputVal.value))) {
+                    if (decompEl) decompEl.textContent = '---';
+                    return;
+                }
+                const val = parseFloat(inputVal.value);
+                const fromKey = selectFrom.value;
+                const unit = CONVERTER_DEFINITIONS.time.units[fromKey];
+                if (!unit) return;
+
+                let totalSeconds = Math.round(val * unit.toBase);
+                if (totalSeconds < 0) totalSeconds = 0;
+
+                const days = Math.floor(totalSeconds / 86400);
+                const hours = Math.floor((totalSeconds % 86400) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                const parts = [];
+                if (days > 0) parts.push(`${days} ngày`);
+                if (hours > 0 || days > 0) parts.push(`${hours} giờ`);
+                if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes} phút`);
+                parts.push(`${seconds} giây`);
+
+                decompEl.textContent = parts.join(' ');
+            }
+
+            inputVal.addEventListener('input', updateDecomposition);
+            selectFrom.addEventListener('change', updateDecomposition);
+            document.getElementById('btnSwap').addEventListener('click', updateDecomposition);
+            updateDecomposition();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

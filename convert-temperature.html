@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Độ C – Độ F – Kelvin (°C, °F, K) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">NHIỆT ĐỘ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Chuyển Đổi Độ C – Độ F – Kelvin (°C, °F, K, °R)</h1>
+                    <p class="text-muted">Quy đổi chính xác giữa các thang đo nhiệt độ phổ biến: Celsius (°C), Fahrenheit (°F), Kelvin (K) và Rankine (°R) theo thời gian thực.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <!-- Interactive Converter Box -->
+                    <div class="converter-box">
+                        <div class="converter-flow">
+                            <!-- From input -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập nhiệt độ</label>
+                                <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập nhiệt độ..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                                <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                                <select id="selectFrom" class="form-control"></select>
+                            </div>
+
+                            <!-- Swap Button -->
+                            <div class="swap-btn-container">
+                                <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                    <i class='bx bx-transfer-alt'></i>
+                                </button>
+                            </div>
+
+                            <!-- To select -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                                <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                            </div>
+                        </div>
+
+                        <!-- Main Conversion Result Card -->
+                        <div class="conversion-result-card">
+                            <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                            <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #38bdf8; margin: 8px 0; word-break: break-all;">---</div>
+                            <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Độ F (Fahrenheit)</div>
+
+                            <div id="formulaText" class="conversion-formula-box">
+                                Nhập nhiệt độ để xem kết quả quy đổi
+                            </div>
+
+                            <div style="margin-top: 14px;">
+                                <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                    <i class='bx bx-copy'></i> Sao chép kết quả
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-unit live grid -->
+                    <div style="text-align: left; margin-top: 32px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-grid-alt'></i> Bảng So Sánh Các Thang Đo Nhiệt Độ
+                        </h3>
+                        <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                    </div>
+
+                    <!-- Thermal Landmarks Table -->
+                    <div style="text-align: left; margin-top: 28px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-sun'></i> Các Mốc Nhiệt Độ Quan Trọng Trong Tự Nhiên
+                        </h3>
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Hiện tượng / Điểm mốc</th>
+                                    <th>Độ C (°C)</th>
+                                    <th>Độ F (°F)</th>
+                                    <th>Kelvin (K)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Độ không tuyệt đối (Absolute Zero)</strong></td>
+                                    <td>-273.15 °C</td>
+                                    <td>-459.67 °F</td>
+                                    <td>0 K</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nước đóng băng (ở 1 atm)</strong></td>
+                                    <td>0 °C</td>
+                                    <td>32 °F</td>
+                                    <td>273.15 K</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nhiệt độ phòng tiêu chuẩn</strong></td>
+                                    <td>20 °C – 25 °C</td>
+                                    <td>68 °F – 77 °F</td>
+                                    <td>293.15 K – 298.15 K</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thân nhiệt người bình thường</strong></td>
+                                    <td>36.5 °C – 37.5 °C</td>
+                                    <td>97.7 °F – 99.5 °F</td>
+                                    <td>309.65 K – 310.65 K</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nước sôi (ở mực nước biển)</strong></td>
+                                    <td>100 °C</td>
+                                    <td>212 °F</td>
+                                    <td>373.15 K</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Thang Đo Nhiệt Độ</h2>
+                        <p>Nhiệt độ là đại lượng vật lý đặc trưng cho mức độ chuyển động nhiệt hỗn loạn của các hạt vi mô cấu tạo nên vật chất. Trong đời sống và khoa học kỹ thuật, có nhiều thang đo nhiệt độ khác nhau được sử dụng tùy theo quốc gia và lĩnh vực nghiên cứu.</p>
+                        
+                        <h3>1. Các công thức chuyển đổi nhiệt độ chuẩn</h3>
+                        <ul>
+                            <li><strong>Từ Celsius sang Fahrenheit:</strong> <span class="formula-highlight">°F = (°C × 9/5) + 32</span> hoặc <span class="formula-highlight">°F = (°C × 1.8) + 32</span></li>
+                            <li><strong>Từ Fahrenheit sang Celsius:</strong> <span class="formula-highlight">°C = (°F - 32) × 5/9</span> hoặc <span class="formula-highlight">°C = (°F - 32) / 1.8</span></li>
+                            <li><strong>Từ Celsius sang Kelvin:</strong> <span class="formula-highlight">K = °C + 273.15</span></li>
+                            <li><strong>Từ Kelvin sang Celsius:</strong> <span class="formula-highlight">°C = K - 273.15</span></li>
+                            <li><strong>Từ Fahrenheit sang Kelvin:</strong> <span class="formula-highlight">K = (°F - 32) × 5/9 + 273.15</span></li>
+                        </ul>
+
+                        <h3>2. Tại sao Mỹ vẫn dùng độ F (°F) thay vì độ C (°C)?</h3>
+                        <p>Hầu hết các quốc gia trên thế giới đều sử dụng thang đo Celsius (°C) thuộc hệ đo lường quốc tế SI vì tính logic: 0°C là điểm đóng băng của nước và 100°C là điểm sôi. Tuy nhiên, Hoa Kỳ, Bahamas, Belize và một số đảo quốc vẫn dùng thang Fahrenheit (°F) trong đời sống hàng ngày do thói quen lịch sử và độ nhạy nhỏ hơn (mỗi bước thay đổi 1°F tương ứng khoảng 0.55°C, giúp người dân dễ cảm nhận sự thay đổi thời tiết mà không cần dùng số thập phân).</p>
+
+                        <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: Điểm nào mà độ C bằng độ F?</strong><br>
+                            Trả lời: Ở đúng <strong>-40 độ</strong>, -40°C tương đương đúng bằng -40°F (-40 × 1.8 + 32 = -72 + 32 = -40).</p>
+                            <p><strong>Hỏi: Kelvin có ký hiệu độ (°) không?</strong><br>
+                            Trả lời: Không. Theo quy chuẩn quốc tế SI, Kelvin là đơn vị nhiệt độ tuyệt đối nên chỉ viết là <strong>K</strong> (ví dụ: 300 K), không dùng °K.</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html" class="active">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('temperature', {
+                defaultFrom: 'c',
+                defaultTo: 'f'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

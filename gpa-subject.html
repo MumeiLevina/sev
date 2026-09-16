@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính điểm tổng kết (GPA) môn học | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">GPA MÔN HỌC</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Tính Điểm Tổng Kết (GPA) Môn Học</h1>
+                <p class="text-muted">Nhập các điểm thành phần chuyên cần, bài tập, giữa kỳ, cuối kỳ để tính điểm tổng kết môn học.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <div class="flex justify-between align-center" style="margin-bottom: 16px;">
+                    <div>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">Tổng trọng số hiện tại: </span>
+                        <strong id="totalWeightIndicator" style="color: #10b981; font-size: 1.1rem;">100%</strong>
+                    </div>
+                    <button type="button" id="btnAddWeightRow" class="btn" style="background: rgba(99, 102, 241, 0.2); color: #475569; padding: 6px 14px; font-size: 0.85rem;">
+                        <i class='bx bx-plus'></i> Thêm thành phần điểm
+                    </button>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="data-table" id="componentsTable">
+                        <thead>
+                            <tr>
+                                <th>Thành Phần Điểm</th>
+                                <th style="width: 140px;">Trọng Số (%)</th>
+                                <th style="width: 150px;">Điểm Đạt Được (0-10)</th>
+                                <th style="width: 60px;">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="componentRowsBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="weightAlertBox" class="callout callout-warning" style="display: none; margin-bottom: 16px;">
+                    Tổng trọng số các điểm thành phần phải bằng chính xác 100%!
+                </div>
+
+                <button type="button" id="btnCalcSubject" class="btn btn-primary" style="width: 100%;">
+                    <i class='bx bx-calculator'></i> Tính Điểm Tổng Kết Môn
+                </button>
+
+                <div id="subjectResultBox" class="result-box active" style="margin-top: 24px;">
+                    <p style="color: var(--text-muted);">Điểm tổng kết học phần:</p>
+                    <div id="subjectFinal10" class="result-value" style="font-size: 3.5rem; color: #10b981;">--</div>
+
+                    <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
+                        <span id="subjectGrade4Badge" class="badge badge-primary">Hệ 4: --</span>
+                        <span id="subjectLetterBadge" class="badge badge-success">Điểm chữ: --</span>
+                        <span id="subjectStatusBadge" class="badge badge-success">QUA MÔN</span>
+                    </div>
+
+                    <div id="subjectAdviceNote" class="callout callout-info" style="text-align: left; margin-bottom: 0;"></div>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại)</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - Bộ đề 600 Câu</a></li>
+                    <li><a href="gpa-subject.html" class="active">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html">Tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/gpa-subject.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

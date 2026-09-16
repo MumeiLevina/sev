@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi & Xử Lý PDF Online | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        // Worker configuration for asynchronous parsing
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+    <style>
+        .drag-active {
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
+        }
+        .stats-badge-container {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #475569;
+            flex-wrap: wrap;
+        }
+        .stat-badge-item {
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">XỬ LÝ PDF</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Trích Xuất Văn Bản Từ File PDF</h1>
+                    <p class="text-muted">Đọc và trích xuất toàn bộ chữ tự động từ file PDF đề cương, giáo trình, bài giảng. 100% xử lý cục bộ trên trình duyệt, không gửi file lên máy chủ.</p>
+                </div>
+
+                <div class="tool-card-box">
+                    <!-- Drop Zone -->
+                    <div id="dropZone" style="border: 2px dashed #93c5fd; border-radius: 12px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: #f8fafc; position: relative;">
+                        <i class='bx bxs-file-pdf' style="font-size: 3.5rem; color: #ef4444; margin-bottom: 12px; display: inline-block;"></i>
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Kéo thả file PDF vào đây</h3>
+                        <p style="font-size: 0.9rem; color: #64748b; margin: 0;">hoặc bấm để chọn file từ máy tính (Hỗ trợ file lên đến 30MB)</p>
+                        <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
+
+                        <!-- Overlay Loading -->
+                        <div id="loadingOverlay" style="display: none; position: absolute; inset: 0; background: rgba(255,255,255,0.94); border-radius: 12px; align-items: center; justify-content: center; flex-direction: column; z-index: 10;">
+                            <i class='bx bx-loader-alt bx-spin' style="font-size: 2.8rem; color: #004bb5; margin-bottom: 10px;"></i>
+                            <span id="loadingStatusText" style="color: #004bb5; font-weight: 600;">Đang đọc dữ liệu PDF, vui lòng đợi...</span>
+                        </div>
+                    </div>
+
+                    <!-- Error Alert -->
+                    <div id="errorAlert" class="callout callout-warning" style="display: none; margin-top: 20px;">
+                        <i class='bx bx-error-circle'></i> <span id="errorMessage"></span>
+                    </div>
+
+                    <!-- Result Container -->
+                    <div id="resultContainer" style="display: none; margin-top: 24px; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <label class="form-label" style="margin-bottom: 0; font-weight: 700; color: #0f172a;">Nội dung văn bản trích xuất:</label>
+                            <div class="stats-badge-container">
+                                <span class="stat-badge-item" id="pageCountStat"><i class='bx bx-file'></i> 0 trang</span>
+                                <span class="stat-badge-item" id="wordCountStat"><i class='bx bx-text'></i> 0 từ</span>
+                                <span class="stat-badge-item" id="charCountStat"><i class='bx bx-font'></i> 0 ký tự</span>
+                            </div>
+                        </div>
+
+                        <textarea id="syllabusText" rows="13" class="form-control" style="font-family: 'Inter', monospace; font-size: 0.92rem; resize: vertical; line-height: 1.6;" placeholder="Nội dung file PDF sẽ xuất hiện ở đây..."></textarea>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 4px;">
+                            <div class="flex gap-2" style="flex-wrap: wrap;">
+                                <button type="button" id="btnCopyText" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;">
+                                    <i class='bx bx-copy'></i> Sao chép văn bản
+                                </button>
+                                <button type="button" id="btnDownloadTxt" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;">
+                                    <i class='bx bx-download'></i> Tải file (.txt)
+                                </button>
+                                <button type="button" id="btnCleanText" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;">
+                                    <i class='bx bx-brush'></i> Dọn khoảng trắng
+                                </button>
+                            </div>
+                            <button type="button" id="btnSendToPlanner" class="btn btn-primary" style="font-size: 0.88rem; padding: 6px 18px;">
+                                <i class='bx bx-brain'></i> Chuyển sang AI Lên lịch học <i class='bx bx-right-arrow-alt'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation & Features -->
+                <article class="tool-explanation">
+                    <h2>Ưu Điểm Của Bộ Xử Lý PDF Client-Side</h2>
+                    <ul class="bullet-diamond-list">
+                        <li><strong>Bảo mật tuyệt đối:</strong> Toàn bộ thuật toán parse PDF chạy trực tiếp bằng Javascript trên RAM của máy bạn, tài liệu riêng tư không bị gửi về bất kỳ máy chủ nào.</li>
+                        <li><strong>Tốc độ tức thì:</strong> Không tốn thời gian upload hay download lại file, trích xuất text ngay khi bạn chọn file.</li>
+                        <li><strong>Tích hợp thông minh:</strong> Dễ dàng sao chép hoặc chuyển trực tiếp đề cương sang công cụ <em>AI Lên lịch học Pomodoro</em> để tự động tạo thời gian biểu ôn tập.</li>
+                    </ul>
+                </article>
+            </main>
+
+            <!-- Right Sidebar: Cuộc sống số & Tiện ích -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Cuộc sống số & Tiện ích</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compressor.html">Nén file</a></li>
+                    <li><a href="file-converter.html">Chuyển đổi file</a></li>
+                    <li><a href="planner.html">AI Lên lịch học Pomodoro</a></li>
+                    <li><a href="pdf-extractor.html" class="active">Chuyển Đổi & Xử Lý PDF Online</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                    <li><a href="fraction.html">Máy tính phân số chi tiết</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingStatusText = document.getElementById('loadingStatusText');
+        const errorAlert = document.getElementById('errorAlert');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultContainer = document.getElementById('resultContainer');
+        const syllabusText = document.getElementById('syllabusText');
+        const pageCountStat = document.getElementById('pageCountStat');
+        const wordCountStat = document.getElementById('wordCountStat');
+        const charCountStat = document.getElementById('charCountStat');
+        const btnCopyText = document.getElementById('btnCopyText');
+        const btnDownloadTxt = document.getElementById('btnDownloadTxt');
+        const btnCleanText = document.getElementById('btnCleanText');
+        const btnSendToPlanner = document.getElementById('btnSendToPlanner');
+
+        const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB
+        let currentLoadedPdfName = 'van_ban_trich_xuat';
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-active');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-active');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-active');
+            if (e.dataTransfer.files.length) {
+                processFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                processFile(e.target.files[0]);
+            }
+        });
+
+        function updateStats(text, numPages = 0) {
+            const chars = text.length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            charCountStat.innerHTML = `<i class='bx bx-font'></i> ${chars.toLocaleString('vi-VN')} ký tự`;
+            wordCountStat.innerHTML = `<i class='bx bx-text'></i> ${words.toLocaleString('vi-VN')} từ`;
+            if (numPages > 0) {
+                pageCountStat.innerHTML = `<i class='bx bx-file'></i> ${numPages} trang`;
+            }
+        }
+
+        syllabusText.addEventListener('input', () => {
+            updateStats(syllabusText.value);
+        });
+
+        btnCopyText.addEventListener('click', () => {
+            if (!syllabusText.value) return;
+            navigator.clipboard.writeText(syllabusText.value).then(() => {
+                const prev = btnCopyText.innerHTML;
+                btnCopyText.innerHTML = "<i class='bx bx-check'></i> Đã sao chép!";
+                setTimeout(() => { btnCopyText.innerHTML = prev; }, 2000);
+            });
+        });
+
+        btnDownloadTxt.addEventListener('click', () => {
+            if (!syllabusText.value) return;
+            const blob = new Blob([syllabusText.value], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentLoadedPdfName}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        btnCleanText.addEventListener('click', () => {
+            if (!syllabusText.value) return;
+            // Remove excessive blank lines and trailing whitespaces
+            let cleaned = syllabusText.value
+                .replace(/[ \t]+/g, ' ')
+                .replace(/(\r?\n){3,}/g, '\n\n')
+                .trim();
+            syllabusText.value = cleaned;
+            updateStats(cleaned);
+        });
+
+        btnSendToPlanner.addEventListener('click', () => {
+            if (!syllabusText.value) return;
+            localStorage.setItem('student_imported_syllabus', syllabusText.value);
+            window.location.href = 'planner.html';
+        });
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorAlert.style.display = 'block';
+            resultContainer.style.display = 'none';
+            loadingOverlay.style.display = 'none';
+            fileInput.value = '';
+        }
+
+        function hideError() {
+            errorAlert.style.display = 'none';
+        }
+
+        async function processFile(file) {
+            hideError();
+            
+            if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                return showError("Định dạng không hợp lệ. Vui lòng chọn file có định dạng .pdf!");
+            }
+            if (file.size > MAX_FILE_SIZE) {
+                return showError("File quá lớn. Vui lòng chọn file dưới 30MB!");
+            }
+
+            currentLoadedPdfName = file.name.replace(/\.pdf$/i, '');
+            loadingOverlay.style.display = 'flex';
+            loadingStatusText.textContent = "Đang đọc dữ liệu PDF, vui lòng đợi...";
+            resultContainer.style.display = 'none';
+
+            const reader = new FileReader();
+            
+            reader.onload = async function(e) {
+                try {
+                    const typedarray = new Uint8Array(e.target.result);
+                    const loadingTask = pdfjsLib.getDocument(typedarray);
+                    const pdf = await loadingTask.promise;
+                    
+                    let fullText = '';
+                    const totalPages = pdf.numPages;
+
+                    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                        loadingStatusText.textContent = `Đang trích xuất trang ${pageNum} / ${totalPages}...`;
+                        const page = await pdf.getPage(pageNum);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        fullText += pageText + '\n\n';
+                    }
+
+                    const cleanText = fullText.trim();
+                    if (cleanText.length < 20) {
+                        showError("Không thể nhận diện chữ từ file này (có thể là file hình ảnh scan không chứa lớp text số hóa). Vui lòng sử dụng file PDF có chữ hoặc copy/paste nội dung.");
+                        return;
+                    }
+
+                    syllabusText.value = cleanText;
+                    updateStats(cleanText, totalPages);
+                    resultContainer.style.display = 'flex';
+
+                } catch (error) {
+                    console.error('Lỗi khi đọc PDF:', error);
+                    showError("Đã có lỗi xảy ra trong quá trình đọc file PDF: " + (error.message || 'Vui lòng thử lại.'));
+                } finally {
+                    loadingOverlay.style.display = 'none';
+                }
+            };
+
+            reader.onerror = function() {
+                showError("Không thể tải file vào bộ nhớ trình duyệt. Vui lòng thử lại.");
+                loadingOverlay.style.display = 'none';
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tính Lượng Calo Cần Nạp & Macros | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">CALO</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Công Cụ Tính Lượng Calo Cần Nạp & Macros</h1>
+                <p class="text-muted">Xác định chính xác lượng calo cần ăn mỗi ngày để giảm cân, giữ cân hoặc tăng cơ, kèm phân chia gram Protein, Carb, Fat.</p>
+            </div>
+
+            <!-- Health Tabs Navigation -->
+            <div class="health-tabs">
+                <a href="bmi.html" class="health-tab-link"><i class='bx bx-body'></i> Tính BMI</a>
+                <a href="bmr.html" class="health-tab-link"><i class='bx bx-flame'></i> Tính BMR</a>
+                <a href="tdee.html" class="health-tab-link"><i class='bx bx-run'></i> Tính TDEE</a>
+                <a href="calorie.html" class="health-tab-link active"><i class='bx bx-dish'></i> Calo Cần Nạp</a>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <form id="calForm">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-flame'></i> Mức TDEE hiện tại (kcal/ngày)</label>
+                            <input type="number" id="calTDEE" class="form-control" value="" placeholder="Nhập mức TDEE (VD: 2000)" min="500" max="8000" step="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-target-lock'></i> Mục tiêu cân nặng</label>
+                            <select id="calGoal" class="form-control">
+                                <option value="lose-fast">Giảm cân nhanh (-750 kcal/ngày ~ -0.75kg/tuần)</option>
+                                <option value="lose-standard" selected>Giảm cân chuẩn (-500 kcal/ngày ~ -0.5kg/tuần)</option>
+                                <option value="lose-slow">Giảm cân chậm & an toàn (-250 kcal/ngày ~ -0.25kg/tuần)</option>
+                                <option value="maintain">Duy trì cân nặng hiện tại (Giữ dáng)</option>
+                                <option value="gain-slow">Tăng cân / Tăng cơ nhẹ (+250 kcal/ngày)</option>
+                                <option value="gain-standard">Tăng cân nhanh / Xả cơ Bulking (+500 kcal/ngày)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class='bx bx-restaurant'></i> Tỷ lệ phân bổ dinh dưỡng (Macro Split)</label>
+                        <select id="calDiet" class="form-control" style="padding: 14px;">
+                            <option value="balanced" selected>Cân Bằng: 30% Đạm (Protein) - 40% Tinh bột (Carb) - 30% Béo (Fat)</option>
+                            <option value="high_protein">Tăng Cơ (High Protein): 35% Đạm - 45% Tinh bột - 20% Béo</option>
+                            <option value="low_carb">Giảm Mỡ (Low-Carb): 40% Đạm - 25% Tinh bột - 35% Béo</option>
+                            <option value="keto">Keto Cắt Giảm Tối Đa Carb: 20% Đạm - 5% Tinh bột - 75% Béo</option>
+                        </select>
+                    </div>
+                </form>
+
+                <!-- Calorie Target Result Display -->
+                <div class="result-box active" style="margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
+                    <span style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Lượng Calo Cần Nạp Mỗi Ngày</span>
+                    <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 10px 0;">
+                        <span id="calTargetVal" style="font-size: 3.8rem; font-weight: 800; color: #10b981; line-height: 1;">---</span>
+                        <span style="font-size: 1.4rem; color: #10b981; font-weight: 600;">kcal / ngày</span>
+                    </div>
+
+                    <div id="calGoalBadge" style="display: inline-block; padding: 6px 16px; border-radius: 20px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">
+                        Vui lòng nhập mức TDEE
+                    </div>
+
+                    <!-- Macro Cards (Protein / Carb / Fat) -->
+                    <div class="macro-grid">
+                        <!-- Protein -->
+                        <div class="macro-card" style="border-top: 4px solid #ef4444;">
+                            <div class="macro-title" style="color: #ef4444;"><i class='bx bxs-hot'></i> Đạm (Protein)</div>
+                            <div class="macro-val" id="macroProteinGrams" style="color: #ef4444;">--- g</div>
+                            <div class="macro-sub" id="macroProteinSub">---</div>
+                        </div>
+
+                        <!-- Carbs -->
+                        <div class="macro-card" style="border-top: 4px solid #f59e0b;">
+                            <div class="macro-title" style="color: #f59e0b;"><i class='bx bx-baguette'></i> Tinh bột (Carb)</div>
+                            <div class="macro-val" id="macroCarbGrams" style="color: #f59e0b;">--- g</div>
+                            <div class="macro-sub" id="macroCarbSub">---</div>
+                        </div>
+
+                        <!-- Fat -->
+                        <div class="macro-card" style="border-top: 4px solid #38bdf8;">
+                            <div class="macro-title" style="color: #38bdf8;"><i class='bx bx-droplet'></i> Chất béo (Fat)</div>
+                            <div class="macro-val" id="macroFatGrams" style="color: #38bdf8;">--- g</div>
+                            <div class="macro-sub" id="macroFatSub">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Safety Warning if < 1200 kcal -->
+                    <div id="calSafetyWarning" class="callout callout-warning" style="display: none; text-align: left;">
+                        <i class='bx bx-error-circle'></i> <span id="calWarningText"></span>
+                    </div>
+
+                    <!-- Meal Distribution Plan -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; text-align: left; margin-top: 16px;">
+                        <h4 style="font-size: 1rem; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <i class='bx bx-time-five' style="color: var(--primary);"></i> Gợi Ý Phân Bổ Năng Lượng Cho 4 Bữa Ăn
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+                            <div style="padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Bữa sáng (25%)</div>
+                                <div id="mealBreakfast" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-top: 2px;">425 kcal</div>
+                            </div>
+                            <div style="padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Bữa trưa (35%)</div>
+                                <div id="mealLunch" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-top: 2px;">595 kcal</div>
+                            </div>
+                            <div style="padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Bữa tối (30%)</div>
+                                <div id="mealDinner" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-top: 2px;">510 kcal</div>
+                            </div>
+                            <div style="padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Bữa phụ (10%)</div>
+                                <div id="mealSnack" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-top: 2px;">170 kcal</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Source Guide -->
+                <div style="margin-top: 36px; text-align: left;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-book-bookmark'></i> Nguồn Thực Phẩm Khuyến Nghị Theo Từng Nhóm Macro
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                        <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px; padding: 14px;">
+                            <strong style="color: #ef4444; display: block; margin-bottom: 6px;"><i class='bx bxs-check-shield'></i> Đạm Tốt (Protein)</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                                Ức gà, thịt bò nạc, cá hồi, cá ngừ, trứng gà, đậu phụ, sữa chua Hy Lạp, các loại hạt đỗ, whey protein.
+                            </p>
+                        </div>
+                        <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 10px; padding: 14px;">
+                            <strong style="color: #f59e0b; display: block; margin-bottom: 6px;"><i class='bx bxs-check-shield'></i> Tinh Bột Chậm (Carb Phức)</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                                Gạo lứt, yến mạch, khoai lang, ngô luộc, bánh mì nguyên cám, đậu lăng, hoa quả ít ngọt (táo, ổi, việt quất).
+                            </p>
+                        </div>
+                        <div style="background: rgba(2, 132, 199, 0.05); border: 1px solid rgba(2, 132, 199, 0.2); border-radius: 10px; padding: 14px;">
+                            <strong style="color: #0284c7; display: block; margin-bottom: 6px;"><i class='bx bxs-check-shield'></i> Chất Béo Lành Mạnh (Fat)</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                                Dầu ô liu nguyên chất, quả bơ, hạt hạnh nhân, hạt óc chó, hạt chia, mỡ cá giàu Omega-3.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Sức Khoẻ & Thể Hình -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Sức khoẻ & Thể hình</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="bmi.html">Công cụ tính BMI</a></li>
+                    <li><a href="bmr.html">Công cụ tính chỉ số BMR</a></li>
+                    <li><a href="tdee.html">Công cụ tính chỉ số TDEE</a></li>
+                    <li><a href="calorie.html" class="active">Công cụ tính lượng Calo cần nạp</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/health-hub.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tdeeEl = document.getElementById('calTDEE');
+            const goalEl = document.getElementById('calGoal');
+            const dietEl = document.getElementById('calDiet');
+
+            // Load saved data and calculate TDEE if available
+            const saved = getHealthData();
+            if (saved && saved.weight && saved.height && saved.age) {
+                const bmr = calculateBMR(saved.gender, saved.weight, saved.height, saved.age, saved.formula || 'mifflin');
+                const calculatedTDEE = calculateTDEE(bmr, saved.activity || 1.375);
+                if (calculatedTDEE) tdeeEl.value = calculatedTDEE;
+                if (saved.goal) goalEl.value = saved.goal;
+                if (saved.diet) dietEl.value = saved.diet;
+            }
+
+            function updateCalorie() {
+                if (!tdeeEl.value || isNaN(parseFloat(tdeeEl.value)) || parseFloat(tdeeEl.value) <= 0) {
+                    document.getElementById('calTargetVal').textContent = '---';
+                    document.getElementById('calGoalBadge').textContent = 'Vui lòng nhập mức TDEE';
+                    document.getElementById('macroProteinGrams').textContent = '--- g';
+                    document.getElementById('macroProteinSub').textContent = '---';
+                    document.getElementById('macroCarbGrams').textContent = '--- g';
+                    document.getElementById('macroCarbSub').textContent = '---';
+                    document.getElementById('macroFatGrams').textContent = '--- g';
+                    document.getElementById('macroFatSub').textContent = '---';
+                    document.getElementById('mealBreakfast').textContent = '--- kcal';
+                    document.getElementById('mealLunch').textContent = '--- kcal';
+                    document.getElementById('mealDinner').textContent = '--- kcal';
+                    document.getElementById('mealSnack').textContent = '--- kcal';
+                    return;
+                }
+                const tdee = parseFloat(tdeeEl.value);
+                const goal = goalEl.value;
+                const diet = dietEl.value;
+
+                saveHealthData({ goal, diet });
+
+                const res = calculateCaloriesAndMacros(tdee, goal, diet);
+
+                document.getElementById('calTargetVal').textContent = res.targetCal.toLocaleString('vi-VN');
+                document.getElementById('calGoalBadge').textContent = 'Mục tiêu: ' + res.goalDesc;
+
+                // Macros
+                document.getElementById('macroProteinGrams').textContent = res.protein.grams + ' g';
+                document.getElementById('macroProteinSub').textContent = res.protein.cal + ' kcal (' + res.protein.percent + '%)';
+
+                document.getElementById('macroCarbGrams').textContent = res.carb.grams + ' g';
+                document.getElementById('macroCarbSub').textContent = res.carb.cal + ' kcal (' + res.carb.percent + '%)';
+
+                document.getElementById('macroFatGrams').textContent = res.fat.grams + ' g';
+                document.getElementById('macroFatSub').textContent = res.fat.cal + ' kcal (' + res.fat.percent + '%)';
+
+                // Safety Warning
+                const warningBox = document.getElementById('calSafetyWarning');
+                if (res.safetyWarning) {
+                    warningBox.style.display = 'block';
+                    document.getElementById('calWarningText').textContent = res.safetyWarning;
+                } else {
+                    warningBox.style.display = 'none';
+                }
+
+                // Meals
+                document.getElementById('mealBreakfast').textContent = Math.round(res.targetCal * 0.25) + ' kcal';
+                document.getElementById('mealLunch').textContent = Math.round(res.targetCal * 0.35) + ' kcal';
+                document.getElementById('mealDinner').textContent = Math.round(res.targetCal * 0.30) + ' kcal';
+                document.getElementById('mealSnack').textContent = Math.round(res.targetCal * 0.10) + ' kcal';
+            }
+
+            tdeeEl.addEventListener('input', updateCalorie);
+            goalEl.addEventListener('change', updateCalorie);
+            dietEl.addEventListener('change', updateCalorie);
+
+            updateCalorie();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

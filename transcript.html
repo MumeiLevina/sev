@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính điểm xét học bạ THPT | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">XÉT HỌC BẠ THPT</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Công Cụ Tính Điểm Xét Học Bạ THPT</h1>
+                    <p class="text-muted">Tính điểm xét tuyển Đại học theo học bạ 3 kỳ, 5 kỳ, cả năm lớp 12 và quy chế cộng điểm ưu tiên mới nhất.</p>
+                </div>
+
+            <div class="tool-container wide glass-panel">
+                <form id="transcriptForm">
+                    <div class="flex gap-4" style="flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 250px;">
+                            <label class="form-label">Phương thức xét tuyển học bạ</label>
+                            <select id="methodSelect" class="form-control">
+                                <option value="method12" selected>Xét cả năm lớp 12 (Tổ hợp 3 môn)</option>
+                                <option value="method3hk">Xét 3 học kỳ (HK1, HK2 lớp 11 + HK1 lớp 12)</option>
+                                <option value="method5hk">Xét 5 học kỳ (Lớp 10 + Lớp 11 + HK1 lớp 12)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="flex: 1; min-width: 250px;">
+                            <label class="form-label">Tổ hợp môn xét tuyển</label>
+                            <select id="comboSelect" class="form-control">
+                                <option value="A00" selected>A00: Toán - Vật lý - Hóa học</option>
+                                <option value="A01">A01: Toán - Vật lý - Tiếng Anh</option>
+                                <option value="B00">B00: Toán - Hóa học - Sinh học</option>
+                                <option value="C00">C00: Ngữ văn - Lịch sử - Địa lý</option>
+                                <option value="D01">D01: Toán - Ngữ văn - Tiếng Anh</option>
+                                <option value="D07">D07: Toán - Hóa học - Tiếng Anh</option>
+                                <option value="custom">Tùy chọn môn khác...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Subjects Inputs -->
+                    <div id="subjectInputsContainer" style="margin: 20px 0;">
+                        <!-- Dynamic subject inputs rendered by JS based on method -->
+                    </div>
+
+                    <!-- Priority points -->
+                    <h4 style="color: #0f172a; font-size: 1.05rem; font-weight: 700; margin: 20px 0 10px;">
+                        <i class='bx bx-award' style="color: #004bb5;"></i> Điểm Ưu Tiên Tuyển Sinh
+                    </h4>
+
+                    <div class="flex gap-4" style="flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 220px;">
+                            <label class="form-label">Khu vực ưu tiên</label>
+                            <select id="regionSelect" class="form-control">
+                                <option value="0">Khu vực 3 (Không ưu tiên - KV3)</option>
+                                <option value="0.25">Khu vực 2 (+0.25 - KV2)</option>
+                                <option value="0.5">Khu vực 2 Nông thôn (+0.5 - KV2-NT)</option>
+                                <option value="0.75">Khu vực 1 (+0.75 - KV1)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="flex: 1; min-width: 220px;">
+                            <label class="form-label">Đối tượng chính sách</label>
+                            <select id="priorityObjectSelect" class="form-control">
+                                <option value="0">Không thuộc đối tượng ưu tiên</option>
+                                <option value="2.0">Nhóm ưu tiên 1 (+2.0 điểm)</option>
+                                <option value="1.0">Nhóm ưu tiên 2 (+1.0 điểm)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <i class='bx bx-calculator'></i> Tính Tổng Điểm Xét Học Bạ
+                    </button>
+                </form>
+
+                <div id="transcriptResult" class="result-box active" style="margin-top: 24px;">
+                    <p style="color: var(--text-muted);">Tổng điểm xét tuyển (Đã gồm điểm ưu tiên):</p>
+                    <div id="totalTranscriptScore" class="result-value" style="font-size: 3.2rem; color: #16a34a; font-weight: 800;">--</div>
+                    <div class="flex justify-between" style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px; margin: 12px 0; font-size: 0.95rem; flex-wrap: wrap; gap: 8px; color: #1e293b;">
+                        <span>Điểm 3 môn xét tuyển: <strong id="rawScore3M" style="color: #004bb5; font-weight: 700;">--</strong></span>
+                        <span>Điểm ưu tiên thực nhận: <strong id="appliedBonusScore" style="color: #d97706; font-weight: 700;">--</strong></span>
+                    </div>
+                    <div id="transcriptEvaluation" class="callout callout-info" style="text-align: left; margin-bottom: 0;"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Công cụ giáo dục -->
+        <aside class="tool-category-sidebar">
+            <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+            <ul class="tool-sidebar-links">
+                <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                <li><a href="transcript.html" class="active">Công cụ tính điểm xét học bạ THPT</a></li>
+                <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - 600 Câu</a></li>
+                <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                <li><a href="fraction.html">Máy tính phân số</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <footer class="minimal-footer">
+        <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+    </footer>
+</div>
+
+    <script src="js/transcript.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tính BMI - Chỉ Số Khối Cơ Thể Chuẩn Châu Á & WHO | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">BMI</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Công Cụ Tính Chỉ Số BMI</h1>
+                    <p class="text-muted">Kiểm tra chỉ số khối cơ thể (Body Mass Index) theo chuẩn IDI & WPRO dành riêng cho người Châu Á và chuẩn WHO Quốc tế.</p>
+                </div>
+
+            <!-- Health Tabs Navigation -->
+            <div class="health-tabs">
+                <a href="bmi.html" class="health-tab-link active"><i class='bx bx-body'></i> Tính BMI</a>
+                <a href="bmr.html" class="health-tab-link"><i class='bx bx-flame'></i> Tính BMR</a>
+                <a href="tdee.html" class="health-tab-link"><i class='bx bx-run'></i> Tính TDEE</a>
+                <a href="calorie.html" class="health-tab-link"><i class='bx bx-dish'></i> Calo Cần Nạp</a>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <form id="bmiForm">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-user'></i> Giới tính</label>
+                            <select id="bmiGender" class="form-control">
+                                <option value="male">Nam giới</option>
+                                <option value="female">Nữ giới</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-calendar'></i> Độ tuổi</label>
+                            <input type="number" id="bmiAge" class="form-control" value="" placeholder="VD: 20" min="2" max="120" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-ruler'></i> Chiều cao (cm)</label>
+                            <input type="number" id="bmiHeight" class="form-control" value="" placeholder="VD: 170" min="50" max="250" step="0.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-dumbbell'></i> Cân nặng (kg)</label>
+                            <input type="number" id="bmiWeight" class="form-control" value="" placeholder="VD: 60" min="10" max="300" step="0.5" required>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- BMI Result Box -->
+                <div class="result-box active" style="margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                        <div style="text-align: left;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Chỉ số BMI của bạn</span>
+                            <div id="bmiValDisplay" style="font-size: 3.2rem; font-weight: 800; color: var(--text-muted); line-height: 1.1;">---</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div id="bmiStatusBadge" class="bmi-badge-pill" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid #cbd5e1;">
+                                <i class='bx bx-info-circle'></i> Chờ nhập thông tin
+                            </div>
+                            <div style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">
+                                Chuẩn WHO: <strong id="bmiWhoDisplay" style="color: var(--text-main);">---</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Gauge Meter -->
+                    <div class="bmi-meter-wrapper">
+                        <div class="bmi-meter-track">
+                            <div id="bmiNeedle" class="bmi-needle" style="left: 0%;"></div>
+                        </div>
+                        <div class="bmi-meter-labels">
+                            <span>Gầy (&lt;18.5)</span>
+                            <span>Bình thường (18.5-22.9)</span>
+                            <span>Thừa cân (23-24.9)</span>
+                            <span>Béo phì (&gt;25)</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Metrics: Ideal Weight & Difference -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 20px; text-align: left;">
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);"><i class='bx bx-target-lock'></i> Cân nặng lý tưởng (Chuẩn Châu Á)</span>
+                            <div id="bmiIdealRange" style="font-size: 1.25rem; font-weight: 700; color: #0284c7; margin-top: 4px;">--- kg</div>
+                        </div>
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);"><i class='bx bx-trending-up'></i> Trạng thái cân nặng</span>
+                            <div id="bmiDiffText" style="font-size: 1.05rem; font-weight: 600; color: #004bb5; margin-top: 4px;">Vui lòng nhập chiều cao và cân nặng để tính toán</div>
+                        </div>
+                    </div>
+
+                    <!-- Advice callout -->
+                    <div id="bmiAdviceBox" class="callout callout-info" style="text-align: left; margin-top: 18px; background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px 16px; border-radius: 6px; font-size: 0.88rem; color: #1e3a8a;">
+                        <i class='bx bx-info-circle'></i> <span id="bmiAdviceText">Nhập thông tin chiều cao và cân nặng của bạn vào ô trên để xem đánh giá chi tiết chỉ số BMI theo chuẩn WHO và người Châu Á.</span>
+                    </div>
+
+                    <!-- Next Step Link to BMR / TDEE -->
+                    <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 12px;">
+                        <a href="bmr.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 18px;">
+                            Tiếp tục: Tính chỉ số BMR tiêu hao <i class='bx bx-right-arrow-alt'></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Classification Reference Table -->
+                <div style="margin-top: 36px; text-align: left;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-table'></i> Bảng Phân Loại Thể Trạng Theo BMI
+                    </h3>
+                    <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background: #f1f5f9; color: #334155; text-align: left; font-weight: 700;">
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Phân Loại</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Chuẩn Châu Á (WPRO/IDI)</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Chuẩn Quốc Tế (WHO)</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Nguy Cơ Bệnh Tật</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px 16px; color: #0284c7; font-weight: 600;">Thiếu cân (Gầy)</td>
+                                    <td style="padding: 12px 16px;">&lt; 18.5</td>
+                                    <td style="padding: 12px 16px;">&lt; 18.5</td>
+                                    <td style="padding: 12px 16px; color: var(--text-muted);">Thấp (nguy cơ loãng xương, suy nhược)</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0; background: #f0fdf4;">
+                                    <td style="padding: 12px 16px; color: #166534; font-weight: 700;">Bình thường</td>
+                                    <td style="padding: 12px 16px; font-weight: 700; color: #166534;">18.5 – 22.9</td>
+                                    <td style="padding: 12px 16px;">18.5 – 24.9</td>
+                                    <td style="padding: 12px 16px; color: #166534; font-weight: 600;">Trung bình (Tối ưu nhất)</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px 16px; color: #b45309; font-weight: 600;">Tiền béo phì (Thừa cân)</td>
+                                    <td style="padding: 12px 16px; font-weight: 700; color: #b45309;">23.0 – 24.9</td>
+                                    <td style="padding: 12px 16px;">25.0 – 29.9</td>
+                                    <td style="padding: 12px 16px; color: #b45309;">Tăng nhẹ</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px 16px; color: #c2410c; font-weight: 600;">Béo phì độ 1</td>
+                                    <td style="padding: 12px 16px;">25.0 – 29.9</td>
+                                    <td style="padding: 12px 16px;">30.0 – 34.9</td>
+                                    <td style="padding: 12px 16px; color: #c2410c;">Cao</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; color: #b91c1c; font-weight: 600;">Béo phì độ 2</td>
+                                    <td style="padding: 12px 16px;">&ge; 30.0</td>
+                                    <td style="padding: 12px 16px;">&ge; 35.0</td>
+                                    <td style="padding: 12px 16px; color: #b91c1c;">Rất cao (nguy hiểm tim mạch, tiểu đường)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+            <!-- Right Sidebar: Sức Khoẻ & Thể Hình -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Sức khoẻ & Thể hình</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="bmi.html" class="active">Công cụ tính BMI</a></li>
+                    <li><a href="bmr.html">Công cụ tính chỉ số BMR</a></li>
+                    <li><a href="tdee.html">Công cụ tính chỉ số TDEE</a></li>
+                    <li><a href="calorie.html">Công cụ tính lượng Calo cần nạp</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/health-hub.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const genderEl = document.getElementById('bmiGender');
+            const ageEl = document.getElementById('bmiAge');
+            const heightEl = document.getElementById('bmiHeight');
+            const weightEl = document.getElementById('bmiWeight');
+
+            // Load saved data if present
+            const saved = getHealthData();
+            if (saved) {
+                genderEl.value = saved.gender || 'male';
+                if (saved.age) ageEl.value = saved.age;
+                if (saved.height) heightEl.value = saved.height;
+                if (saved.weight) weightEl.value = saved.weight;
+            }
+
+            function updateBMI() {
+                const w = parseFloat(weightEl.value) || 0;
+                const h = parseFloat(heightEl.value) || 0;
+                const a = parseInt(ageEl.value) || 0;
+                const g = genderEl.value;
+
+                if (h <= 0 || w <= 0) {
+                    document.getElementById('bmiValDisplay').textContent = '---';
+                    document.getElementById('bmiValDisplay').style.color = 'var(--text-muted)';
+                    const badge = document.getElementById('bmiStatusBadge');
+                    badge.style.color = 'var(--text-muted)';
+                    badge.style.borderColor = '#cbd5e1';
+                    badge.style.backgroundColor = '#f1f5f9';
+                    badge.innerHTML = `<i class='bx bx-info-circle'></i> Chờ nhập thông tin`;
+                    document.getElementById('bmiWhoDisplay').textContent = '---';
+                    document.getElementById('bmiNeedle').style.left = '0%';
+                    document.getElementById('bmiIdealRange').textContent = '--- kg';
+                    document.getElementById('bmiDiffText').textContent = 'Vui lòng nhập chiều cao và cân nặng để tính toán';
+                    document.getElementById('bmiAdviceText').textContent = 'Nhập thông tin chiều cao và cân nặng của bạn vào ô trên để xem đánh giá chi tiết chỉ số BMI theo chuẩn WHO và người Châu Á.';
+                    return;
+                }
+
+                saveHealthData({ gender: g, age: a, height: h, weight: w });
+
+                const res = calculateBMI(w, h);
+                if (!res) return;
+
+                document.getElementById('bmiValDisplay').textContent = res.bmi;
+                document.getElementById('bmiValDisplay').style.color = res.asianColor;
+
+                const badge = document.getElementById('bmiStatusBadge');
+                badge.style.color = res.asianColor;
+                badge.style.borderColor = res.asianColor;
+                badge.style.backgroundColor = res.asianColor + '22';
+                badge.innerHTML = `<i class='bx bxs-circle' style='font-size: 0.7rem;'></i> ${res.asianStatus}`;
+
+                document.getElementById('bmiWhoDisplay').textContent = res.whoStatus;
+                document.getElementById('bmiNeedle').style.left = `${res.gaugePercent}%`;
+                document.getElementById('bmiIdealRange').textContent = `${res.idealMin} – ${res.idealMax} kg`;
+                document.getElementById('bmiDiffText').textContent = res.diffText;
+
+                document.getElementById('bmiAdviceText').textContent = res.advice;
+            }
+
+            genderEl.addEventListener('change', updateBMI);
+            ageEl.addEventListener('input', updateBMI);
+            heightEl.addEventListener('input', updateBMI);
+            weightEl.addEventListener('input', updateBMI);
+
+            updateBMI();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

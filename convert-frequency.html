@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi MHz – GHz – Hz – kHz (Tần Số) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">TẦN SỐ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi MHz – GHz – Hz – kHz</h1>
+                <p class="text-muted">Quy đổi giữa các đơn vị tần số sóng vô tuyến, xung nhịp CPU máy tính và mạng viễn thông: Hz, kHz, MHz, GHz, THz, RPM.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập tần số</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập tần số..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #38bdf8; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Gigahertz (GHz)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập tần số để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng So Sánh Các Đơn Vị Tần Số
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                <!-- Notes -->
+                <div style="text-align: left; margin-top: 28px;">
+                    <div class="callout callout-info">
+                        <strong>Ứng dụng thực tế của các dải tần số:</strong><br>
+                        • <strong>Hz (Hertz)</strong>: Dao động âm thanh tai người nghe được (20 Hz – 20,000 Hz). Điện lưới sinh hoạt ở Việt Nam là <strong>50 Hz</strong>.<br>
+                        • <strong>kHz (Kilohertz)</strong>: Sóng phát thanh radio AM (530 – 1700 kHz).<br>
+                        • <strong>MHz (Megahertz)</strong>: Sóng phát thanh FM (87.5 – 108 MHz), tốc độ bus RAM DDR4/DDR5.<br>
+                        • <strong>GHz (Gigahertz)</strong>: Xung nhịp CPU máy tính (ví dụ 3.5 – 5.2 GHz), sóng Wi-Fi (2.4 GHz, 5 GHz, 6 GHz), mạng 5G.
+                    </div>
+                </div>
+
+                <!-- Comprehensive Editorial Content for AdSense & Learning -->
+                <section class="tool-explanation-section">
+                    <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Các Đơn Vị Đo Tần Số</h2>
+                    <p>Trong vật lý và kỹ thuật điện tử, <strong>Tần số (Frequency)</strong> là đại lượng đặc trưng cho số lần lặp lại của một hiện tượng dao động tuần hoàn trong một đơn vị thời gian (công thức tổng quát <code>f = 1 / T</code>). Đơn vị đo tần số chuẩn quốc tế trong hệ SI là <strong>Hertz (Hz)</strong>, được đặt tên để vinh danh nhà vật lý người Đức Heinrich Rudolf Hertz – người đầu tiên chứng minh bằng thực nghiệm sự tồn tại của sóng điện từ.</p>
+
+                    <h3>1. Bảng đối chiếu các đơn vị đo tần số thông dụng</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Đơn vị</th>
+                                    <th>Ký hiệu</th>
+                                    <th>Hệ thống / Quy chuẩn</th>
+                                    <th>Quy đổi sang Hertz (Hz)</th>
+                                    <th>Ứng dụng thực tế</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Hertz</strong></td>
+                                    <td>Hz</td>
+                                    <td>Đơn vị cơ bản SI (1 chu kỳ/giây)</td>
+                                    <td>1 Hz</td>
+                                    <td>Dải tần số âm thanh con người nghe thấy (20 Hz – 20,000 Hz), tần số điện lưới dân dụng Việt Nam (50 Hz)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilohertz</strong></td>
+                                    <td>kHz</td>
+                                    <td>Hệ mét SI (10³ Hz)</td>
+                                    <td>1,000 Hz</td>
+                                    <td>Sóng phát thanh radio AM (530 – 1,700 kHz), tần số lấy mẫu file nhạc Hi-Res Audio (44.1 kHz, 96 kHz, 192 kHz)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Megahertz</strong></td>
+                                    <td>MHz</td>
+                                    <td>Hệ mét SI (10⁶ Hz)</td>
+                                    <td>1,000,000 Hz</td>
+                                    <td>Đài phát thanh FM (87.5 – 108 MHz), tốc độ bus bộ nhớ RAM máy tính (DDR4 3200 MHz, DDR5 5600 MHz)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gigahertz</strong></td>
+                                    <td>GHz</td>
+                                    <td>Hệ mét SI (10⁹ Hz)</td>
+                                    <td>1,000,000,000 Hz</td>
+                                    <td>Tốc độ xung nhịp CPU máy tính (3.0 – 5.5 GHz), sóng mạng WiFi (2.4 GHz, 5 GHz, 6 GHz), trạm phát sóng di động 5G</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Terahertz</strong></td>
+                                    <td>THz</td>
+                                    <td>Hệ mét SI (10¹² Hz)</td>
+                                    <td>1,000,000,000,000 Hz</td>
+                                    <td>Công nghệ truyền thông tương lai 6G, máy quét an ninh cổng sân bay kiểm tra hành lý không xâm lấn</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vòng / phút (RPM)</strong></td>
+                                    <td>RPM</td>
+                                    <td>Cơ học / Động cơ máy móc</td>
+                                    <td>1/60 Hz (~0.01667 Hz)</td>
+                                    <td>Vòng tua máy ô tô xe máy (1500 – 8000 RPM), quạt tản nhiệt máy tính (1200 – 2200 RPM), máy giặt vắt quần áo</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Radian / giây</strong></td>
+                                    <td>rad/s</td>
+                                    <td>Vận tốc góc chuyển động tròn</td>
+                                    <td>1 / (2π) ≈ 0.15915 Hz</td>
+                                    <td>Tính toán động lực học cơ cấu quay, cánh quạt turbine gió, con lắc vật lý</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Công thức tính toán chu kỳ, bước sóng & tốc độ vòng tua</h3>
+                    <ul>
+                        <li><strong>Mối liên hệ giữa Tần số (f) và Chu kỳ dao động (T):</strong><br>
+                            <span class="formula-highlight">f = 1 / T (với f tính bằng Hz, T tính bằng giây)</span><br>
+                            Ví dụ: Dòng điện sinh hoạt gia đình tại Việt Nam có tần số <code>50 Hz</code>. Chu kỳ để dòng điện đổi chiều và hoàn thành một dao động toàn phần là: <span class="formula-highlight">T = 1 ÷ 50 = 0.02 giây = 20 mili-giây (ms)</span>.
+                        </li>
+                        <li><strong>Công thức đổi tốc độ động cơ từ RPM sang Hertz (Tần số quay):</strong><br>
+                            <span class="formula-highlight">Hz = RPM ÷ 60</span><br>
+                            Ví dụ: Quạt tản nhiệt CPU máy tính quay với tốc độ <code>1,800 RPM</code> (vòng/phút). Tần số quay của cánh quạt là: <span class="formula-highlight">1,800 ÷ 60 = 30 Hz</span> (tương đương 30 vòng quay mỗi giây).
+                        </li>
+                        <li><strong>Công thức liên hệ Tần số và Bước sóng điện từ (Wi-Fi, Ánh sáng):</strong><br>
+                            <span class="formula-highlight">Bước sóng (λ) = Vận tốc ánh sáng (c) ÷ Tần số (f)</span> (trong đó <code>c ≈ 300,000,000 m/s</code>).<br>
+                            Tần số càng cao thì bước sóng càng ngắn. Do đó, sóng Wi-Fi 5 GHz có bước sóng ngắn (~6 cm) nên truyền dữ liệu nhanh hơn nhưng khó xuyên qua tường gạch dày so với sóng Wi-Fi 2.4 GHz (bước sóng ~12.5 cm).
+                        </li>
+                    </ul>
+
+                    <h3>3. Câu hỏi thường gặp về tần số (FAQ)</h3>
+                    <div style="margin-top: 10px;">
+                        <p><strong>Hỏi: Nên kết nối mạng WiFi băng tần 2.4 GHz hay 5 GHz trên điện thoại và laptop?</strong><br>
+                        Trả lời: Tùy vào khoảng cách và vị trí phòng của bạn. Nếu bạn đang ngồi gần cục router WiFi (cùng phòng), hãy chọn <strong>5 GHz</strong> để đạt tốc độ tải mượt mà nhất khi xem phim 4K hay chơi game. Nếu bạn ở cách xa 1-2 bức tường hoặc khác tầng lầu, hãy chọn <strong>2.4 GHz</strong> vì sóng bước sóng dài có độ phủ sóng rộng và khả năng xuyên tường tốt hơn nhiều.</p>
+
+                        <p><strong>Hỏi: Xung nhịp CPU máy tính 4.2 GHz có ý nghĩa gì?</strong><br>
+                        Trả lời: Xung nhịp vi xử lý 4.2 GHz có nghĩa là bộ dao động thạch anh bên trong chip bán dẫn tạo ra <strong>4.2 tỷ xung nhịp mỗi giây</strong>. Mỗi xung nhịp cho phép vi xử lý thực hiện các bước trong chu trình nạp, giải mã và thực thi lệnh mã máy tính.</p>
+
+                        <p><strong>Hỏi: Tai người có thể nghe được âm thanh ở dải tần số nào?</strong><br>
+                        Trả lời: Tai người bình thường có thể nghe được âm thanh trong dải tần từ <strong>20 Hz đến 20,000 Hz (20 kHz)</strong>. Các âm thanh có tần số dưới 20 Hz được gọi là <em>Hạ âm (Infrasound)</em> thường sinh ra từ động đất, bão biển mà loài voi có thể cảm nhận được; các âm thanh trên 20,000 Hz được gọi là <em>Siêu âm (Ultrasound)</em> được cá heo, loài dơi dùng để định vị hoặc dùng trong máy siêu âm y tế chụp hình thai nhi.</p>
+                    </div>
+                </section>
+            </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links (Image 2) -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html" class="active">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('frequency', {
+                defaultFrom: 'mhz',
+                defaultTo: 'ghz'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

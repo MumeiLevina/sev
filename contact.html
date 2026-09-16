@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ | Kinetic Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <span class="nav-pill-btn active">LIÊN HỆ</span>
+        </div>
+
+        <div class="legal-page">
+            <h1>Liên hệ với chúng tôi</h1>
+            <p style="margin-bottom: 8px;">Bạn có câu hỏi, góp ý, hoặc muốn đề xuất tính năng mới? Chúng tôi luôn sẵn sàng lắng nghe!</p>
+        </div>
+
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <div class="tool-card-box">
+                <h2 style="font-size: 1.2rem; font-weight: 700; color: #111827; margin-bottom: 20px;">
+                    <i class='bx bx-send' style="color: #3b82f6;"></i> Gửi tin nhắn
+                </h2>
+                <form class="contact-form" id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="contactName" placeholder="Nhập họ và tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Địa chỉ email</label>
+                        <input type="email" class="form-control" id="contactEmail" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Chủ đề</label>
+                        <select class="form-control" id="contactSubject" required>
+                            <option value="">— Chọn chủ đề —</option>
+                            <option value="feedback">Góp ý / Phản hồi</option>
+                            <option value="bug">Báo lỗi công cụ</option>
+                            <option value="feature">Đề xuất tính năng mới</option>
+                            <option value="partnership">Hợp tác / Liên kết</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nội dung tin nhắn</label>
+                        <textarea class="form-control" id="contactMessage" placeholder="Nhập nội dung chi tiết..." rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class='bx bx-paper-plane'></i> Gửi tin nhắn
+                    </button>
+                    <div id="contactSuccess" style="display:none; margin-top: 16px; padding: 12px 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; color: #166534; font-size: 0.9rem;">
+                        <i class='bx bx-check-circle'></i> Cảm ơn bạn! Tin nhắn đã được ghi nhận. Chúng tôi sẽ phản hồi sớm nhất có thể.
+                    </div>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-info-cards">
+                <div class="contact-info-card">
+                    <i class='bx bx-envelope'></i>
+                    <div>
+                        <h4>Email</h4>
+                        <p>contact@studenttools.vn</p>
+                    </div>
+                </div>
+                <div class="contact-info-card">
+                    <i class='bx bx-time-five'></i>
+                    <div>
+                        <h4>Thời gian phản hồi</h4>
+                        <p>Chúng tôi cố gắng phản hồi trong vòng 24-48 giờ làm việc.</p>
+                    </div>
+                </div>
+                <div class="contact-info-card">
+                    <i class='bx bx-bulb'></i>
+                    <div>
+                        <h4>Đề xuất công cụ</h4>
+                        <p>Bạn cần một công cụ mà chúng tôi chưa có? Hãy gửi đề xuất và chúng tôi sẽ xem xét phát triển!</p>
+                    </div>
+                </div>
+                <div class="contact-info-card">
+                    <i class='bx bx-bug'></i>
+                    <div>
+                        <h4>Báo lỗi</h4>
+                        <p>Phát hiện lỗi tính toán hoặc giao diện? Vui lòng mô tả chi tiết để chúng tôi khắc phục nhanh chóng.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ mini -->
+                <div class="tool-card-box" style="margin-top: 8px;">
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #111827; margin-bottom: 14px;">
+                        <i class='bx bx-help-circle' style="color: #3b82f6;"></i> Câu hỏi thường gặp
+                    </h3>
+                    <details style="margin-bottom: 10px; font-size: 0.92rem;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #1e293b; padding: 6px 0;">Có cần đăng ký tài khoản không?</summary>
+                        <p style="padding: 8px 0 0 16px; color: #475569;">Không. Tất cả công cụ trên Kinetic Tech đều miễn phí và không yêu cầu đăng ký.</p>
+                    </details>
+                    <details style="margin-bottom: 10px; font-size: 0.92rem;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #1e293b; padding: 6px 0;">Kết quả tính toán có chính xác không?</summary>
+                        <p style="padding: 8px 0 0 16px; color: #475569;">Chúng tôi sử dụng công thức chuẩn và cập nhật thường xuyên. Tuy nhiên, kết quả chỉ mang tính tham khảo. Vui lòng kiểm tra lại với nguồn chính thức khi cần.</p>
+                    </details>
+                    <details style="margin-bottom: 10px; font-size: 0.92rem;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #1e293b; padding: 6px 0;">Dữ liệu của tôi có được lưu trữ không?</summary>
+                        <p style="padding: 8px 0 0 16px; color: #475569;">Dữ liệu chỉ lưu trên trình duyệt của bạn (localStorage). Chúng tôi không thu thập hay gửi dữ liệu tính toán về máy chủ.</p>
+                    </details>
+                    <details style="font-size: 0.92rem;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #1e293b; padding: 6px 0;">Tôi có thể sử dụng trên điện thoại không?</summary>
+                        <p style="padding: 8px 0 0 16px; color: #475569;">Có. Tất cả công cụ đều responsive và hoạt động tốt trên mọi thiết bị.</p>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            // In production, replace with actual form submission (e.g., Formspree, EmailJS)
+            var form = document.getElementById('contactForm');
+            var success = document.getElementById('contactSuccess');
+            success.style.display = 'block';
+            form.reset();
+            setTimeout(function() {
+                success.style.display = 'none';
+            }, 6000);
+        }
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

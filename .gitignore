@@ -1,0 +1,39 @@
+# ── Environment & Secrets ──
+.env
+.env.production
+.env.local
+*.env.production
+pdf-converter-service/.env
+subtitle-service/.env
+.local_users_db.json
+scratch/
+
+# ── OS Generated ──
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Node ──
+node_modules/
+package-lock.json
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# ── Docker (local volumes, not needed in repo) ──
+docker-compose.override.yml
+
+# ── Logs ──
+*.log
+logs/

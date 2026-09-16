@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính điểm qua môn | Kinetic Tech</title>
+    <!-- Reset scroll position on reload -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">GPA NGƯỢC</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Tính điểm GPA ngược</h1>
+                <p class="text-muted">Tính điểm thi cuối kỳ tối thiểu để qua môn hoặc đạt học bổng.</p>
+            </div>
+        <div class="tool-container glass-panel">
+            <form id="gpaForm">
+                <div class="form-group">
+                    <label class="form-label">Hệ thống điểm</label>
+                    <select id="systemSelect" class="form-control" required>
+                        <option value="10">Hệ 10 (Chuẩn Việt Nam)</option>
+                        <option value="4">Hệ 4 (Đại học tín chỉ)</option>
+                        <option value="letter">Hệ chữ (A/B/C/D)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mục tiêu môn học</label>
+                    <select id="targetSelect" class="form-control" required>
+                        <option value="pass">Chỉ cần qua môn (Tối thiểu)</option>
+                        <option value="b">Mục tiêu Khá / B (>= 7.0 hoặc 3.0)</option>
+                        <option value="a">Mục tiêu Giỏi / A (>= 8.5 hoặc 3.6)</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">Điểm quá trình / giữa kỳ</label>
+                        <input type="number" id="midtermScore" class="form-control" step="0.1" min="0" required placeholder="Ví dụ: 7.5">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">Tỷ lệ % quá trình</label>
+                        <select id="midtermWeight" class="form-control" required>
+                            <option value="0.2">20%</option>
+                            <option value="0.3" selected>30%</option>
+                            <option value="0.4">40%</option>
+                            <option value="0.5">50%</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class='bx bx-calculator'></i> Tính toán ngay
+                </button>
+            </form>
+
+            <div id="resultBox" class="result-box">
+                <p>Bạn cần đạt ít nhất:</p>
+                <div id="requiredScore" class="result-value">--</div>
+                <p id="resultMessage" style="color: var(--text-muted); font-size: 0.9rem;">trong bài thi cuối kỳ</p>
+            </div>
+        </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại)</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - Bộ đề 600 Câu</a></li>
+                    <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html">Tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/gpa.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

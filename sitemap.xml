@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Pages -->
+  <url><loc>https://studenttools.vn/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://studenttools.vn/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://studenttools.vn/contact.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://studenttools.vn/privacy-policy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://studenttools.vn/terms-of-use.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
+  <!-- Chuyển đổi Đơn vị -->
+  <url><loc>https://studenttools.vn/convert-length.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-weight.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-area.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-land.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-volume.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-time.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-data.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-energy.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://studenttools.vn/convert-pressure.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://studenttools.vn/convert-frequency.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Học Tập & Thi Cử -->
+  <url><loc>https://studenttools.vn/gpa.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studenttools.vn/cgpa.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/gpa-subject.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/scale-convert.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/high-school.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studenttools.vn/transcript.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/ielts.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studenttools.vn/sat.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/fraction.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://studenttools.vn/b2-theory.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/planner.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Sức Khỏe & Dinh Dưỡng -->
+  <url><loc>https://studenttools.vn/bmi.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studenttools.vn/bmr.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/tdee.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/calorie.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Xử Lý Tệp -->
+  <url><loc>https://studenttools.vn/compressor.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/file-converter.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studenttools.vn/pdf-extractor.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Chuyển Đổi Bổ Sung -->
+  <url><loc>https://studenttools.vn/convert-temperature.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studenttools.vn/convert-speed.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Tài Chính -->
+  <url><loc>https://studenttools.vn/compound-interest.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/currency-converter.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/tax-calculator.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+
+  <!-- Văn Bản & Năng Suất -->
+  <url><loc>https://studenttools.vn/word-counter.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/password-generator.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/qr-generator.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/convert-base.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/stopwatch-timer.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/budget-planner.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/room-splitter.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://studenttools.vn/subtitle-extractor.html</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://studenttools.vn/login.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

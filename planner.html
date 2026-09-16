@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lên Lịch Học Tập & Pomodoro | Kinetic Tech</title>
+    <!-- Reset scroll position on reload -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .pomodoro-widget {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .pomo-modes {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .pomo-mode-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 50px;
+            padding: 5px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .pomo-mode-btn.active {
+            background: #004bb5;
+            border-color: #004bb5;
+            color: #ffffff;
+        }
+        .pomo-timer-display {
+            font-size: 3.8rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 2px;
+            font-variant-numeric: tabular-nums;
+            margin: 6px 0 12px 0;
+        }
+        .pomo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .day-plan-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+        .day-plan-card.completed {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .day-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .day-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .session-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #f1f5f9;
+            font-size: 0.92rem;
+            color: #334155;
+        }
+        .session-item:last-child {
+            border-bottom: none;
+        }
+        .session-checkbox {
+            margin-top: 4px;
+            cursor: pointer;
+            width: 17px;
+            height: 17px;
+            accent-color: #004bb5;
+        }
+        .session-item.checked span {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+        .progress-indicator-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+        }
+        .plan-actions-toolbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .loading-pulse {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">KẾ HOẠCH HỌC TẬP</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>AI Lên Lịch Học Tập & Pomodoro</h1>
+                    <p class="text-muted">Tự động phân bổ đề cương ôn thi theo từng ngày với Spaced Repetition và đồng hồ đếm ngược Pomodoro tập trung.</p>
+                </div>
+
+                <div class="tool-container glass-panel">
+                    <!-- Integrated Pomodoro Live Timer -->
+                    <div class="pomodoro-widget">
+                        <div class="pomo-modes">
+                            <button type="button" class="pomo-mode-btn active" data-time="25" data-mode="work">
+                                <i class='bx bx-book-reader'></i> Học tập (25p)
+                            </button>
+                            <button type="button" class="pomo-mode-btn" data-time="5" data-mode="shortBreak">
+                                <i class='bx bx-coffee'></i> Nghỉ ngắn (5p)
+                            </button>
+                            <button type="button" class="pomo-mode-btn" data-time="15" data-mode="longBreak">
+                                <i class='bx bx-bed'></i> Nghỉ dài (15p)
+                            </button>
+                        </div>
+                        <div id="pomoDisplay" class="pomo-timer-display">25:00</div>
+                        <div class="pomo-controls">
+                            <button type="button" id="btnPomoStart" class="btn btn-primary" style="padding: 6px 20px;">
+                                <i class='bx bx-play'></i> Bắt đầu
+                            </button>
+                            <button type="button" id="btnPomoReset" class="btn btn-outline" style="padding: 6px 16px;">
+                                <i class='bx bx-reset'></i> Đặt lại
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Input Form -->
+                    <form id="plannerForm">
+                        <div class="flex gap-4 mb-4" style="flex-wrap: wrap;">
+                            <div class="form-group" style="flex: 2; min-width: 220px;">
+                                <label class="form-label">Tên môn học</label>
+                                <input type="text" id="subjectName" class="form-control" required placeholder="VD: Giải tích 1, Kinh tế lượng, Triết học..." value="">
+                            </div>
+                            <div class="form-group" style="flex: 1; min-width: 140px;">
+                                <label class="form-label">Số ngày ôn tập</label>
+                                <input type="number" id="daysLeft" class="form-control" min="1" max="30" required placeholder="VD: 7" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                                <span>Danh sách các chương / chủ đề cần ôn</span>
+                                <label for="folderInput" style="cursor: pointer; color: #2563eb; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                                    <i class='bx bxs-folder-open'></i> Trích xuất từ thư mục slide bài giảng
+                                </label>
+                                <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;">
+                            </label>
+                            <textarea id="topics" class="form-control" rows="4" required placeholder="Nhập danh sách chủ đề (mỗi chủ đề ngăn cách bằng dấu phẩy hoặc xuống dòng).&#10;VD:&#10;Chương 1: Giới hạn và tính liên tục&#10;Chương 2: Đạo hàm và vi phân&#10;Chương 3: Tích phân bất định và xác định&#10;Chương 4: Chuỗi số và chuỗi hàm"></textarea>
+                            <div id="folderStatus" style="font-size: 0.8rem; color: #10b981; margin-top: 5px; display: none;"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Mục tiêu điểm số</label>
+                            <select id="goal" class="form-control">
+                                <option value="Qua môn (Chỉ học trọng tâm)">Chỉ cần qua môn (Tập trung lý thuyết cốt lõi & dạng bài hay thi)</option>
+                                <option value="Điểm Khá (B)" selected>Mục tiêu Khá - Điểm B (Nắm vững phương pháp và giải bài tập trung bình)</option>
+                                <option value="Điểm Giỏi (A)">Mục tiêu Giỏi - Điểm A (Ôn luyện toàn diện lý thuyết chuyên sâu và bài tập nâng cao)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" id="generateBtn" class="btn btn-primary" style="width: 100%;">
+                            <i class='bx bx-brain'></i> AI Phân Bổ Lộ Trình Ôn Thi
+                        </button>
+                    </form>
+
+                    <!-- Result Box -->
+                    <div id="resultBox" class="result-box" style="margin-top: 28px; text-align: left; display: none;">
+                        <div class="progress-indicator-box">
+                            <div>
+                                <span style="font-size: 0.82rem; color: #1e40af; font-weight: 600; text-transform: uppercase;">Tiến độ hoàn thành</span>
+                                <div id="progressText" style="font-size: 1.15rem; font-weight: 800; color: #1e3a8a;">0 / 0 phiên Pomodoro (0%)</div>
+                            </div>
+                            <span id="streakBadge" class="badge badge-primary"><i class='bx bxs-flame'></i> Sẵn sàng xuất phát</span>
+                        </div>
+
+                        <div class="plan-actions-toolbar">
+                            <button type="button" id="btnCopyPlan" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;">
+                                <i class='bx bx-copy'></i> Sao chép lộ trình
+                            </button>
+                            <button type="button" id="btnDownloadPlan" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;">
+                                <i class='bx bx-download'></i> Tải file (.txt)
+                            </button>
+                            <button type="button" id="btnResetProgress" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px; margin-left: auto;">
+                                <i class='bx bx-reset'></i> Đặt lại tích chọn
+                            </button>
+                        </div>
+
+                        <div id="planContainer">
+                            <!-- Rendered Days Cards -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation & Benefits -->
+                <article class="tool-explanation" style="margin-top: 32px;">
+                    <h2>Chiến Thuật Ôn Thi Đỉnh Cao Dành Cho Sinh Viên</h2>
+                    <ul class="bullet-diamond-list">
+                        <li><strong>Pomodoro (25/5):</strong> Học tập trung cao độ trong 25 phút, sau đó nghỉ 5 phút giúp não bộ duy trì sự tỉnh táo và ghi nhớ sâu mà không bị kiệt sức.</li>
+                        <li><strong>Spaced Repetition (Lặp lại ngắt quãng):</strong> Các chủ đề đã học ở những ngày đầu sẽ được ôn lại theo chu kỳ ngắn, biến trí nhớ ngắn hạn thành trí nhớ dài hạn trước ngày thi.</li>
+                        <li><strong>Chủ động kiểm soát:</strong> Tích chọn từng phiên học giúp bạn tạo động lực hoàn thành và không bị cảm giác ngợp bài khi mùa thi đến.</li>
+                    </ul>
+                </article>
+            </main>
+
+            <!-- Right Sidebar: Cuộc sống số & Tiện ích -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Cuộc sống số & Tiện ích</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compressor.html">Nén file</a></li>
+                    <li><a href="file-converter.html">Chuyển đổi file</a></li>
+                    <li><a href="planner.html" class="active">AI Lên lịch học Pomodoro</a></li>
+                    <li><a href="pdf-extractor.html">Chuyển Đổi & Xử Lý PDF Online</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                    <li><a href="fraction.html">Máy tính phân số chi tiết</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/planner.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

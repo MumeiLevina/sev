@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thi thử lý thuyết B2 Online - Bộ đề 600 Câu | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">LÝ THUYẾT B2</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Thi Thử Lý Thuyết B2 Online (Bộ Đề 600 Câu)</h1>
+                <p class="text-muted">Đề thi 35 câu chuẩn Bộ GTVT • Thời gian làm bài 22 phút • Đạt từ 32/35 câu và KHÔNG sai câu điểm liệt.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Quiz Header bar -->
+                <div class="quiz-header">
+                    <div>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Trạng thái làm bài:</span>
+                        <div style="font-weight: 700; color: #475569;" id="examStatusText">Đang thi sát hạch B2</div>
+                    </div>
+                    <div class="quiz-timer" id="timerBox">
+                        <i class='bx bx-time-five'></i> <span id="timerDisplay">22:00</span>
+                    </div>
+                    <div>
+                        <button type="button" id="btnSubmitQuiz" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem;">
+                            <i class='bx bx-send' style="margin-right: 4px;"></i> Nộp Bài
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Palette (Question Numbers) -->
+                <div class="quiz-palette" id="questionPalette">
+                    <!-- 35 buttons rendered by JS -->
+                </div>
+
+                <!-- Current Question Card -->
+                <div class="quiz-question-box" id="questionCard">
+                    <div class="flex justify-between align-center" style="margin-bottom: 12px;">
+                        <span style="color: var(--primary); font-weight: 700; font-size: 1.05rem;" id="qIndexTitle">Câu hỏi 1 / 35</span>
+                        <span id="fatalBadge" class="badge badge-danger" style="display: none;">
+                            <i class='bx bxs-error-circle'></i> CÂU ĐIỂM LIỆT (BẮT BUỘC ĐÚNG)
+                        </span>
+                    </div>
+                    <div class="quiz-question-title" id="qText">Nội dung câu hỏi đang được tải...</div>
+                    <div class="quiz-options" id="qOptions">
+                        <!-- Options rendered by JS -->
+                    </div>
+                    <div id="qExplanation" class="callout callout-info" style="display: none; margin-top: 16px;"></div>
+                </div>
+
+                <!-- Navigation between questions -->
+                <div class="flex justify-between align-center" style="margin-top: 20px;">
+                    <button type="button" id="btnPrevQ" class="btn" style="background: rgba(30, 41, 59, 0.7); color: white;">
+                        <i class='bx bx-left-arrow-alt'></i> Câu trước
+                    </button>
+                    <button type="button" id="btnNextQ" class="btn" style="background: rgba(30, 41, 59, 0.7); color: white;">
+                        Câu kế tiếp <i class='bx bx-right-arrow-alt'></i>
+                    </button>
+                </div>
+
+                <!-- Quiz Results Modal/Box -->
+                <div id="quizResultBox" class="result-box" style="margin-top: 28px;">
+                    <h2 id="quizVerdict" style="font-size: 2.2rem; margin-bottom: 8px;">KẾT QUẢ SÁT HẠCH</h2>
+                    <div id="quizScoreCount" class="result-value" style="font-size: 3.5rem;">0 / 35</div>
+                    <div id="quizSummaryDetail" style="margin-bottom: 16px;"></div>
+                    <button type="button" id="btnRestartQuiz" class="btn btn-primary" onclick="restartB2Quiz()">
+                        <i class='bx bx-reset'></i> Làm Lại Đề Mới
+                    </button>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại)</a></li>
+                    <li><a href="b2-theory.html" class="active">Thi thử lý thuyết B2 Online - Bộ đề 600 Câu</a></li>
+                    <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html">Tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/b2-theory.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

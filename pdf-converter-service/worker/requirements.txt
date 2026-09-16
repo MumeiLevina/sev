@@ -1,0 +1,13 @@
+celery>=5.3.6
+redis>=5.0.3
+minio>=7.2.5
+pdf2docx>=0.5.8
+pdfplumber>=0.11.0
+openpyxl>=3.1.2
+python-pptx>=0.6.23
+img2pdf>=0.5.1
+unoserver>=2.1
+python-magic>=0.4.27
+Pillow>=10.2.0
+requests>=2.31.0
+weasyprint>=61.0

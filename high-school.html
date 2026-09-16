@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính điểm xét tốt nghiệp THPT 2026 | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">TỐT NGHIỆP THPT</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Công Cụ Tính Điểm Xét Tốt Nghiệp THPT 2026</h1>
+                <p class="text-muted">Áp dụng công thức thi tốt nghiệp THPT theo Chương trình Giáo dục phổ thông 2018 (2 môn bắt buộc + 2 môn lựa chọn).</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <form id="highSchoolForm">
+                    <!-- Phần 1: Điểm 4 bài thi tốt nghiệp -->
+                    <h4 style="color: #475569; font-size: 1.05rem; margin-bottom: 16px;">
+                        <i class='bx bx-edit-alt'></i> 1. Điểm 4 Môn Thi Tốt Nghiệp (Thang điểm 10)
+                    </h4>
+
+                    <div class="flex gap-4" style="flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 200px;">
+                            <label class="form-label">Toán (Bắt buộc)</label>
+                            <input type="number" id="examMath" class="form-control exam-score" min="0" max="10" step="0.05" value="" placeholder="Nhập điểm Toán" required>
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 200px;">
+                            <label class="form-label">Ngữ văn (Bắt buộc)</label>
+                            <input type="number" id="examLit" class="form-control exam-score" min="0" max="10" step="0.05" value="" placeholder="Nhập điểm Văn" required>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4" style="flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 200px;">
+                            <label class="form-label">
+                                <span>Môn tự chọn 1</span>
+                                <select id="elective1" class="form-control" style="margin-top: 4px; padding: 6px 12px; font-size: 0.9rem;">
+                                    <option value="Tiếng Anh" selected>Tiếng Anh</option>
+                                    <option value="Vật lý">Vật lý</option>
+                                    <option value="Hóa học">Hóa học</option>
+                                    <option value="Sinh học">Sinh học</option>
+                                    <option value="Lịch sử">Lịch sử</option>
+                                    <option value="Địa lý">Địa lý</option>
+                                    <option value="GDKT & PL">GDKT & Pháp luật</option>
+                                    <option value="Tin học">Tin học</option>
+                                    <option value="Công nghệ">Công nghệ</option>
+                                </select>
+                            </label>
+                            <input type="number" id="examElective1" class="form-control exam-score" min="0" max="10" step="0.05" value="" placeholder="Nhập điểm thi" required>
+                        </div>
+
+                        <div class="form-group" style="flex: 1; min-width: 200px;">
+                            <label class="form-label">
+                                <span>Môn tự chọn 2</span>
+                                <select id="elective2" class="form-control" style="margin-top: 4px; padding: 6px 12px; font-size: 0.9rem;">
+                                    <option value="Vật lý" selected>Vật lý</option>
+                                    <option value="Hóa học">Hóa học</option>
+                                    <option value="Sinh học">Sinh học</option>
+                                    <option value="Lịch sử">Lịch sử</option>
+                                    <option value="Địa lý">Địa lý</option>
+                                    <option value="Tiếng Anh">Tiếng Anh</option>
+                                    <option value="GDKT & PL">GDKT & Pháp luật</option>
+                                    <option value="Tin học">Tin học</option>
+                                    <option value="Công nghệ">Công nghệ</option>
+                                </select>
+                            </label>
+                            <input type="number" id="examElective2" class="form-control exam-score" min="0" max="10" step="0.05" value="" placeholder="Nhập điểm thi" required>
+                        </div>
+                    </div>
+
+                    <!-- Phần 2: Điểm trung bình học bạ 3 năm -->
+                    <h4 style="color: #0f172a; font-size: 1.05rem; font-weight: 700; margin: 24px 0 16px;">
+                        <i class='bx bx-book-bookmark' style="color: #004bb5;"></i> 2. Điểm Trung Bình Cả Năm Học Bạ (Lớp 10, 11, 12)
+                    </h4>
+
+                    <div class="flex gap-4" style="flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 150px;">
+                            <label class="form-label">Cả năm Lớp 10</label>
+                            <input type="number" id="gpaGrade10" class="form-control" min="0" max="10" step="0.01" value="" placeholder="Điểm TB Lớp 10" required>
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 150px;">
+                            <label class="form-label">Cả năm Lớp 11</label>
+                            <input type="number" id="gpaGrade11" class="form-control" min="0" max="10" step="0.01" value="" placeholder="Điểm TB Lớp 11" required>
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 150px;">
+                            <label class="form-label">Cả năm Lớp 12</label>
+                            <input type="number" id="gpaGrade12" class="form-control" min="0" max="10" step="0.01" value="" placeholder="Điểm TB Lớp 12" required>
+                        </div>
+                    </div>
+
+                    <!-- Phần 3: Điểm khuyến khích & Điểm ưu tiên -->
+                    <h4 style="color: #0f172a; font-size: 1.05rem; font-weight: 700; margin: 24px 0 16px;">
+                        <i class='bx bx-gift' style="color: #004bb5;"></i> 3. Điểm Khuyến Khích & Ưu Tiên
+                    </h4>
+
+                    <div class="flex gap-4" style="flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 220px;">
+                            <label class="form-label">Điểm khuyến khích (Nghề, HSG tỉnh... tối đa 4.0)</label>
+                            <input type="number" id="bonusEncourage" class="form-control" min="0" max="4.0" step="0.5" value="0">
+                        </div>
+
+                        <div class="form-group" style="flex: 1; min-width: 220px;">
+                            <label class="form-label">Điểm ưu tiên diện tốt nghiệp</label>
+                            <select id="bonusPriority" class="form-control">
+                                <option value="0" selected>Diện 1: Không ưu tiên (+0 điểm)</option>
+                                <option value="0.25">Diện 2: Ưu tiên nhóm 2 (+0.25 điểm)</option>
+                                <option value="0.5">Diện 3: Ưu tiên nhóm 3 (+0.5 điểm)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <i class='bx bx-calculator'></i> Tính Điểm Xét Tốt Nghiệp THPT 2026
+                    </button>
+                </form>
+
+                <!-- Kết quả -->
+                <div id="graduationResult" class="result-box active" style="margin-top: 24px;">
+                    <p style="color: var(--text-muted);">Điểm xét tốt nghiệp THPT của bạn:</p>
+                    <div id="graduationFinalScore" class="result-value" style="font-size: 3.5rem;">--</div>
+
+                    <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+                        <span id="gradStatusBadge" class="badge badge-success">ĐỦ ĐIỀU KIỆN ĐỖ TỐT NGHIỆP</span>
+                        <span id="gradRankBadge" class="badge badge-primary">XẾP LOẠI: KHÁ</span>
+                    </div>
+
+                    <div class="flex justify-between" style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px; margin-bottom: 14px; font-size: 0.95rem; flex-wrap: wrap; gap: 8px; color: #1e293b;">
+                        <span>ĐTB 4 bài thi: <strong id="examAvgDisplay" style="color: #004bb5; font-weight: 700;">--</strong></span>
+                        <span>ĐTB Học bạ 3 năm: <strong id="gpaAvgDisplay" style="color: #059669; font-weight: 700;">--</strong></span>
+                        <span>Khuyến khích & Ưu tiên: <strong id="bonusDisplay" style="color: #d97706; font-weight: 700;">--</strong></span>
+                    </div>
+
+                    <div id="gradNoteCallout" class="callout callout-info" style="text-align: left; margin-bottom: 0;"></div>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html" class="active">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại)</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - Bộ đề 600 Câu</a></li>
+                    <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html">Tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/high-school.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

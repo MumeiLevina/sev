@@ -1,0 +1,7 @@
+celery>=5.3.6
+redis>=5.0.3
+sqlalchemy>=2.0.28
+psycopg2-binary>=2.9.9
+minio>=7.2.5
+openai>=1.14.0
+requests>=2.31.0

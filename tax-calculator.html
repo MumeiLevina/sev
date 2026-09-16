@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Thuế Thu Nhập Cá Nhân (TNCN) & Lương Gross Sang Net | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">TÀI CHÍNH</a>
+            <span class="nav-pill-btn active">THUẾ TNCN & GROSS NET</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Tính Thuế Thu Nhập Cá Nhân & Đổi Lương Gross Sang Net</h1>
+                    <p class="text-muted">Áp dụng biểu thuế lũy tiến từng phần 7 bậc và mức giảm trừ gia cảnh chuẩn Việt Nam mới nhất (11 triệu bản thân + 4.4 triệu người phụ thuộc).</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px;">
+                        <!-- Inputs -->
+                        <div>
+                            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 20px;">
+                                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                    <i class='bx bx-briefcase-alt-2' style="color: #0284c7;"></i> Thông tin mức lương & giảm trừ
+                                </h3>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Thu nhập hàng tháng / Lương Gross (VND)</label>
+                                    <input type="number" id="taxGrossIncome" class="form-control" value="" placeholder="Nhập lương Gross (VD: 15,000,000)" step="500000" style="font-size: 1.2rem; font-weight: 700;">
+                                    <span style="font-size: 0.8rem; color: #64748b;" id="taxGrossLabel">0 đ</span>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" style="font-size: 0.85rem;">Số người phụ thuộc</label>
+                                        <input type="number" id="taxDependents" class="form-control" value="0" min="0" max="10">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" style="font-size: 0.85rem;">Vùng lương tối thiểu</label>
+                                        <select id="taxRegion" class="form-control">
+                                            <option value="1" selected>Vùng I (Hà Nội, TP.HCM...)</option>
+                                            <option value="2">Vùng II (Đà Nẵng, Cần Thơ...)</option>
+                                            <option value="3">Vùng III (Đô thị loại 3)</option>
+                                            <option value="4">Vùng IV (Nông thôn)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label" style="font-size: 0.85rem;">Mức đóng bảo hiểm</label>
+                                    <select id="taxInsuranceType" class="form-control">
+                                        <option value="official" selected>Đóng trên 100% lương chính thức</option>
+                                        <option value="none">Không đóng bảo hiểm (Hợp đồng cộng tác/part-time)</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" id="btnCalcTax" class="btn btn-primary" style="width: 100%; margin-top: 8px; padding: 10px; font-weight: 700;">
+                                    <i class='bx bx-calculator'></i> Tính thuế & Lương Net
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <div>
+                            <div class="conversion-result-card" style="margin-top: 0; text-align: left;">
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Lương thực nhận (Net)</div>
+                                <div id="resNetSalary" style="font-size: 2.6rem; font-weight: 800; color: #10b981; margin: 4px 0;">
+                                    13,275,000 đ
+                                </div>
+                                <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;">
+                                    Thuế TNCN phải nộp: <strong id="resTaxAmount" style="color: #ef4444;">150,000 đ</strong>
+                                </div>
+
+                                <!-- Allocation bar -->
+                                <div style="font-size: 0.82rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Phân bổ thu nhập Gross:</div>
+                                <div class="stacked-bar-container" style="height: 20px;">
+                                    <div id="barNet" class="stacked-bar-segment" style="width: 88%; background: #10b981;" title="Lương Net"></div>
+                                    <div id="barIns" class="stacked-bar-segment" style="width: 10.5%; background: #0284c7;" title="Bảo hiểm"></div>
+                                    <div id="barTax" class="stacked-bar-segment" style="width: 1.5%; background: #ef4444;" title="Thuế TNCN"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: #64748b; margin-top: 4px;">
+                                    <span style="color: #166534;">■ Net: <strong id="pctNet">88.5%</strong></span>
+                                    <span style="color: #0369a1;">■ BHXH: <strong id="pctIns">10.5%</strong></span>
+                                    <span style="color: #991b1b;">■ Thuế: <strong id="pctTax">1%</strong></span>
+                                </div>
+
+                                <!-- Detailed metrics table -->
+                                <table class="calc-table" style="font-size: 0.84rem; margin-top: 18px;">
+                                    <tbody>
+                                        <tr><td><strong>Lương Gross ban đầu</strong></td><td id="rowGross" style="font-weight: 700; text-align: right;">15,000,000 đ</td></tr>
+                                        <tr><td>- BHXH (8%)</td><td id="rowBhxh" style="text-align: right; color: #0284c7;">-1,200,000 đ</td></tr>
+                                        <tr><td>- BHYT (1.5%)</td><td id="rowBhyt" style="text-align: right; color: #0284c7;">-225,000 đ</td></tr>
+                                        <tr><td>- BHTN (1%)</td><td id="rowBhtn" style="text-align: right; color: #0284c7;">-150,000 đ</td></tr>
+                                        <tr><td><strong>Giảm trừ gia cảnh (bản thân + PT)</strong></td><td id="rowDeduction" style="text-align: right;">-11,000,000 đ</td></tr>
+                                        <tr><td><strong>Thu nhập tính thuế</strong></td><td id="rowTaxableIncome" style="font-weight: 700; text-align: right; color: #d97706;">2,425,000 đ</td></tr>
+                                        <tr><td><strong>Thuế TNCN nộp ngân sách</strong></td><td id="rowFinalTax" style="font-weight: 700; text-align: right; color: #ef4444;">-121,250 đ</td></tr>
+                                        <tr style="background: #f0fdf4; font-size: 0.95rem;">
+                                            <td><strong>LƯƠNG NET THỰC NHẬN</strong></td>
+                                            <td id="rowFinalNet" style="font-weight: 800; text-align: right; color: #166534;">13,303,750 đ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div style="margin-top: 14px;">
+                                    <button type="button" id="btnCopyTax" class="btn btn-outline" style="font-size: 0.85rem; width: 100%; padding: 8px;">
+                                        <i class='bx bx-copy'></i> Sao chép phiếu lương
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7 Bracket Progressive Tax Schedule Table -->
+                    <div style="text-align: left; margin-top: 36px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-chart'></i> Bảng Giải Trình Thuế TNCN Lũy Tiến Từng Phần (7 Bậc)
+                        </h3>
+                        <table class="calc-table" id="taxBracketTable">
+                            <thead>
+                                <tr>
+                                    <th>Bậc thuế</th>
+                                    <th>Thu nhập tính thuế / tháng</th>
+                                    <th>Thuế suất</th>
+                                    <th>Số tiền tính thuế của bạn</th>
+                                    <th>Tiền thuế phải nộp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Sinh Viên Đi Làm Cần Biết Gì Về Thuế TNCN?</h2>
+                        <p>Khi sinh viên đi thực tập (internship), làm gia sư hoặc làm nhân viên part-time có thu nhập, việc hiểu rõ cách tính thuế TNCN và các quyền lợi bảo hiểm sẽ giúp bạn không bị bỡ ngỡ và bảo vệ quyền lợi chính đáng của mình.</p>
+                        
+                        <h3>1. Các khoản đóng góp bảo hiểm bắt buộc của người lao động</h3>
+                        <p>Theo Luật Bảo hiểm xã hội hiện hành, người lao động ký hợp đồng từ 1 tháng trở lên sẽ trích đóng <strong>10.5%</strong> tổng lương:</p>
+                        <ul>
+                            <li><strong>Bảo hiểm Xã hội (BHXH):</strong> 8% (chế độ ốm đau, thai sản, hưu trí sau này).</li>
+                            <li><strong>Bảo hiểm Y tế (BHYT):</strong> 1.5% (khám chữa bệnh tại các bệnh viện).</li>
+                            <li><strong>Bảo hiểm Thất nghiệp (BHTN):</strong> 1% (trợ cấp nếu mất việc làm).</li>
+                        </ul>
+
+                        <h3>2. Giảm trừ gia cảnh mới nhất</h3>
+                        <ul>
+                            <li><strong>Giảm trừ bản thân người nộp thuế:</strong> <strong>11.000.000 đ/tháng</strong> (tức 132 triệu đồng/năm). Nếu tổng thu nhập sau khi trừ bảo hiểm dưới 11 triệu đồng thì bạn <strong>không phải nộp một đồng thuế TNCN nào</strong>.</li>
+                            <li><strong>Giảm trừ người phụ thuộc:</strong> <strong>4.400.000 đ/tháng</strong> cho mỗi người phụ thuộc hợp pháp (cha mẹ già hết tuổi lao động, con nhỏ, em ruột không nơi nương tựa).</li>
+                        </ul>
+
+                        <h3>3. Thuế TNCN 10% đối với hợp đồng thời vụ & Cách hoàn thuế</h3>
+                        <p>Nhiều sinh viên đi làm cộng tác viên (hợp đồng dịch vụ dưới 3 tháng) có mức chi trả từ 2.000.000 đ/lần trở lên thường bị công ty tạm khấu trừ <strong>10% thuế TNCN</strong> ngay tại nguồn. Tuy nhiên, nếu trong cả năm tổng thu nhập của bạn chưa tới mức phải nộp thuế (dưới 132 triệu đồng/năm), bạn hoàn toàn có thể làm <strong>thủ tục quyết toán thuế cuối năm</strong> trên ứng dụng eTax Mobile của Tổng cục Thuế để nhận lại toàn bộ số tiền 10% đã bị khấu trừ!</p>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Finance Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Tài chính</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compound-interest.html">Tính lãi suất kép & Tiết kiệm</a></li>
+                    <li><a href="currency-converter.html">Quy đổi ngoại tệ (VND ↔ USD, EUR)</a></li>
+                    <li><a href="tax-calculator.html" class="active">Tính thuế TNCN & Lương Gross - Net</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        function formatVND(num) {
+            return Math.round(num).toLocaleString('vi-VN') + ' đ';
+        }
+
+        const BRACKETS = [
+            { level: 1, max: 5000000, rate: 0.05, desc: 'Đến 5 triệu' },
+            { level: 2, max: 10000000, rate: 0.10, desc: 'Trên 5 đến 10 triệu' },
+            { level: 3, max: 18000000, rate: 0.15, desc: 'Trên 10 đến 18 triệu' },
+            { level: 4, max: 32000000, rate: 0.20, desc: 'Trên 18 đến 32 triệu' },
+            { level: 5, max: 52000000, rate: 0.25, desc: 'Trên 32 đến 52 triệu' },
+            { level: 6, max: 80000000, rate: 0.30, desc: 'Trên 52 đến 80 triệu' },
+            { level: 7, max: Infinity, rate: 0.35, desc: 'Trên 80 triệu' }
+        ];
+
+        function calculateTax() {
+            const grossInput = document.getElementById('taxGrossIncome');
+            const gross = parseFloat(grossInput.value) || 0;
+            const dependents = parseInt(document.getElementById('taxDependents').value, 10) || 0;
+            const insType = document.getElementById('taxInsuranceType').value;
+
+            document.getElementById('taxGrossLabel').textContent = gross > 0 ? formatVND(gross) : '0 đ';
+
+            if (!grossInput.value.trim() || gross <= 0) {
+                document.getElementById('resNetSalary').textContent = '---';
+                document.getElementById('resTaxAmount').textContent = '---';
+                ['rowGross', 'rowBhxh', 'rowBhyt', 'rowBhtn', 'rowDeduction', 'rowTaxableIncome', 'rowFinalTax', 'rowFinalNet'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '---';
+                });
+                document.getElementById('barNet').style.width = '0%';
+                document.getElementById('barIns').style.width = '0%';
+                document.getElementById('barTax').style.width = '0%';
+                document.getElementById('pctNet').textContent = '0%';
+                document.getElementById('pctIns').textContent = '0%';
+                document.getElementById('pctTax').textContent = '0%';
+                const tbody = document.querySelector('#taxBracketTable tbody');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 16px; color: var(--text-muted);">Vui lòng nhập mức lương Gross để xem phân tích thuế</td></tr>';
+                return;
+            }
+
+            // Insurance calculations
+            let bhxh = 0, bhyt = 0, bhtn = 0;
+            if (insType === 'official') {
+                // Statutory limits: BHXH capped at 20 x Base Salary (46.800.000đ)
+                const salaryCapBhxh = Math.min(gross, 46800000);
+                bhxh = salaryCapBhxh * 0.08;
+                bhyt = salaryCapBhxh * 0.015;
+
+                // BHTN capped at 20 x Region Minimum Salary (Region 1: 4.960.000 x 20 = 99.200.000)
+                const salaryCapBhtn = Math.min(gross, 99200000);
+                bhtn = salaryCapBhtn * 0.01;
+            }
+
+            const totalInsurance = bhxh + bhyt + bhtn;
+
+            // Deductions
+            const selfDeduction = 11000000;
+            const depDeduction = dependents * 4400000;
+            const totalDeduction = selfDeduction + depDeduction;
+
+            // Taxable income
+            const taxableIncome = Math.max(0, gross - totalInsurance - totalDeduction);
+
+            // Progressive Tax calculation
+            let totalTax = 0;
+            let prevMax = 0;
+            const bracketDetails = [];
+
+            for (let b of BRACKETS) {
+                const bracketSpan = b.max - prevMax;
+                let portionInBracket = 0;
+                let taxInBracket = 0;
+
+                if (taxableIncome > prevMax) {
+                    portionInBracket = Math.min(taxableIncome - prevMax, bracketSpan);
+                    taxInBracket = portionInBracket * b.rate;
+                    totalTax += taxInBracket;
+                }
+
+                bracketDetails.push({
+                    level: b.level,
+                    desc: b.desc,
+                    rate: `${b.rate * 100}%`,
+                    portion: portionInBracket,
+                    tax: taxInBracket
+                });
+
+                prevMax = b.max;
+                if (taxableIncome <= b.max) break;
+            }
+
+            const netSalary = gross - totalInsurance - totalTax;
+
+            // Display
+            document.getElementById('resNetSalary').textContent = formatVND(netSalary);
+            document.getElementById('resTaxAmount').textContent = formatVND(totalTax);
+
+            document.getElementById('rowGross').textContent = formatVND(gross);
+            document.getElementById('rowBhxh').textContent = '-' + formatVND(bhxh);
+            document.getElementById('rowBhyt').textContent = '-' + formatVND(bhyt);
+            document.getElementById('rowBhtn').textContent = '-' + formatVND(bhtn);
+            document.getElementById('rowDeduction').textContent = '-' + formatVND(totalDeduction);
+            document.getElementById('rowTaxableIncome').textContent = formatVND(taxableIncome);
+            document.getElementById('rowFinalTax').textContent = '-' + formatVND(totalTax);
+            document.getElementById('rowFinalNet').textContent = formatVND(netSalary);
+
+            // Stacked Bar
+            if (gross > 0) {
+                const pctNetVal = Math.round((netSalary / gross) * 100);
+                const pctInsVal = Math.round((totalInsurance / gross) * 100);
+                const pctTaxVal = 100 - pctNetVal - pctInsVal;
+
+                document.getElementById('barNet').style.width = `${pctNetVal}%`;
+                document.getElementById('barIns').style.width = `${pctInsVal}%`;
+                document.getElementById('barTax').style.width = `${Math.max(0, pctTaxVal)}%`;
+
+                document.getElementById('pctNet').textContent = `${pctNetVal}%`;
+                document.getElementById('pctIns').textContent = `${pctInsVal}%`;
+                document.getElementById('pctTax').textContent = `${Math.max(0, pctTaxVal)}%`;
+            }
+
+            // Populate schedule table
+            const tbody = document.querySelector('#taxBracketTable tbody');
+            tbody.innerHTML = '';
+            bracketDetails.forEach(b => {
+                const tr = document.createElement('tr');
+                if (b.tax > 0) {
+                    tr.style.background = '#fffbeb';
+                }
+                tr.innerHTML = `
+                    <td><strong>Bậc ${b.level}</strong></td>
+                    <td>${b.desc}</td>
+                    <td>${b.rate}</td>
+                    <td>${formatVND(b.portion)}</td>
+                    <td style="font-weight: 700; color: ${b.tax > 0 ? '#ef4444' : '#64748b'};">${formatVND(b.tax)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateTax();
+
+            ['taxGrossIncome', 'taxDependents', 'taxRegion', 'taxInsuranceType'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateTax);
+                if (el) el.addEventListener('change', calculateTax);
+            });
+
+            document.getElementById('btnCalcTax').addEventListener('click', calculateTax);
+
+            document.getElementById('btnCopyTax').addEventListener('click', function() {
+                const net = document.getElementById('resNetSalary').textContent;
+                const gross = document.getElementById('rowGross').textContent;
+                const tax = document.getElementById('resTaxAmount').textContent;
+                const text = `Phiếu tính lương Gross - Net (Kinetic Tech):\n- Lương Gross: ${gross}\n- Thuế TNCN: ${tax}\n- Lương thực nhận (Net): ${net}`;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.innerHTML = "<i class='bx bx-check' style='color: #10b981;'></i> Đã sao chép!";
+                    setTimeout(() => {
+                        this.innerHTML = "<i class='bx bx-copy'></i> Sao chép phiếu lương";
+                    }, 1800);
+                });
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Jun – Electonvon – Kilo Jun (Năng Lượng) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">NĂNG LƯỢNG</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Jun – Electonvon – Kilo Jun</h1>
+                <p class="text-muted">Quy đổi giữa các đơn vị năng lượng và công: Jun (J), Electronvolt (eV), Kilojun (kJ), Megajun, Calo, Kilocalo, kWh.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập giá trị năng lượng</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập năng lượng..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #f59e0b; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Electronvolt (eV)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập năng lượng để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng Quy Đổi Đầy Đủ Các Đơn Vị Năng Lượng
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                <!-- Notes -->
+                <div style="text-align: left; margin-top: 28px;">
+                    <div class="callout callout-info">
+                        <strong>Công thức vật lý & chuyển đổi cốt lõi:</strong><br>
+                        • <strong>1 eV (Electronvolt) = 1.602176634 × 10⁻¹⁹ J</strong> (đơn vị vi mô dùng trong vật lý hạt, lượng tử, bán dẫn).<br>
+                        • <strong>1 Jun (J) ≈ 6.2415 × 10¹⁸ eV = 10⁻³ kJ</strong>.<br>
+                        • <strong>1 Kilocalo (kcal) = 1,000 cal = 4,184 J = 4.184 kJ</strong> (đơn vị phổ biến trong dinh dưỡng thực phẩm).<br>
+                        • <strong>1 kWh (Số điện tiêu thụ gia đình) = 3,600,000 J = 3.6 MJ</strong>.
+                    </div>
+                </div>
+
+                <!-- Comprehensive Editorial Content for AdSense & Learning -->
+                <section class="tool-explanation-section">
+                    <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Các Đơn Vị Đo Năng Lượng</h2>
+                    <p>Trong vật lý học, năng lượng là khả năng sinh công của một hệ thống vật chất. Năng lượng tồn tại dưới nhiều dạng khác nhau: cơ năng, nhiệt năng, điện năng, hóa năng và năng lượng hạt nhân. Đơn vị đo năng lượng chuẩn quốc tế trong hệ SI là <strong>Joule (viết tắt là J, đọc là Jun)</strong>, đặt theo tên nhà vật lý người Anh James Prescott Joule.</p>
+
+                    <h3>1. Bảng đối chiếu các đơn vị đo năng lượng phổ biến</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Đơn vị</th>
+                                    <th>Ký hiệu</th>
+                                    <th>Hệ thống / Lĩnh vực</th>
+                                    <th>Quy đổi sang Joule (J)</th>
+                                    <th>Ứng dụng thực tế</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Electronvolt</strong></td>
+                                    <td>eV</td>
+                                    <td>Vật lý hạt nhân / Lượng tử</td>
+                                    <td>1.602 × 10⁻¹⁹ J</td>
+                                    <td>Đo năng lượng vùng cấm bán dẫn (Bandgap), quang phổ photon, vật lý tia X</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Joule (Jun)</strong></td>
+                                    <td>J</td>
+                                    <td>Hệ mét chuẩn SI</td>
+                                    <td>1 J (1 N·m = 1 W·s)</td>
+                                    <td>Công cơ học, động năng vật chuyển động, thế năng trọng trường</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilojoule</strong></td>
+                                    <td>kJ</td>
+                                    <td>Hệ mét SI (10³ J)</td>
+                                    <td>1,000 J</td>
+                                    <td>Nhiệt phản ứng hóa học (Enthalpy), đo năng lượng bài tập thể thao</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Megajoule</strong></td>
+                                    <td>MJ</td>
+                                    <td>Hệ mét SI (10⁶ J)</td>
+                                    <td>1,000,000 J</td>
+                                    <td>Nhiệt trị nhiên liệu xăng dầu, khí đốt tự nhiên, động cơ xe lửa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Calorie (Calo)</strong></td>
+                                    <td>cal</td>
+                                    <td>Nhiệt lượng học</td>
+                                    <td>4.184 J</td>
+                                    <td>Lượng nhiệt cần thiết để nâng nhiệt độ của 1 gam nước thêm 1°C</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilocalorie</strong></td>
+                                    <td>kcal</td>
+                                    <td>Dinh dưỡng & Y tế</td>
+                                    <td>4,184 J (1,000 cal)</td>
+                                    <td>Mức năng lượng nạp vào từ bữa ăn, thực đơn giảm cân, calo ghi trên bao bì</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Watt-giờ</strong></td>
+                                    <td>Wh</td>
+                                    <td>Kỹ thuật điện</td>
+                                    <td>3,600 J</td>
+                                    <td>Dung lượng pin sạc dự phòng điện thoại, pin laptop, xe đạp điện</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilowatt-giờ</strong></td>
+                                    <td>kWh</td>
+                                    <td>Thương mại điện lực</td>
+                                    <td>3,600,000 J (3.6 MJ)</td>
+                                    <td>Đo chỉ số công tơ điện gia đình ("1 số điện" trong hóa đơn tiền điện sinh hoạt)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>BTU</strong></td>
+                                    <td>BTU</td>
+                                    <td>Điện lạnh / Anh - Mỹ</td>
+                                    <td>1,055.06 J</td>
+                                    <td>Công suất làm lạnh điều hòa nhiệt độ gia đình (máy 9,000 BTU, 12,000 BTU)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Công thức tính toán điện năng & năng lượng sinh hoạt</h3>
+                    <ul>
+                        <li><strong>Cách tính tiền điện tiêu thụ từ công suất thiết bị:</strong><br>
+                            <span class="formula-highlight">Điện năng (kWh) = Công suất (W) × Số giờ dùng ÷ 1,000</span><br>
+                            Ví dụ: Chiếc quạt bàn công suất <code>50W</code> bật liên tục 10 tiếng mỗi ngày trong 30 ngày:<br>
+                            Điện năng = 50 × 10 × 30 ÷ 1,000 = 15 kWh (15 số điện). Với giá điện sinh hoạt bậc thang ~2,500đ/số, tiền điện quạt dùng trong tháng chỉ khoảng 37,500 đồng.
+                        </li>
+                        <li><strong>Quy đổi năng lượng thực phẩm sang thời gian vận động:</strong><br>
+                            Một bát phở bò hoặc cơm tấm chứa khoảng <code>500 - 600 kcal</code> (~2.1 - 2.5 triệu Joules). Để tiêu hao hết lượng năng lượng này, một người trưởng thành nặng 60kg cần chạy bộ liên tục với tốc độ vừa phải khoảng 50 - 60 phút.
+                        </li>
+                    </ul>
+
+                    <h3>3. Câu hỏi thường gặp về năng lượng (FAQ)</h3>
+                    <div style="margin-top: 10px;">
+                        <p><strong>Hỏi: Tại sao pin sạc dự phòng thường ghi dung lượng là 10,000 mAh hoặc 20,000 mAh thay vì Wh?</strong><br>
+                        Trả lời: Đơn vị mAh (miliampe-giờ) chỉ lượng điện tích, chứ không phải năng lượng thuần túy. Để tính năng lượng theo Watt-giờ (Wh), bạn nhân với điện áp tế bào pin (thường là 3.7V đối với pin Lithium-ion/Polymer): <span class="formula-highlight">Wh = (mAh × V) ÷ 1,000</span>. Ví dụ: Cục sạc dự phòng 10,000 mAh = <code>(10,000 × 3.7) ÷ 1,000 = 37 Wh</code>. Quy định hàng không quốc tế cho phép mang pin dự phòng dưới 100 Wh lên máy bay dạng hành lý xách tay.</p>
+
+                        <p><strong>Hỏi: 1 ngựa (HP) điều hòa nhiệt độ bằng bao nhiêu BTU?</strong><br>
+                        Trả lời: Trong ngành điện lạnh dân dụng tại Việt Nam, điều hòa <strong>1 ngựa (1 HP)</strong> tương đương với khoảng <strong>9,000 BTU/h</strong> (thích hợp làm lạnh cho phòng ngủ diện tích dưới 15 m²). Điều hòa <strong>1.5 HP</strong> tương đương khoảng <strong>12,000 BTU/h</strong> (phòng 15 - 20 m²).</p>
+
+                        <p><strong>Hỏi: 1 số điện (1 kWh) có thể giúp thiết bị gì hoạt động?</strong><br>
+                        Trả lời: 1 kWh năng lượng điện đủ để: Thắp sáng bóng đèn LED 10W trong 100 giờ liên tục, sạc đầy khoảng 60 đến 70 lần điện thoại thông minh, hoặc chạy tủ lạnh gia đình khoảng 1 ngày.</p>
+                    </div>
+                </section>
+            </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links (Image 2) -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html" class="active">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('energy', {
+                defaultFrom: 'j',
+                defaultTo: 'ev'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

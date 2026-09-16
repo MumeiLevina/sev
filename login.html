@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập &amp; Đăng Ký Tài Khoản | Kinetic Tech</title>
+    <meta name="description" content="Đăng nhập hoặc đăng ký tài khoản Kinetic Tech để mở khóa 1 giờ bóc subtitle AI miễn phí và lưu trữ tiện ích học tập.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-page-container {
+            max-width: 1040px;
+            margin: 24px auto 48px;
+            padding: 0 20px;
+        }
+
+        .login-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 40px;
+            align-items: start;
+            margin-top: 24px;
+        }
+
+        /* ── Left Hero Side ── */
+        .login-hero {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 20px;
+            padding: 36px;
+            color: #ffffff;
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-hero::after {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .login-hero-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .login-hero h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+
+        .login-hero-desc {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .login-perks {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .perk-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .perk-item:hover {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .perk-icon-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .perk-title {
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #f8fafc;
+            margin-bottom: 2px;
+        }
+
+        .perk-desc {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* ── Right Auth Box ── */
+        .login-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.07);
+        }
+
+        .login-card-header {
+            margin-bottom: 22px;
+        }
+
+        .login-card-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .login-card-sub {
+            font-size: 0.88rem;
+            color: #64748b;
+        }
+
+        .login-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 22px;
+        }
+
+        .login-tab-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .login-tab-btn.active {
+            background: #ffffff;
+            color: #004bb5;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group-custom {
+            margin-bottom: 16px;
+        }
+
+        .form-group-custom label {
+            display: block;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .input-icon-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-group i.field-icon {
+            position: absolute;
+            left: 14px;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .input-icon-group input {
+            width: 100%;
+            padding: 11px 40px 11px 42px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            color: #1e293b;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .input-icon-group input:focus {
+            outline: none;
+            border-color: #004bb5;
+            box-shadow: 0 0 0 3px rgba(0, 75, 181, 0.12);
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-password-btn:hover {
+            color: #334155;
+        }
+
+        .login-alert {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        .login-alert.error {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .login-alert.success {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+        }
+
+        .btn-submit-main {
+            width: 100%;
+            padding: 12px;
+            background: #004bb5;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 75, 181, 0.25);
+            margin-top: 20px;
+        }
+
+        .btn-submit-main:hover {
+            background: #003685;
+            box-shadow: 0 6px 18px rgba(0, 75, 181, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .login-divider {
+            position: relative;
+            text-align: center;
+            margin: 22px 0;
+        }
+
+        .login-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .login-divider span {
+            position: relative;
+            background: #ffffff;
+            padding: 0 14px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+
+
+        /* ── Logged In User Profile View ── */
+        .logged-card {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .logged-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #004bb5 0%, #3b82f6 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 2rem;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 16px rgba(0, 75, 181, 0.25);
+        }
+
+        .logged-name {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .logged-email {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .logged-plan-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .logged-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .logged-btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px;
+            border-radius: 10px;
+            background: #004bb5;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+        }
+
+        .logged-btn-primary:hover {
+            background: #003685;
+            color: #ffffff;
+        }
+
+        .logged-btn-outline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            transition: all 0.2s ease;
+        }
+
+        .logged-btn-outline:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .logged-btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .logged-btn-logout:hover {
+            background: #fef2f2;
+        }
+
+        @media (max-width: 840px) {
+            .login-grid {
+                grid-template-columns: 1fr;
+            }
+            .login-hero {
+                padding: 24px;
+            }
+            .login-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container login-page-container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <span class="nav-pill-btn active">TÀI KHOẢN KINETIC TECH</span>
+        </div>
+
+        <div class="login-grid">
+            <!-- Left Info Panel -->
+            <div class="login-hero">
+                <div class="login-hero-brand">
+                    <svg viewBox="0 0 32 32" width="34" height="34" fill="none">
+                        <rect width="32" height="32" rx="7" fill="#3b82f6"/>
+                        <text x="16" y="22" text-anchor="middle" fill="#fff" font-size="16" font-weight="800" font-family="Inter,sans-serif">K</text>
+                    </svg>
+                    <span style="font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px;">Kinetic <span style="color: #60a5fa;">Tech</span></span>
+                </div>
+
+                <h1>Khám Phá Nền Tảng Học Tập Đa Năng</h1>
+                <p class="login-hero-desc">
+                    Tạo tài khoản miễn phí để mở khóa toàn bộ sức mạnh công cụ AI và tiện ích sinh viên.
+                </p>
+
+                <div class="login-perks">
+                    <div class="perk-item">
+                        <div class="perk-icon-wrap" style="background: rgba(59, 130, 246, 0.18); color: #60a5fa;">
+                            <i class='bx bx-captions'></i>
+                        </div>
+                        <div>
+                            <div class="perk-title">1 Giờ Bóc Sub Video AI Miễn Phí</div>
+                            <div class="perk-desc">Chuyển đổi âm thanh &amp; video sang phụ đề SRT, VTT chuẩn xác bằng mô hình Whisper.</div>
+                        </div>
+                    </div>
+
+                    <div class="perk-item">
+                        <div class="perk-icon-wrap" style="background: rgba(16, 185, 129, 0.18); color: #34d399;">
+                            <i class='bx bx-calculator'></i>
+                        </div>
+                        <div>
+                            <div class="perk-title">Lưu Trữ Dữ Liệu Tính Điểm</div>
+                            <div class="perk-desc">Lưu bảng điểm GPA, mục tiêu điểm cuối kỳ, tính toán chỉ số sức khỏe BMR/BMI.</div>
+                        </div>
+                    </div>
+
+                    <div class="perk-item">
+                        <div class="perk-icon-wrap" style="background: rgba(245, 158, 11, 0.18); color: #fbbf24;">
+                            <i class='bx bx-cloud-download'></i>
+                        </div>
+                        <div>
+                            <div class="perk-title">Tốc Độ Xử Lý File Ưu Tiên</div>
+                            <div class="perk-desc">Nén PDF, chuyển đổi hình ảnh, tài liệu Word/Excel với băng thông cao và ổn định.</div>
+                        </div>
+                    </div>
+
+                    <div class="perk-item">
+                        <div class="perk-icon-wrap" style="background: rgba(168, 85, 247, 0.18); color: #c084fc;">
+                            <i class='bx bx-shield-quarter'></i>
+                        </div>
+                        <div>
+                            <div class="perk-title">Miễn Phí &amp; Bảo Mật 100%</div>
+                            <div class="perk-desc">Không spam, không thu thập dữ liệu nhạy cảm, bảo vệ quyền riêng tư học sinh sinh viên.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Form Card -->
+            <div class="login-card">
+                <!-- Logged In State -->
+                <div id="loggedCard" class="logged-card">
+                    <div class="logged-avatar" id="loggedAvatar">U</div>
+                    <div class="logged-name" id="loggedName">Người dùng</div>
+                    <div class="logged-email" id="loggedEmail">email@example.com</div>
+                    <div>
+                        <span class="logged-plan-tag" id="loggedPlan">
+                            <i class='bx bx-check-shield'></i> Tài khoản Miễn phí
+                        </span>
+                    </div>
+
+                    <div class="logged-actions">
+                        <a href="subtitle-extractor.html" class="logged-btn-primary">
+                            <i class='bx bx-captions'></i> Bóc Subtitle Video AI (1h Free)
+                        </a>
+                        <a href="index.html" class="logged-btn-outline">
+                            <i class='bx bx-home-alt'></i> Khám phá 30+ công cụ
+                        </a>
+                        <button type="button" class="logged-btn-logout" id="loggedBtnLogout">
+                            <i class='bx bx-log-out'></i> Đăng xuất tài khoản này
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Guest State -->
+                <div id="guestCard">
+                    <div class="login-card-header">
+                        <div class="login-card-title" id="cardHeaderTitle">Đăng Nhập</div>
+                        <div class="login-card-sub" id="cardHeaderSub">Chào mừng bạn quay lại với Kinetic Tech</div>
+                    </div>
+
+                    <div class="login-tabs">
+                        <button type="button" class="login-tab-btn active" id="tabLogin">Đăng Nhập</button>
+                        <button type="button" class="login-tab-btn" id="tabRegister">Đăng Ký Mới</button>
+                    </div>
+
+                    <div id="loginAlert" class="login-alert"></div>
+
+                    <!-- Form Đăng Nhập -->
+                    <form id="pageLoginForm">
+                        <div class="form-group-custom">
+                            <label for="inputLoginEmail">Email sinh viên / cá nhân</label>
+                            <div class="input-icon-group">
+                                <i class='bx bx-envelope field-icon'></i>
+                                <input type="email" id="inputLoginEmail" placeholder="vidu@gmail.com" required autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label for="inputLoginPassword" style="margin-bottom: 0;">Mật khẩu</label>
+                                <a href="javascript:void(0)" id="linkForgotPassword" style="font-size: 0.82rem; color: #004bb5; text-decoration: none; font-weight: 600;">Quên mật khẩu?</a>
+                            </div>
+                            <div class="input-icon-group">
+                                <i class='bx bx-lock-alt field-icon'></i>
+                                <input type="password" id="inputLoginPassword" placeholder="••••••••" required autocomplete="current-password">
+                                <button type="button" class="toggle-password-btn" id="toggleLoginPasswordBtn" aria-label="Hiện mật khẩu">
+                                    <i class='bx bx-show'></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit-main" id="btnPageLoginSubmit">
+                            <i class='bx bx-log-in'></i> Đăng Nhập Ngay
+                        </button>
+                    </form>
+
+                    <!-- Form Đăng Ký -->
+                    <form id="pageRegisterForm" style="display: none;">
+                        <div class="form-group-custom">
+                            <label for="inputRegName">Họ và tên hiển thị</label>
+                            <div class="input-icon-group">
+                                <i class='bx bx-user field-icon'></i>
+                                <input type="text" id="inputRegName" placeholder="Nguyễn Văn A" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <label for="inputRegEmail">Địa chỉ Email</label>
+                            <div class="input-icon-group">
+                                <i class='bx bx-envelope field-icon'></i>
+                                <input type="email" id="inputRegEmail" placeholder="vidu@gmail.com" required autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <label for="inputRegPassword">Mật khẩu (tối thiểu 6 ký tự)</label>
+                            <div class="input-icon-group">
+                                <i class='bx bx-lock-alt field-icon'></i>
+                                <input type="password" id="inputRegPassword" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+                                <button type="button" class="toggle-password-btn" id="toggleRegPasswordBtn" aria-label="Hiện mật khẩu">
+                                    <i class='bx bx-show'></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <label for="inputRegConfirm">Nhập lại mật khẩu</label>
+                            <div class="input-icon-group">
+                                <i class='bx bx-lock-alt field-icon'></i>
+                                <input type="password" id="inputRegConfirm" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+                                <button type="button" class="toggle-password-btn" id="toggleRegConfirmBtn" aria-label="Hiện mật khẩu">
+                                    <i class='bx bx-show'></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit-main" id="btnPageRegSubmit">
+                            <i class='bx bx-user-plus'></i> Tạo Tài Khoản &amp; Nhận 1 Giờ Free
+                        </button>
+                    </form>
+
+                    <!-- Form Quên Mật Khẩu -->
+                    <form id="pageForgotForm" style="display: none;">
+                        <div id="forgotStep1">
+                            <div class="form-group-custom">
+                                <label for="inputForgotEmail">Email đã đăng ký</label>
+                                <div class="input-icon-group">
+                                    <i class='bx bx-envelope field-icon'></i>
+                                    <input type="email" id="inputForgotEmail" placeholder="vidu@gmail.com" required autocomplete="email">
+                                </div>
+                                <small style="color: #64748b; font-size: 0.8rem; display: block; margin-top: 6px;">
+                                    Hệ thống sẽ tạo và gửi mã xác thực 6 số (OTP) đến email của bạn để xác minh chủ tài khoản.
+                                </small>
+                            </div>
+
+                            <button type="button" class="btn-submit-main" id="btnForgotSendOtp">
+                                <i class='bx bx-send'></i> Gửi Mã Xác Nhận
+                            </button>
+                        </div>
+
+                        <div id="forgotStep2" style="display: none; margin-top: 18px; border-top: 1px dashed #cbd5e1; padding-top: 18px;">
+                            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.84rem; color: #1e40af; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-info-circle' style="font-size: 1.15rem; flex-shrink: 0;"></i>
+                                <span id="forgotOtpHintText">Mã OTP gồm 6 chữ số đã được gửi tới email của bạn (hiệu lực 15 phút).</span>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <label for="inputForgotOtp">Mã xác thực OTP (6 chữ số)</label>
+                                <div class="input-icon-group">
+                                    <i class='bx bx-key field-icon'></i>
+                                    <input type="text" id="inputForgotOtp" placeholder="123456" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code" style="letter-spacing: 4px; font-weight: 700; font-size: 1.05rem;">
+                                </div>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <label for="inputForgotNewPassword">Mật khẩu mới (tối thiểu 6 ký tự)</label>
+                                <div class="input-icon-group">
+                                    <i class='bx bx-lock-alt field-icon'></i>
+                                    <input type="password" id="inputForgotNewPassword" placeholder="••••••••" minlength="6" autocomplete="new-password">
+                                    <button type="button" class="toggle-password-btn" id="toggleForgotNewPasswordBtn" aria-label="Hiện mật khẩu">
+                                        <i class='bx bx-show'></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <label for="inputForgotConfirmPassword">Nhập lại mật khẩu mới</label>
+                                <div class="input-icon-group">
+                                    <i class='bx bx-lock-alt field-icon'></i>
+                                    <input type="password" id="inputForgotConfirmPassword" placeholder="••••••••" minlength="6" autocomplete="new-password">
+                                    <button type="button" class="toggle-password-btn" id="toggleForgotConfirmPasswordBtn" aria-label="Hiện mật khẩu">
+                                        <i class='bx bx-show'></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-submit-main" id="btnForgotSubmit">
+                                <i class='bx bx-check-shield'></i> Xác Nhận &amp; Đặt Lại Mật Khẩu
+                            </button>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 18px;">
+                            <button type="button" id="btnBackToLoginFromForgot" style="background: none; border: none; color: #004bb5; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class='bx bx-arrow-back'></i> Quay lại Đăng nhập
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer class="minimal-footer"></footer>
+    </div>
+
+    <script src="js/site-components.js"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            const TOKEN_KEY = 'kt_sub_access_token';
+            const REFRESH_KEY = 'kt_sub_refresh_token';
+            const USER_CACHE_KEY = 'kt_sub_user_cache';
+            const API_BASE = window.SUBTITLE_API_URL || (
+                location.port === '3000'
+                    ? '/api/v1'
+                    : (location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000/api/v1'
+                        : '/api/v1')
+            );
+
+            // Elements
+            const guestCard = document.getElementById('guestCard');
+            const loggedCard = document.getElementById('loggedCard');
+            const loggedAvatar = document.getElementById('loggedAvatar');
+            const loggedName = document.getElementById('loggedName');
+            const loggedEmail = document.getElementById('loggedEmail');
+            const loggedPlan = document.getElementById('loggedPlan');
+            const loggedBtnLogout = document.getElementById('loggedBtnLogout');
+
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const cardHeaderTitle = document.getElementById('cardHeaderTitle');
+            const cardHeaderSub = document.getElementById('cardHeaderSub');
+
+            const formLogin = document.getElementById('pageLoginForm');
+            const formRegister = document.getElementById('pageRegisterForm');
+            const alertBox = document.getElementById('loginAlert');
+            const toggleLoginPasswordBtn = document.getElementById('toggleLoginPasswordBtn');
+
+            function getStoredUser() {
+                try {
+                    const raw = localStorage.getItem(USER_CACHE_KEY);
+                    if (raw) return JSON.parse(raw);
+                } catch (e) {}
+                return null;
+            }
+
+            function setAuth(user, access, refresh) {
+                try { localStorage.removeItem('kt_sub_remaining_seconds_v2'); } catch (_) {}
+                if (user) localStorage.setItem(USER_CACHE_KEY, JSON.stringify(user));
+                if (access) localStorage.setItem(TOKEN_KEY, access);
+                if (refresh) localStorage.setItem(REFRESH_KEY, refresh);
+                window.dispatchEvent(new CustomEvent('kt:auth-changed', { detail: { user } }));
+                updateView();
+            }
+
+            function clearAuth() {
+                try { localStorage.removeItem('kt_sub_remaining_seconds_v2'); } catch (_) {}
+                localStorage.removeItem(TOKEN_KEY);
+                localStorage.removeItem(REFRESH_KEY);
+                localStorage.removeItem(USER_CACHE_KEY);
+                window.dispatchEvent(new CustomEvent('kt:auth-changed', { detail: { user: null } }));
+                updateView();
+            }
+
+            function showAlert(msg, isError) {
+                alertBox.className = 'login-alert ' + (isError ? 'error' : 'success');
+                alertBox.innerHTML = "<i class='bx " + (isError ? "bx-error-circle" : "bx-check-circle") + "'></i> " + msg;
+                alertBox.style.display = 'flex';
+            }
+
+            function clearAlert() {
+                alertBox.style.display = 'none';
+                alertBox.innerHTML = '';
+            }
+
+            function updateView() {
+                const user = getStoredUser();
+                if (user) {
+                    guestCard.style.display = 'none';
+                    loggedCard.style.display = 'block';
+
+                    const name = user.display_name || (user.email ? user.email.split('@')[0] : 'Học Viên');
+                    const initial = (name || 'U').trim().charAt(0).toUpperCase();
+                    loggedAvatar.textContent = initial;
+                    loggedName.textContent = name;
+                    loggedEmail.textContent = user.email || '';
+
+                    const isPro = user.plan === 'pro' || user.plan === 'premium';
+                    loggedPlan.innerHTML = `<i class='bx ${isPro ? "bx-crown" : "bx-check-shield"}'></i> ` + 
+                        (isPro ? 'Gói Pro VIP' : 'Tài khoản Miễn phí');
+                } else {
+                    guestCard.style.display = 'block';
+                    loggedCard.style.display = 'none';
+                }
+            }
+
+            // Forgot password elements
+            const linkForgotPassword = document.getElementById('linkForgotPassword');
+            const formForgot = document.getElementById('pageForgotForm');
+            const forgotStep1 = document.getElementById('forgotStep1');
+            const forgotStep2 = document.getElementById('forgotStep2');
+            const inputForgotEmail = document.getElementById('inputForgotEmail');
+            const inputForgotOtp = document.getElementById('inputForgotOtp');
+            const inputForgotNewPassword = document.getElementById('inputForgotNewPassword');
+            const inputForgotConfirmPassword = document.getElementById('inputForgotConfirmPassword');
+            const btnForgotSendOtp = document.getElementById('btnForgotSendOtp');
+            const btnForgotSubmit = document.getElementById('btnForgotSubmit');
+            const btnBackToLoginFromForgot = document.getElementById('btnBackToLoginFromForgot');
+            const forgotOtpHintText = document.getElementById('forgotOtpHintText');
+
+            // Tabs
+            tabLogin.addEventListener('click', function () {
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+                formLogin.style.display = 'block';
+                formRegister.style.display = 'none';
+                if (formForgot) formForgot.style.display = 'none';
+                cardHeaderTitle.textContent = 'Đăng Nhập';
+                cardHeaderSub.textContent = 'Chào mừng bạn quay lại với Kinetic Tech';
+                clearAlert();
+            });
+
+            tabRegister.addEventListener('click', function () {
+                tabRegister.classList.add('active');
+                tabLogin.classList.remove('active');
+                formLogin.style.display = 'none';
+                formRegister.style.display = 'block';
+                if (formForgot) formForgot.style.display = 'none';
+                cardHeaderTitle.textContent = 'Đăng Ký Mới';
+                cardHeaderSub.textContent = 'Tạo tài khoản miễn phí và nhận ngay 1 giờ bóc sub AI';
+                clearAlert();
+            });
+
+            function showForgotForm() {
+                tabLogin.classList.remove('active');
+                tabRegister.classList.remove('active');
+                formLogin.style.display = 'none';
+                formRegister.style.display = 'none';
+                if (formForgot) formForgot.style.display = 'block';
+                cardHeaderTitle.textContent = 'Quên Mật Khẩu';
+                cardHeaderSub.textContent = 'Khôi phục quyền truy cập vào tài khoản Kinetic Tech';
+                clearAlert();
+                if (inputForgotEmail && !inputForgotEmail.value) {
+                    const lEmail = document.getElementById('inputLoginEmail');
+                    if (lEmail) inputForgotEmail.value = lEmail.value.trim();
+                }
+            }
+
+            if (linkForgotPassword) {
+                linkForgotPassword.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showForgotForm();
+                });
+            }
+
+            if (btnBackToLoginFromForgot) {
+                btnBackToLoginFromForgot.addEventListener('click', function () {
+                    tabLogin.click();
+                });
+            }
+
+            // Password Toggles (Fix Lỗi 7)
+            function setupPasswordToggle(btnId, inputId) {
+                const btn = document.getElementById(btnId);
+                const input = document.getElementById(inputId);
+                if (!btn || !input) return;
+                btn.addEventListener('click', function () {
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        btn.innerHTML = "<i class='bx bx-hide'></i>";
+                    } else {
+                        input.type = 'password';
+                        btn.innerHTML = "<i class='bx bx-show'></i>";
+                    }
+                });
+            }
+            setupPasswordToggle('toggleLoginPasswordBtn', 'inputLoginPassword');
+            setupPasswordToggle('toggleRegPasswordBtn', 'inputRegPassword');
+            setupPasswordToggle('toggleRegConfirmBtn', 'inputRegConfirm');
+            setupPasswordToggle('toggleForgotNewPasswordBtn', 'inputForgotNewPassword');
+            setupPasswordToggle('toggleForgotConfirmPasswordBtn', 'inputForgotConfirmPassword');
+
+            // Forgot Password Step 1: Send OTP
+            if (btnForgotSendOtp) {
+                btnForgotSendOtp.addEventListener('click', async function () {
+                    const email = inputForgotEmail.value.trim();
+                    if (!email || !email.includes('@')) {
+                        showAlert('Vui lòng nhập địa chỉ email hợp lệ.', true);
+                        return;
+                    }
+                    btnForgotSendOtp.disabled = true;
+                    btnForgotSendOtp.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Đang gửi mã OTP...";
+                    clearAlert();
+
+                    try {
+                        const resp = await fetch(API_BASE + '/auth/forgot-password', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email })
+                        });
+                        const data = await resp.json().catch(() => ({}));
+                        if (resp.ok) {
+                            showAlert(data.message || 'Mã xác thực đã được gửi tới email của bạn!', false);
+                            if (forgotStep2) forgotStep2.style.display = 'block';
+                            if (data.code) {
+                                forgotOtpHintText.innerHTML = `Mã xác nhận thử nghiệm của bạn là: <strong>${data.code}</strong> (hiệu lực 15 phút).`;
+                                inputForgotOtp.value = data.code;
+                            } else {
+                                forgotOtpHintText.textContent = `Mã OTP gồm 6 chữ số đã được gửi tới ${email} (hiệu lực 15 phút).`;
+                            }
+                            if (inputForgotOtp) inputForgotOtp.focus();
+                        } else {
+                            throw new Error(data.detail || 'Không tìm thấy tài khoản với email này.');
+                        }
+                    } catch (err) {
+                        showAlert(err.message, true);
+                    } finally {
+                        btnForgotSendOtp.disabled = false;
+                        btnForgotSendOtp.innerHTML = "<i class='bx bx-send'></i> Gửi Lại Mã";
+                    }
+                });
+            }
+
+            // Forgot Password Step 2: Submit Reset Password
+            if (formForgot) {
+                formForgot.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    clearAlert();
+                    const email = inputForgotEmail.value.trim();
+                    const code = inputForgotOtp.value.trim();
+                    const newPassword = inputForgotNewPassword.value;
+                    const confirmPassword = inputForgotConfirmPassword.value;
+
+                    if (!code || code.length !== 6) {
+                        showAlert('Vui lòng nhập đúng mã OTP gồm 6 chữ số.', true);
+                        return;
+                    }
+                    if (newPassword.length < 6) {
+                        showAlert('Mật khẩu mới phải có tối thiểu 6 ký tự.', true);
+                        return;
+                    }
+                    if (newPassword !== confirmPassword) {
+                        showAlert('Mật khẩu xác nhận không trùng khớp.', true);
+                        return;
+                    }
+
+                    btnForgotSubmit.disabled = true;
+                    btnForgotSubmit.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Đang đổi mật khẩu...";
+
+                    try {
+                        const resp = await fetch(API_BASE + '/auth/reset-password', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                email,
+                                code,
+                                new_password: newPassword
+                            })
+                        });
+                        const data = await resp.json().catch(() => ({}));
+                        if (resp.ok) {
+                            tabLogin.click();
+                            const loginEmailInput = document.getElementById('inputLoginEmail');
+                            if (loginEmailInput) loginEmailInput.value = email;
+                            const loginPwdInput = document.getElementById('inputLoginPassword');
+                            if (loginPwdInput) loginPwdInput.value = '';
+                            showAlert('Đặt lại mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới.', false);
+                            inputForgotOtp.value = '';
+                            inputForgotNewPassword.value = '';
+                            inputForgotConfirmPassword.value = '';
+                            if (forgotStep2) forgotStep2.style.display = 'none';
+                        } else {
+                            throw new Error(data.detail || 'Không thể đặt lại mật khẩu.');
+                        }
+                    } catch (err) {
+                        showAlert(err.message, true);
+                    } finally {
+                        btnForgotSubmit.disabled = false;
+                        btnForgotSubmit.innerHTML = "<i class='bx bx-check-shield'></i> Xác Nhận &amp; Đặt Lại Mật Khẩu";
+                    }
+                });
+            }
+
+            // Submit Login
+            formLogin.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                clearAlert();
+                const email = document.getElementById('inputLoginEmail').value.trim();
+                const password = document.getElementById('inputLoginPassword').value;
+                const btn = document.getElementById('btnPageLoginSubmit');
+
+                btn.disabled = true;
+                btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Đang đăng nhập...";
+
+                try {
+                    const resp = await fetch(API_BASE + '/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        const profileResp = await fetch(API_BASE + '/auth/me', {
+                            headers: { 'Authorization': 'Bearer ' + data.access_token }
+                        }).catch(() => null);
+
+                        const user = (profileResp && profileResp.ok) ? await profileResp.json() : {
+                            email: email,
+                            display_name: email.split('@')[0],
+                            plan: 'free'
+                        };
+
+                        setAuth(user, data.access_token, data.refresh_token);
+                    } else {
+                        const err = await resp.json().catch(() => ({}));
+                        throw new Error(err.detail || 'Email hoặc mật khẩu không đúng.');
+                    }
+                } catch (err) {
+                    if (err.message.indexOf('fetch') !== -1 || err.message.indexOf('Network') !== -1 || err.message.indexOf('Failed') !== -1) {
+                        // Offline fallback
+                        const offlineUser = {
+                            id: 'user-' + Date.now(),
+                            email: email,
+                            display_name: email.split('@')[0],
+                            plan: 'free',
+                            quota_used_seconds: 0,
+                            quota_limit_seconds: 3600
+                        };
+                        setAuth(offlineUser, 'offline-token', 'offline-refresh');
+                    } else {
+                        showAlert(err.message, true);
+                    }
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = "<i class='bx bx-log-in'></i> Đăng Nhập Ngay";
+                }
+            });
+
+            // Submit Register
+            formRegister.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                clearAlert();
+                const name = document.getElementById('inputRegName').value.trim();
+                const email = document.getElementById('inputRegEmail').value.trim();
+                const password = document.getElementById('inputRegPassword').value;
+                const confirm = document.getElementById('inputRegConfirm').value;
+                const btn = document.getElementById('btnPageRegSubmit');
+
+                if (password !== confirm) {
+                    showAlert('Mật khẩu xác nhận không trùng khớp.', true);
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Đang tạo tài khoản...";
+
+                try {
+                    const resp = await fetch(API_BASE + '/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password, display_name: name })
+                    });
+
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        // Load full user profile from /auth/me
+                        let userObj = null;
+                        try {
+                            const pResp = await fetch(API_BASE + '/auth/me', {
+                                headers: { 'Authorization': 'Bearer ' + data.access_token }
+                            });
+                            if (pResp.ok) userObj = await pResp.json();
+                        } catch (_) {}
+
+                        if (!userObj) {
+                            userObj = {
+                                id: data.user_id || ('user-' + Date.now()),
+                                email: email,
+                                display_name: name || email.split('@')[0],
+                                plan: 'free',
+                                quota_used_seconds: 0,
+                                quota_limit_seconds: 3600
+                            };
+                        }
+                        setAuth(userObj, data.access_token, data.refresh_token);
+                    } else {
+                        const err = await resp.json().catch(() => ({}));
+                        if (resp.status === 409) {
+                            showAlert(err.detail || 'Email này đã được đăng ký. Mỗi email chỉ được đăng ký duy nhất 1 tài khoản. Vui lòng chuyển sang Đăng Nhập.', true);
+                            const loginEmailInput = document.getElementById('inputLoginEmail');
+                            if (loginEmailInput) loginEmailInput.value = email;
+                            return;
+                        }
+                        throw new Error(err.detail || 'Không thể đăng ký tài khoản.');
+                    }
+                } catch (err) {
+                    if (err.message.indexOf('fetch') !== -1 || err.message.indexOf('Network') !== -1 || err.message.indexOf('Failed') !== -1) {
+                        const localUser = {
+                            id: 'user-' + Date.now(),
+                            email: email,
+                            display_name: name,
+                            plan: 'free',
+                            quota_used_seconds: 0,
+                            quota_limit_seconds: 3600
+                        };
+                        setAuth(localUser, 'offline-token', 'offline-refresh');
+                    } else {
+                        showAlert(err.message, true);
+                    }
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = "<i class='bx bx-user-plus'></i> Tạo Tài Khoản &amp; Nhận 1 Giờ Free";
+                }
+            });
+
+            // Logout
+            loggedBtnLogout.addEventListener('click', async function () {
+                const token = localStorage.getItem(TOKEN_KEY);
+                const refresh = localStorage.getItem(REFRESH_KEY);
+                if (token || refresh) {
+                    try {
+                        await fetch(API_BASE + '/auth/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+                            },
+                            body: JSON.stringify({ refresh_token: refresh || '' })
+                        });
+                    } catch (_) {}
+                }
+                clearAuth();
+            });
+
+            // Listen to auth events
+            window.addEventListener('kt:auth-changed', updateView);
+            window.addEventListener('storage', function (e) {
+                if (e.key === USER_CACHE_KEY || e.key === TOKEN_KEY) {
+                    updateView();
+                }
+            });
+
+            // Initial view
+            updateView();
+        })();
+    </script>
+</body>
+</html>

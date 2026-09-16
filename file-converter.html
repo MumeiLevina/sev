@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi File & Tài Liệu | Kinetic Tech</title>
+    <!-- Reset scroll position on reload -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+    <!-- PDF-Lib CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <!-- JSZip for batch download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        .converter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .conv-tab-btn {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .conv-tab-btn:hover {
+            border-color: #3b82f6;
+            color: #1e40af;
+            background: #f8fafc;
+        }
+        .conv-tab-btn.active {
+            background: #004bb5;
+            border-color: #004bb5;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 75, 181, 0.2);
+        }
+        .conv-pane {
+            display: none;
+        }
+        .conv-pane.active {
+            display: block;
+        }
+        .drop-zone {
+            border: 2px dashed #93c5fd;
+            border-radius: 12px;
+            padding: 36px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: #f8fafc;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .drop-zone i.main-icon {
+            font-size: 3.5rem;
+            color: #2563eb;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .drop-zone h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .drop-zone p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        .image-order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 18px 0;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .image-order-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            transition: all 0.15s ease;
+        }
+        .image-order-item:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .img-thumb-mini {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .img-page-num {
+            width: 26px;
+            height: 26px;
+            background: #004bb5;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .img-meta-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .img-meta-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .img-meta-size {
+            font-size: 0.78rem;
+            color: #64748b;
+        }
+        .img-btn-group {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .btn-order-action {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.15s ease;
+        }
+        .btn-order-action:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        .btn-order-action.danger:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            border-color: #fca5a5;
+        }
+        .pdf-pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+        .pdf-page-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .pdf-page-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+        .pdf-page-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            background: #f8fafc;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+        .pdf-page-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .fmt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 14px 0 20px 0;
+        }
+        .fmt-pill {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+        }
+        .fmt-pill i {
+            font-size: 1.5rem;
+            color: #64748b;
+            transition: color 0.2s ease;
+        }
+        .fmt-pill:hover {
+            border-color: #3b82f6;
+            background: #f0f7ff;
+            color: #1e40af;
+        }
+        .fmt-pill:hover i {
+            color: #2563eb;
+        }
+        .fmt-pill.active {
+            background: #eff6ff;
+            border-color: #004bb5;
+            color: #004bb5;
+            box-shadow: 0 0 0 2px rgba(0, 75, 181, 0.15);
+        }
+        .fmt-pill.active i {
+            color: #004bb5;
+        }
+        .job-progress-card {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .job-progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+        .job-progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #004bb5);
+            width: 0%;
+            border-radius: 50px;
+            transition: width 0.4s ease;
+        }
+        .api-mode-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 14px;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+            color: #475569;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .api-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+        .api-status-badge.online {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .api-status-badge.client {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #2563eb;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">CHUYỂN ĐỔI FILE</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Chuyển Đổi File & Tài Liệu</h1>
+                    <p class="text-muted">Ghép nhiều ảnh bài tập thành 1 file PDF duy nhất, tách PDF thành từng ảnh, hoặc đổi nhanh định dạng ảnh. 100% xử lý an toàn ngay trên trình duyệt.</p>
+                </div>
+
+                    <!-- API Mode / Backend Status Banner -->
+                    <div class="api-mode-banner">
+                        <div class="flex align-center gap-2">
+                            <span class="api-status-badge online" id="apiStatusBadge">
+                                <i class='bx bx-check-circle'></i> Sẵn sàng chuyển đổi (14+ định dạng)
+                            </span>
+                            <span style="color: #64748b;">Hệ thống chuyển đổi file phân tán hiệu năng cao</span>
+                        </div>
+                        <div class="flex align-center gap-2">
+                            <span style="font-size: 0.78rem; color: #64748b;">Cổng API:</span>
+                            <code id="apiEndpointText" style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;"></code>
+                            <script>document.getElementById('apiEndpointText').textContent = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8080' : 'https://pdf-api.studenttools.vn';</script>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Tabs -->
+                    <div class="converter-tabs">
+                        <button type="button" class="conv-tab-btn active" data-tab="tab-pdf2x">
+                            <i class='bx bxs-file-pdf'></i> PDF sang định dạng khác (PDF → X)
+                        </button>
+                        <button type="button" class="conv-tab-btn" data-tab="tab-x2pdf">
+                            <i class='bx bx-transfer'></i> Chuyển sang PDF (X → PDF)
+                        </button>
+                        <button type="button" class="conv-tab-btn" data-tab="tab-img2pdf">
+                            <i class='bx bxs-file-image'></i> Ảnh → PDF (Ghép bài tập)
+                        </button>
+                        <button type="button" class="conv-tab-btn" data-tab="tab-pdf2img">
+                            <i class='bx bxs-image'></i> PDF → Ảnh (Tách trang)
+                        </button>
+                        <button type="button" class="conv-tab-btn" data-tab="tab-imgformat">
+                            <i class='bx bx-refresh'></i> Đổi định dạng ảnh
+                        </button>
+                        <button type="button" class="conv-tab-btn" data-tab="tab-txt2pdf">
+                            <i class='bx bx-text'></i> Văn bản → PDF
+                        </button>
+                    </div>
+
+                    <!-- ====================================================
+                         PANE: PDF SANG ĐỊNH DẠNG KHÁC (PDF TO X)
+                         ==================================================== -->
+                    <div id="tab-pdf2x" class="conv-pane active">
+                        <div class="drop-zone" id="dropZonePdf2X">
+                            <i class='bx bxs-file-pdf main-icon'></i>
+                            <h3>Kéo thả file PDF vào đây</h3>
+                            <p>hoặc bấm để chọn file PDF cần chuyển đổi</p>
+                            <span class="badge badge-primary">Dung lượng tối đa 50MB</span>
+                            <input type="file" id="inputPdf2X" class="hidden" accept="application/pdf">
+                        </div>
+
+                        <div id="panelPdf2XConfig" class="hidden">
+                            <!-- File Info Box -->
+                            <div style="display: flex; align-items: center; gap: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+                                <i class='bx bxs-file-pdf' style="font-size: 2.2rem; color: #ef4444;"></i>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div id="pdf2xFileName" style="font-weight: 700; color: #0f172a; font-size: 0.95rem; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">document.pdf</div>
+                                    <div id="pdf2xFileSize" style="font-size: 0.8rem; color: #64748b;">0 MB</div>
+                                </div>
+                                <button type="button" id="btnChangePdf2XFile" class="btn btn-outline" style="font-size: 0.78rem; padding: 4px 10px;">
+                                    <i class='bx bx-sync'></i> Chọn file khác
+                                </button>
+                            </div>
+
+                            <label class="form-label" style="font-size: 0.92rem; font-weight: 700; color: #0f172a;">
+                                Chọn định dạng muốn chuyển đổi:
+                            </label>
+
+                            <!-- Format Selector Grid -->
+                            <div class="fmt-grid" id="pdf2xFormatGrid">
+                                <button type="button" class="fmt-pill active" data-fmt="docx">
+                                    <i class='bx bxs-file-doc'></i>
+                                    <span>Word (.docx)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="xlsx">
+                                    <i class='bx bxs-spreadsheet'></i>
+                                    <span>Excel (.xlsx)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="pptx">
+                                    <i class='bx bxs-slideshow'></i>
+                                    <span>PowerPoint (.pptx)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="png">
+                                    <i class='bx bxs-file-png'></i>
+                                    <span>Ảnh (.png)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="jpg">
+                                    <i class='bx bxs-file-jpg'></i>
+                                    <span>Ảnh (.jpg)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="epub">
+                                    <i class='bx bxs-book-bookmark'></i>
+                                    <span>Sách (.epub)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="rtf">
+                                    <i class='bx bx-text'></i>
+                                    <span>Rich Text (.rtf)</span>
+                                </button>
+                                <button type="button" class="fmt-pill" data-fmt="html">
+                                    <i class='bx bxl-html5'></i>
+                                    <span>Trang web (.html)</span>
+                                </button>
+                            </div>
+
+                            <!-- Additional options -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+                                <div style="font-weight: 700; font-size: 0.85rem; color: #334155; margin-bottom: 10px;">
+                                    <i class='bx bx-slider-alt'></i> Tùy chọn nâng cao (nếu cần):
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.8rem;">Mật khẩu PDF (nếu file bị khóa):</label>
+                                        <input type="password" id="pdf2xPassword" class="form-control" placeholder="Nhập mật khẩu để mở khóa file...">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.8rem;">Độ phân giải (DPI khi xuất ảnh / slide):</label>
+                                        <select id="pdf2xDpi" class="form-control">
+                                            <option value="150" selected>150 DPI (Tiêu chuẩn, tốc độ nhanh)</option>
+                                            <option value="300">300 DPI (Sắc nét cao, chất lượng in ấn)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" id="btnStartPdf2X" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;">
+                                <i class='bx bx-play-circle'></i> Bắt Đầu Chuyển Đổi Ngay
+                            </button>
+                        </div>
+
+                        <!-- Progress / Result Card -->
+                        <div id="pdf2xProgressCard" class="job-progress-card hidden">
+                            <div class="flex items-center justify-between">
+                                <strong id="pdf2xProgressStatusText" style="color: #004bb5; font-size: 1rem;">
+                                    <span class="loading-spinner"></span> Đang kết nối hàng đợi xử lý...
+                                </strong>
+                                <span id="pdf2xProgressPercent" style="font-weight: 700; color: #004bb5;">0%</span>
+                            </div>
+                            <div class="job-progress-bar-bg">
+                                <div id="pdf2xProgressBarFill" class="job-progress-bar-fill"></div>
+                            </div>
+                            <div id="pdf2xStepDetail" style="font-size: 0.82rem; color: #64748b; margin-bottom: 16px;">
+                                Đang tải file lên máy chủ chuyển đổi...
+                            </div>
+                            
+                            <div id="pdf2xDownloadArea" class="hidden">
+                                <div style="background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 14px; margin-bottom: 16px; color: #065f46; font-size: 0.9rem;">
+                                    <i class='bx bx-check-double' style="font-size: 1.2rem; vertical-align: middle;"></i>
+                                    <strong>Chuyển đổi hoàn tất thành công!</strong> File đã sẵn sàng để tải về.
+                                </div>
+                                <div class="flex gap-2">
+                                    <a id="btnDownloadPdf2XResult" href="#" target="_blank" class="btn btn-primary" style="flex: 1; padding: 12px; text-decoration: none;">
+                                        <i class='bx bxs-download'></i> Tải File Kết Quả Về Máy
+                                    </a>
+                                    <button type="button" id="btnResetPdf2X" class="btn btn-outline">
+                                        <i class='bx bx-redo'></i> Chuyển file khác
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ====================================================
+                         PANE: CHUYỂN ĐỔI SANG PDF (X TO PDF)
+                         ==================================================== -->
+                    <div id="tab-x2pdf" class="conv-pane">
+                        <div class="drop-zone" id="dropZoneX2Pdf">
+                            <i class='bx bxs-file-import main-icon'></i>
+                            <h3>Kéo thả tài liệu bất kỳ vào đây</h3>
+                            <p>Hỗ trợ: Word (DOC/DOCX), Excel (XLS/XLSX), PowerPoint (PPTX), RTF, TXT, HTML, EPUB, Ảnh (PNG/JPG)</p>
+                            <span class="badge badge-primary">Chuyển sang chuẩn PDF</span>
+                            <input type="file" id="inputX2Pdf" class="hidden" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.rtf,.txt,.html,.epub,.png,.jpg,.jpeg">
+                        </div>
+
+                        <div id="panelX2PdfConfig" class="hidden">
+                            <div style="display: flex; align-items: center; gap: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+                                <i class='bx bxs-file' id="x2pdfFileIcon" style="font-size: 2.2rem; color: #2563eb;"></i>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div id="x2pdfFileName" style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">document.docx</div>
+                                    <div id="x2pdfFileSize" style="font-size: 0.8rem; color: #64748b;">Định dạng: Word • 0 MB</div>
+                                </div>
+                                <button type="button" id="btnChangeX2PdfFile" class="btn btn-outline" style="font-size: 0.78rem; padding: 4px 10px;">
+                                    <i class='bx bx-sync'></i> Chọn file khác
+                                </button>
+                            </div>
+
+                            <button type="button" id="btnStartX2Pdf" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;">
+                                <i class='bx bxs-file-pdf'></i> Chuyển Sang File PDF Ngay
+                            </button>
+                        </div>
+
+                        <!-- Progress / Result Card -->
+                        <div id="x2pdfProgressCard" class="job-progress-card hidden">
+                            <div class="flex items-center justify-between">
+                                <strong id="x2pdfProgressStatusText" style="color: #004bb5; font-size: 1rem;">
+                                    <span class="loading-spinner"></span> Đang xử lý tài liệu...
+                                </strong>
+                                <span id="x2pdfProgressPercent" style="font-weight: 700; color: #004bb5;">0%</span>
+                            </div>
+                            <div class="job-progress-bar-bg">
+                                <div id="x2pdfProgressBarFill" class="job-progress-bar-fill"></div>
+                            </div>
+                            <div id="x2pdfStepDetail" style="font-size: 0.82rem; color: #64748b; margin-bottom: 16px;">
+                                Đang chuyển đổi sang định dạng PDF...
+                            </div>
+                            
+                            <div id="x2pdfDownloadArea" class="hidden">
+                                <div style="background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 14px; margin-bottom: 16px; color: #065f46; font-size: 0.9rem;">
+                                    <i class='bx bx-check-double' style="font-size: 1.2rem; vertical-align: middle;"></i>
+                                    <strong>Chuyển đổi thành công!</strong> File PDF đã sẵn sàng.
+                                </div>
+                                <div class="flex gap-2">
+                                    <a id="btnDownloadX2PdfResult" href="#" target="_blank" class="btn btn-primary" style="flex: 1; padding: 12px; text-decoration: none;">
+                                        <i class='bx bxs-file-pdf'></i> Tải File PDF Về Máy
+                                    </a>
+                                    <button type="button" id="btnResetX2Pdf" class="btn btn-outline">
+                                        <i class='bx bx-redo'></i> Chuyển file khác
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ====================================================
+                         TAB 3: ẢNH SANG PDF (GHÉP NHIỀU TRANG BÀI TẬP)
+                         ==================================================== -->
+                    <div id="tab-img2pdf" class="conv-pane">
+                        <div id="dropZoneImg2Pdf" class="drop-zone">
+                            <i class='bx bx-images main-icon'></i>
+                            <h3>Kéo thả các ảnh bài tập vào đây</h3>
+                            <p>hoặc bấm để chọn nhiều ảnh cùng lúc (Hỗ trợ: JPG, PNG, WebP)</p>
+                            <span class="badge badge-primary">Có thể chọn nhiều ảnh</span>
+                            <input type="file" id="inputImg2Pdf" class="hidden" accept="image/jpeg,image/png,image/webp" multiple>
+                        </div>
+
+                        <!-- Settings & Image List Area -->
+                        <div id="img2pdfArea" class="hidden">
+                            <div class="flex justify-between align-center" style="margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <h4 style="font-size: 0.95rem; color: #0f172a; margin: 0;">
+                                    <i class='bx bx-list-check'></i> Danh sách trang ảnh bài tập (<span id="imgCountBadge">0</span> ảnh):
+                                </h4>
+                                <div class="flex gap-2">
+                                    <button type="button" id="btnAddMoreImgs" class="btn btn-outline" style="font-size: 0.8rem; padding: 4px 12px;">
+                                        <i class='bx bx-plus'></i> Thêm ảnh
+                                    </button>
+                                    <button type="button" id="btnClearImgs" class="btn btn-outline" style="font-size: 0.8rem; padding: 4px 12px; color: #ef4444; border-color: #fca5a5;">
+                                        <i class='bx bx-trash'></i> Xóa tất cả
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Image order list -->
+                            <div id="imageOrderList" class="image-order-list"></div>
+
+                            <!-- PDF Page Settings -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin: 16px 0;">
+                                <div style="font-weight: 700; font-size: 0.88rem; color: #334155; margin-bottom: 10px;">
+                                    <i class='bx bx-cog'></i> Cài đặt trang PDF xuất ra:
+                                </div>
+                                <div class="flex gap-4" style="flex-wrap: wrap;">
+                                    <div style="flex: 1; min-width: 150px;">
+                                        <label class="form-label" style="font-size: 0.82rem;">Khổ giấy</label>
+                                        <select id="pdfPageSize" class="form-control" style="padding: 6px 12px; font-size: 0.88rem;">
+                                            <option value="a4" selected>Khổ A4 tiêu chuẩn (210 x 297 mm)</option>
+                                            <option value="fit">Vừa khít với kích thước ảnh gốc</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 1; min-width: 150px;">
+                                        <label class="form-label" style="font-size: 0.82rem;">Định hướng trang</label>
+                                        <select id="pdfOrientation" class="form-control" style="padding: 6px 12px; font-size: 0.88rem;">
+                                            <option value="portrait" selected>Trang dọc (Portrait)</option>
+                                            <option value="landscape">Trang ngang (Landscape)</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 1; min-width: 150px;">
+                                        <label class="form-label" style="font-size: 0.82rem;">Tên file PDF xuất ra</label>
+                                        <input type="text" id="pdfOutputName" class="form-control" value="Bai_Tap_Nop.pdf" style="padding: 6px 12px; font-size: 0.88rem;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" id="btnGeneratePdf" class="btn btn-primary" style="width: 100%;">
+                                <i class='bx bxs-file-pdf'></i> Ghép & Xuất File PDF Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ====================================================
+                         TAB 4: PDF SANG ẢNH (TÁCH CÁC TRANG RA JPG/PNG)
+                         ==================================================== -->
+                    <div id="tab-pdf2img" class="conv-pane">
+                        <div id="dropZonePdf2Img" class="drop-zone">
+                            <i class='bx bxs-file-pdf main-icon' style="color: #ef4444;"></i>
+                            <h3>Kéo thả file PDF cần tách ảnh vào đây</h3>
+                            <p>hoặc bấm để chọn file PDF từ máy tính</p>
+                            <span class="badge badge-primary">Tách từng trang thành ảnh nét cao</span>
+                            <input type="file" id="inputPdf2Img" class="hidden" accept="application/pdf">
+                        </div>
+
+                        <div id="pdf2imgArea" class="hidden">
+                            <div class="flex justify-between align-center" style="margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                                <div>
+                                    <strong id="loadedPdfName" style="color: #0f172a; font-size: 0.95rem;">tailieu.pdf</strong>
+                                    <div id="loadedPdfMeta" style="font-size: 0.8rem; color: #64748b;">Tổng cộng 0 trang</div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button type="button" id="btnDownloadAllZip" class="btn btn-primary" style="font-size: 0.85rem; padding: 6px 16px;">
+                                        <i class='bx bxs-archive'></i> Tải tất cả trang (.ZIP)
+                                    </button>
+                                    <button type="button" id="btnResetPdf2Img" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 12px;">
+                                        <i class='bx bx-refresh'></i> Chọn file khác
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="pdfRenderingNotice" style="display: none; text-align: center; padding: 20px; color: #2563eb; font-weight: 600;">
+                                <span class="loading-spinner"></span> Đang kết xuất các trang PDF thành ảnh chất lượng cao...
+                            </div>
+
+                            <!-- Grid rendered pages -->
+                            <div id="pdfPagesGrid" class="pdf-pages-grid"></div>
+                        </div>
+                    </div>
+
+                    <!-- ====================================================
+                         TAB 5: ĐỔI ĐỊNH DẠNG ẢNH (JPG / PNG / WEBP)
+                         ==================================================== -->
+                    <div id="tab-imgformat" class="conv-pane">
+                        <div id="dropZoneImgFormat" class="drop-zone">
+                            <i class='bx bx-transfer-alt main-icon'></i>
+                            <h3>Kéo thả ảnh cần chuyển định dạng vào đây</h3>
+                            <p>Hỗ trợ chuyển đổi qua lại giữa JPG, PNG, WEBP</p>
+                            <input type="file" id="inputImgFormat" class="hidden" accept="image/*">
+                        </div>
+
+                        <div id="imgFormatArea" class="hidden">
+                            <div class="flex gap-4" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 16px; align-items: center; flex-wrap: wrap;">
+                                <img id="formatSourceThumb" src="" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                <div style="flex: 1; min-width: 180px;">
+                                    <strong id="formatSourceName" style="color: #0f172a; font-size: 0.95rem; word-break: break-all;">image.png</strong>
+                                    <div id="formatSourceMeta" style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">Gốc: PNG - 0 KB</div>
+                                </div>
+                                <div style="min-width: 180px;">
+                                    <label class="form-label" style="font-size: 0.82rem;">Đổi sang định dạng:</label>
+                                    <select id="targetImageFormat" class="form-control" style="font-weight: 700; color: #004bb5;">
+                                        <option value="image/jpeg">JPG / JPEG (Nhẹ, tương thích cao)</option>
+                                        <option value="image/png">PNG (Không nén, giữ độ trong suốt)</option>
+                                        <option value="image/webp">WEBP (Thế hệ mới, siêu nhẹ & nét)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="button" id="btnConvertImageFormat" class="btn btn-primary" style="width: 100%;">
+                                <i class='bx bx-check-circle'></i> Chuyển Đổi & Tải Ảnh Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ====================================================
+                         TAB 6: VĂN BẢN SANG PDF (TEXT TO PDF)
+                         ==================================================== -->
+                    <div id="tab-txt2pdf" class="conv-pane">
+                        <div class="form-group">
+                            <label class="form-label">Tiêu đề tài liệu</label>
+                            <input type="text" id="txtDocTitle" class="form-control" placeholder="VD: Ghi Chú Ôn Thi Môn Triết Học" value="Tài Liệu Ghi Chú">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nội dung văn bản cần chuyển thành file PDF</label>
+                            <textarea id="txtDocContent" rows="10" class="form-control" style="font-family: monospace; font-size: 0.92rem; line-height: 1.6;" placeholder="Nhập hoặc dán nội dung văn bản, đề cương tại đây..."></textarea>
+                        </div>
+                        <button type="button" id="btnTextToPdf" class="btn btn-primary" style="width: 100%;">
+                            <i class='bx bxs-file-pdf'></i> Xuất File PDF Đẹp
+                        </button>
+                    </div>
+
+                <!-- Guidance & Features -->
+                <article class="tool-explanation" style="margin-top: 32px;">
+                    <h2>Lợi Ích Khi Sử Dụng Công Cụ Chuyển Đổi File</h2>
+                    <ul class="bullet-diamond-list">
+                        <li><strong>Ghép ảnh bài tập tức thì:</strong> Chụp ảnh từng trang bài làm bằng điện thoại, sắp xếp thứ tự chuẩn xác và ghép thành một file PDF duy nhất trước khi nộp lên hệ thống trường.</li>
+                        <li><strong>Tách trang PDF thông minh:</strong> Lấy ảnh từng trang của tài liệu hoặc bài giảng PDF để chèn vào Word/PowerPoint mà không cần cài phần mềm Adobe cồng kềnh.</li>
+                        <li><strong>Bảo mật 100% (Client-Side):</strong> Toàn bộ dữ liệu xử lý trực tiếp trên trình duyệt của bạn thông qua Web APIs, tài liệu riêng tư không bao giờ bị rò rỉ.</li>
+                    </ul>
+                </article>
+            </main>
+
+            <!-- Right Sidebar: Cuộc sống số & Tiện ích -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Cuộc sống số & Tiện ích</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compressor.html">Nén file</a></li>
+                    <li><a href="file-converter.html" class="active">Chuyển đổi file</a></li>
+                    <li><a href="planner.html">AI Lên lịch học Pomodoro</a></li>
+                    <li><a href="pdf-extractor.html">Chuyển Đổi & Xử Lý PDF Online</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                    <li><a href="fraction.html">Máy tính phân số chi tiết</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/file-converter.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

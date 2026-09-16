@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính phân số | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">PHÂN SỐ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Máy Tính Phân Số Thông Minh</h1>
+                <p class="text-muted">Cộng, trừ, nhân, chia, rút gọn phân số kèm các bước giải chi tiết và chuyển đổi hỗn số.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" id="btn-frac-calc" onclick="switchFracTab('calc')">Phép Tính 2 Phân Số</button>
+                    <button class="tab-btn" id="btn-frac-simplify" onclick="switchFracTab('simplify')">Rút Gọn Phân Số / ƯCLN & BCNN</button>
+                </div>
+
+                <!-- Tab 1: 2 Fractions Operator -->
+                <div id="tab-frac-calc" class="tab-pane active">
+                    <form id="fractionForm">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <!-- Fraction 1 -->
+                            <div style="display: flex; flex-direction: column; width: 120px; text-align: center;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Tử số 1</label>
+                                <input type="number" id="num1" class="form-control text-center" value="" placeholder="Tử 1" required style="font-weight: 700; font-size: 1.2rem;">
+                                <div style="height: 2px; background: var(--text-main); margin: 6px 0;"></div>
+                                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Mẫu số 1</label>
+                                <input type="number" id="den1" class="form-control text-center" value="" placeholder="Mẫu 1" required style="font-weight: 700; font-size: 1.2rem;">
+                            </div>
+
+                            <!-- Operator Select -->
+                            <div style="width: 80px;">
+                                <select id="fractionOp" class="form-control text-center" style="font-size: 1.6rem; font-weight: 700; padding: 10px 4px; color: var(--primary);">
+                                    <option value="+" selected>+</option>
+                                    <option value="-">-</option>
+                                    <option value="*">×</option>
+                                    <option value="/">÷</option>
+                                </select>
+                            </div>
+
+                            <!-- Fraction 2 -->
+                            <div style="display: flex; flex-direction: column; width: 120px; text-align: center;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Tử số 2</label>
+                                <input type="number" id="num2" class="form-control text-center" value="" placeholder="Tử 2" required style="font-weight: 700; font-size: 1.2rem;">
+                                <div style="height: 2px; background: var(--text-main); margin: 6px 0;"></div>
+                                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Mẫu số 2</label>
+                                <input type="number" id="den2" class="form-control text-center" value="" placeholder="Mẫu 2" required style="font-weight: 700; font-size: 1.2rem;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class='bx bx-calculator'></i> Tính Kết Quả & Hiện Lời Giải
+                        </button>
+                    </form>
+
+                    <!-- Fraction Calculation Result -->
+                    <div id="fractionResultBox" class="result-box" style="margin-top: 24px;">
+                        <p style="color: var(--text-muted);">Kết quả phép tính:</p>
+                        
+                        <!-- Visual Math Result Display -->
+                        <div class="math-display">
+                            <div class="fraction">
+                                <span class="num" id="resRawNum">--</span>
+                                <span class="den" id="resRawDen">--</span>
+                            </div>
+                            <span class="math-op">=</span>
+                            <span id="resMixedNumber" style="font-weight: 700; color: #f59e0b; font-size: 1.6rem; display: inline-flex; align-items: center;">
+                                --
+                            </span>
+                            <span class="math-op">≈</span>
+                            <span id="resDecimal" style="font-weight: 700; color: #10b981; font-size: 1.6rem;">--</span>
+                        </div>
+
+                        <!-- Step-by-step solution list -->
+                        <div style="text-align: left; margin-top: 24px;">
+                            <h4 style="color: #475569; font-size: 1rem; margin-bottom: 12px;">
+                                <i class='bx bx-list-ol'></i> Các bước giải chi tiết:
+                            </h4>
+                            <div id="stepsContainer">
+                                <!-- Step cards rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Simplify single fraction -->
+                <div id="tab-frac-simplify" class="tab-pane">
+                    <form id="simplifyForm">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
+                            <div style="display: flex; flex-direction: column; width: 140px; text-align: center;">
+                                <label style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">Tử số</label>
+                                <input type="number" id="simpNum" class="form-control text-center" value="" placeholder="Tử số" required style="font-weight: 700; font-size: 1.2rem;">
+                                <div style="height: 2px; background: var(--text-main); margin: 6px 0;"></div>
+                                <label style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">Mẫu số</label>
+                                <input type="number" id="simpDen" class="form-control text-center" value="" placeholder="Mẫu số" required style="font-weight: 700; font-size: 1.2rem;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class='bx bx-check-circle'></i> Rút Gọn Về Tối Giản
+                        </button>
+                    </form>
+
+                    <div id="simplifyResultBox" class="result-box" style="margin-top: 24px;">
+                        <p style="color: var(--text-muted);">Phân số tối giản:</p>
+                        <div class="math-display">
+                            <div class="fraction">
+                                <span class="num" id="simpOriginalNum">--</span>
+                                <span class="den" id="simpOriginalDen">--</span>
+                            </div>
+                            <span class="math-op">=</span>
+                            <div class="fraction" style="color: #10b981;">
+                                <span class="num" id="simpFinalNum">--</span>
+                                <span class="den" id="simpFinalDen">--</span>
+                            </div>
+                            <span class="math-op">≈</span>
+                            <span id="simpDecimal" style="color: #6366f1;">--</span>
+                        </div>
+
+                        <div class="callout callout-info" id="simpGcdInfo" style="text-align: left; margin-top: 16px;"></div>
+                    </div>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại)</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - Bộ đề 600 Câu</a></li>
+                    <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html" class="active">Tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/fraction.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

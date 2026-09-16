@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy Đổi Tiền Tệ Online – Đổi Ngoại Tệ Sang VND | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">TÀI CHÍNH</a>
+            <span class="nav-pill-btn active">ĐỔI NGOẠI TỆ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Quy Đổi Tiền Tệ Trực Tuyến (VND ↔ USD, EUR, JPY)</h1>
+                    <p class="text-muted">Chuyển đổi tỷ giá giữa Đồng Việt Nam (VND) và các đồng tiền phổ biến: Đô la Mỹ, Euro, Yên Nhật, Bảng Anh, Won Hàn Quốc, Nhân dân tệ.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <!-- Interactive Converter Box -->
+                    <div class="converter-box">
+                        <div class="converter-flow">
+                            <!-- From input -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-dollar-circle'></i> Nhập số tiền</label>
+                                <input type="number" id="currInputVal" class="form-control" value="100" step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                                <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đồng tiền</label>
+                                <select id="currSelectFrom" class="form-control" style="font-weight: 600;"></select>
+                            </div>
+
+                            <!-- Swap Button -->
+                            <div class="swap-btn-container">
+                                <button type="button" id="btnSwapCurr" class="btn-swap" title="Đổi chiều tiền tệ">
+                                    <i class='bx bx-transfer-alt'></i>
+                                </button>
+                            </div>
+
+                            <!-- To select -->
+                            <div class="converter-input-group">
+                                <label class="form-label"><i class='bx bx-money'></i> Đổi sang đồng tiền</label>
+                                <select id="currSelectTo" class="form-control" style="font-weight: 600; margin-top: 0;"></select>
+
+                                <!-- Custom Rate Toggle -->
+                                <div style="margin-top: 14px; background: #f1f5f9; border-radius: 8px; padding: 8px 12px; font-size: 0.8rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="color: #475569;">Tỷ giá quy đổi 1 đơn vị:</span>
+                                        <input type="number" id="currCustomRate" style="width: 110px; font-size: 0.8rem; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: right;" step="any">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Result Card -->
+                        <div class="conversion-result-card">
+                            <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Số tiền tương đương</div>
+                            <div id="resCurrVal" style="font-size: 2.8rem; font-weight: 800; color: #0284c7; margin: 8px 0; word-break: break-all;">
+                                2,540,000 đ
+                            </div>
+                            <div id="resCurrUnit" style="font-size: 1.05rem; color: var(--text-main); font-weight: 600;">Đồng Việt Nam (VND)</div>
+
+                            <div id="currFormulaText" class="conversion-formula-box">
+                                1 USD ≈ 25,400 VND
+                            </div>
+
+                            <div style="margin-top: 14px;">
+                                <button type="button" id="btnCopyCurr" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                    <i class='bx bx-copy'></i> Sao chép kết quả
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-currency Exchange Table -->
+                    <div style="text-align: left; margin-top: 32px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-table'></i> Bảng Tỷ Giá Tham Khảo Các Đồng Tiền Phổ Biến
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table" id="currencyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Ký hiệu</th>
+                                        <th>Tên đồng tiền</th>
+                                        <th>1 Đơn vị = VND</th>
+                                        <th>100 Đơn vị = VND</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Kiến Thức Đổi Ngoại Tệ Cho Sinh Viên</h2>
+                        <p>Nhu cầu quy đổi ngoại tệ của sinh viên ngày càng cao: từ việc thanh toán các khóa học trực tuyến (Coursera, Udemy), mua tài liệu ôn thi nước ngoài, thanh toán phần mềm (ChatGPT Plus, Spotify, Google One), đến việc chuẩn bị chi phí du học hay du lịch nước ngoài.</p>
+                        
+                        <h3>1. Phân biệt các loại tỷ giá ngân hàng</h3>
+                        <ul>
+                            <li><strong>Tỷ giá Mua tiền mặt:</strong> Mức giá ngân hàng sẽ trả cho bạn khi bạn mang tờ tiền giấy ngoại tệ đến bán cho ngân hàng lấy tiền VND.</li>
+                            <li><strong>Tỷ giá Mua chuyển khoản:</strong> Mức giá khi bạn nhận tiền ngoại tệ chuyển khoản từ nước ngoài về tài khoản ngân hàng trong nước.</li>
+                            <li><strong>Tỷ giá Bán:</strong> Mức giá bạn phải trả bằng tiền VND để mua ngoại tệ từ ngân hàng hoặc tỷ giá áp dụng khi quẹt thẻ thanh toán quốc tế.</li>
+                        </ul>
+
+                        <h3>2. Phí chuyển đổi ngoại tệ thẻ Visa/Mastercard (FX Fee)</h3>
+                        <p>Khi sinh viên dùng thẻ thanh toán quốc tế của các ngân hàng Việt Nam (Vietcombank, Techcombank, MB, v.v.) để mua hàng hoặc dịch vụ tính bằng USD/EUR, ngân hàng sẽ thu thêm <strong>phí xử lý giao dịch ngoại tệ</strong> (thường dao động từ <strong>1.5% đến 3.5%</strong> giá trị giao dịch). Vì vậy số tiền thực tế bị trừ trong tài khoản sẽ hơi cao hơn một chút so với tỷ giá niêm yết trên thị trường.</p>
+
+                        <h3>3. Mẹo đổi tiền du học tiết kiệm</h3>
+                        <p>Nếu bạn chuẩn bị đi du học hoặc tham gia chương trình trao đổi sinh viên (Exchange program), nên làm thẻ tín dụng hoặc thẻ ghi nợ sinh viên có ưu đãi miễn phí giao dịch ngoại tệ, hoặc đổi tiền mặt tại các chi nhánh ngân hàng có thủ tục sinh viên du học với mức phí cạnh tranh nhất.</p>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Finance Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Tài chính</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compound-interest.html">Tính lãi suất kép & Tiết kiệm</a></li>
+                    <li><a href="currency-converter.html" class="active">Quy đổi ngoại tệ (VND ↔ USD, EUR)</a></li>
+                    <li><a href="tax-calculator.html">Tính thuế TNCN & Lương Gross - Net</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Reference rates against VND (Base: 1 Unit = X VND)
+        const CURRENCIES = {
+            USD: { name: 'Đô la Mỹ (USD)', symbol: '$', rateToVnd: 25450 },
+            EUR: { name: 'Đồng Euro (EUR)', symbol: '€', rateToVnd: 27800 },
+            JPY: { name: 'Yên Nhật (JPY)', symbol: '¥', rateToVnd: 172.5 },
+            GBP: { name: 'Bảng Anh (GBP)', symbol: '£', rateToVnd: 32900 },
+            KRW: { name: 'Won Hàn Quốc (KRW)', symbol: '₩', rateToVnd: 18.7 },
+            CNY: { name: 'Nhân dân tệ (CNY)', symbol: '¥', rateToVnd: 3520 },
+            AUD: { name: 'Đô la Úc (AUD)', symbol: 'A$', rateToVnd: 16850 },
+            CAD: { name: 'Đô la Canada (CAD)', symbol: 'C$', rateToVnd: 18700 },
+            SGD: { name: 'Đô la Singapore (SGD)', symbol: 'S$', rateToVnd: 19150 },
+            THB: { name: 'Baht Thái Lan (THB)', symbol: '฿', rateToVnd: 740 },
+            VND: { name: 'Đồng Việt Nam (VND)', symbol: 'đ', rateToVnd: 1 }
+        };
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-US', { maximumFractionDigits: 4 });
+        }
+
+        function initCurrencyPage() {
+            const selectFrom = document.getElementById('currSelectFrom');
+            const selectTo = document.getElementById('currSelectTo');
+
+            selectFrom.innerHTML = '';
+            selectTo.innerHTML = '';
+
+            Object.entries(CURRENCIES).forEach(([code, data]) => {
+                const opt1 = new Option(`${code} – ${data.name}`, code);
+                const opt2 = new Option(`${code} – ${data.name}`, code);
+                selectFrom.add(opt1);
+                selectTo.add(opt2);
+            });
+
+            selectFrom.value = 'USD';
+            selectTo.value = 'VND';
+
+            populateCurrencyTable();
+            performConvert();
+        }
+
+        function performConvert() {
+            const val = parseFloat(document.getElementById('currInputVal').value) || 0;
+            const fromCode = document.getElementById('currSelectFrom').value;
+            const toCode = document.getElementById('currSelectTo').value;
+
+            const fromData = CURRENCIES[fromCode];
+            const toData = CURRENCIES[toCode];
+
+            let rate = fromData.rateToVnd / toData.rateToVnd;
+
+            // Custom rate override if provided
+            const customRateEl = document.getElementById('currCustomRate');
+            if (document.activeElement === customRateEl && !isNaN(parseFloat(customRateEl.value))) {
+                rate = parseFloat(customRateEl.value);
+            } else {
+                customRateEl.value = parseFloat(rate.toFixed(4));
+            }
+
+            const result = val * rate;
+
+            document.getElementById('resCurrVal').textContent = formatNumber(result) + ' ' + toData.symbol;
+            document.getElementById('resCurrUnit').textContent = toData.name;
+            document.getElementById('currFormulaText').textContent = `1 ${fromCode} ≈ ${formatNumber(rate)} ${toCode}`;
+        }
+
+        function populateCurrencyTable() {
+            const tbody = document.querySelector('#currencyTable tbody');
+            tbody.innerHTML = '';
+
+            Object.entries(CURRENCIES).forEach(([code, data]) => {
+                if (code === 'VND') return;
+                const tr = document.createElement('tr');
+                const rate1 = data.rateToVnd;
+                const rate100 = data.rateToVnd * 100;
+                tr.innerHTML = `
+                    <td><strong>${code}</strong></td>
+                    <td>${data.name}</td>
+                    <td style="color: #0284c7; font-weight: 600;">${rate1.toLocaleString('vi-VN')} đ</td>
+                    <td>${rate100.toLocaleString('vi-VN')} đ</td>
+                    <td>
+                        <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 3px 8px;" onclick="selectCurrencyPair('${code}')">
+                            Chuyển đổi
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function selectCurrencyPair(code) {
+            document.getElementById('currSelectFrom').value = code;
+            document.getElementById('currSelectTo').value = 'VND';
+            performConvert();
+            window.scrollTo({ top: 150, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCurrencyPage();
+
+            document.getElementById('currInputVal').addEventListener('input', performConvert);
+            document.getElementById('currSelectFrom').addEventListener('change', performConvert);
+            document.getElementById('currSelectTo').addEventListener('change', performConvert);
+            document.getElementById('currCustomRate').addEventListener('input', performConvert);
+
+            document.getElementById('btnSwapCurr').addEventListener('click', () => {
+                const sFrom = document.getElementById('currSelectFrom');
+                const sTo = document.getElementById('currSelectTo');
+                const temp = sFrom.value;
+                sFrom.value = sTo.value;
+                sTo.value = temp;
+                performConvert();
+            });
+
+            document.getElementById('btnCopyCurr').addEventListener('click', function() {
+                const val = document.getElementById('resCurrVal').textContent;
+                const formula = document.getElementById('currFormulaText').textContent;
+                navigator.clipboard.writeText(`${val} (${formula})`).then(() => {
+                    this.innerHTML = "<i class='bx bx-check' style='color: #10b981;'></i> Đã sao chép!";
+                    setTimeout(() => {
+                        this.innerHTML = "<i class='bx bx-copy'></i> Sao chép kết quả";
+                    }, 1800);
+                });
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

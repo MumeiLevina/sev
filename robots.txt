@@ -1,0 +1,13 @@
+# Kinetic Tech — robots.txt
+# https://studenttools.vn/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /pdf-converter-service/
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Sitemap
+Sitemap: https://studenttools.vn/sitemap.xml

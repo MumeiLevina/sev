@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Kilomét – Dặm – Yard – Feet (Chiều Dài) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">CHIỀU DÀI</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Kilomét – Dặm – Yard – Feet</h1>
+                <p class="text-muted">Quy đổi giữa hệ đo lường Quốc tế (SI) và Anh/Mỹ: Kilomét (km), Mét (m), Dặm (Mile), Yard, Feet (ft), Inch, Hải lý.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập khoảng cách</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập khoảng cách..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #38bdf8; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Dặm (Mile)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập khoảng cách để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng So Sánh Các Đơn Vị Chiều Dài & Khoảng Cách
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                    <!-- Notes -->
+                    <div style="text-align: left; margin-top: 28px;">
+                        <div class="callout callout-info">
+                            <strong>Quy đổi thông dụng nhanh:</strong><br>
+                            • <strong>1 km = 1,000 m ≈ 0.62137 Dặm (Mile) ≈ 1,093.61 Yard ≈ 3,280.84 Feet</strong>.<br>
+                            • <strong>1 Dặm (Mile) = 1,609.344 m = 1.609344 km = 1,760 Yard = 5,280 Feet</strong>.<br>
+                            • <strong>1 Yard = 3 Feet = 36 Inches = 0.9144 m</strong>.<br>
+                            • <strong>1 Foot (ft) = 12 Inches = 30.48 cm = 0.3048 m</strong>.<br>
+                            • <strong>1 Inch (in) = 2.54 cm = 25.4 mm</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Các Đơn Vị Đo Chiều Dài</h2>
+                        <p>Chiều dài và khoảng cách là một trong những đại lượng đo lường vật lý cơ bản nhất của nhân loại. Trong quá trình học tập, nghiên cứu và làm việc thực tế, sinh viên thường xuyên phải chuyển đổi qua lại giữa hai hệ thống đo lường chính: <strong>Hệ thống Đo lường Quốc tế (SI)</strong> và <strong>Hệ thống Đo lường Anh – Mỹ (Imperial Units)</strong>.</p>
+
+                        <h3>1. Bảng đối chiếu các hệ đo lường chiều dài thông dụng</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Đơn vị</th>
+                                        <th>Ký hiệu</th>
+                                        <th>Hệ thống</th>
+                                        <th>Quy đổi sang Mét (m)</th>
+                                        <th>Ứng dụng phổ biến</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Milimét</strong></td>
+                                        <td>mm</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>0.001 m</td>
+                                        <td>Cơ khí chính xác, kích thước linh kiện điện tử</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Centimét</strong></td>
+                                        <td>cm</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>0.01 m</td>
+                                        <td>Đo chiều cao, may mặc, kích thước bàn học</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mét</strong></td>
+                                        <td>m</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>Đơn vị gốc (1 m)</td>
+                                        <td>Đo khoảng cách hàng ngày, xây dựng, kiến trúc</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kilomét</strong></td>
+                                        <td>km</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>1,000 m</td>
+                                        <td>Khoảng cách giao thông đường bộ, địa lý</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Inch (Thấu)</strong></td>
+                                        <td>in hoặc "</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>0.0254 m (2.54 cm)</td>
+                                        <td>Đo kích thước màn hình TV, laptop, điện thoại, vành bánh xe</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Foot (Bộ)</strong></td>
+                                        <td>ft hoặc '</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>0.3048 m (30.48 cm)</td>
+                                        <td>Đo chiều cao con người ở phương Tây, độ cao bay hàng không</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Yard (Thước Anh)</strong></td>
+                                        <td>yd</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>0.9144 m</td>
+                                        <td>Sân bóng đá Mỹ (NFL), đo đạc vải vóc và sân cỏ golf</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mile (Dặm đất)</strong></td>
+                                        <td>mi</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>1,609.344 m</td>
+                                        <td>Khoảng cách đường cao tốc tại Mỹ và Vương quốc Anh</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Hải lý (Nautical Mile)</strong></td>
+                                        <td>nmi hoặc NM</td>
+                                        <td>Hàng hải / Quốc tế</td>
+                                        <td>1,852 m</td>
+                                        <td>Đo khoảng cách hành trình tàu biển và phi cơ hàng không</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>2. Các công thức quy đổi nhanh thường gặp</h3>
+                        <ul>
+                            <li><strong>Đổi Inch sang Centimét:</strong> <span class="formula-highlight">cm = inch × 2.54</span> (Ví dụ: Màn hình laptop 15.6 inch = 15.6 × 2.54 = 39.62 cm đường chéo).</li>
+                            <li><strong>Đổi Feet sang Mét:</strong> <span class="formula-highlight">m = feet × 0.3048</span> (Ví dụ: Chiều cao 6 feet = 6 × 0.3048 = 1.8288 m ≈ 1m83).</li>
+                            <li><strong>Đổi Kilomét sang Dặm (Mile):</strong> <span class="formula-highlight">mile = km × 0.621371</span> (Ví dụ: Cung đường chạy marathon 42.195 km ≈ 26.22 miles).</li>
+                            <li><strong>Đổi Dặm sang Kilomét:</strong> <span class="formula-highlight">km = mile × 1.609344</span> (Ví dụ: Giới hạn tốc độ 60 mph trên đường cao tốc Mỹ tương ứng khoảng 96.5 km/h).</li>
+                        </ul>
+
+                        <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: 1 foot bằng bao nhiêu inch?</strong><br>
+                            Trả lời: 1 foot chính xác bằng <strong>12 inches</strong>. Vì vậy khi người phương Tây ghi chiều cao <code>5'10"</code> tức là 5 feet 10 inches = (5 × 12 + 10) × 2.54 cm = 70 × 2.54 cm = 177.8 cm.</p>
+
+                            <p><strong>Hỏi: Hải lý khác dặm đất liền (statute mile) như thế nào?</strong><br>
+                            Trả lời: 1 Hải lý (Nautical Mile) dài <strong>1,852 mét</strong>, trong khi 1 Dặm đất (Statute Mile) chỉ dài <strong>1,609.344 mét</strong>. Hải lý được định nghĩa bằng một phút cung của vĩ độ dọc theo kinh tuyến Trái Đất, giúp các thuyền trưởng và phi công định vị tọa độ địa lý chuẩn xác hơn.</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html" class="active">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('length', {
+                defaultFrom: 'km',
+                defaultTo: 'mile'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

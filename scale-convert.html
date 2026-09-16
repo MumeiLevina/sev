@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">QUY ĐỔI HỆ 4 - 10</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Quy Đổi Điểm Hệ 4 Sang Hệ 10 (Và Ngược Lại)</h1>
+                    <p class="text-muted">Chuyển đổi tức thì giữa thang điểm 10, thang điểm 4, điểm chữ và xếp loại theo Thông tư 08/2021/TT-BGDĐT.</p>
+                </div>
+
+            <div class="tool-container wide glass-panel">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" id="btn-tab-10to4" onclick="switchScaleTab('10to4')">Đổi từ Hệ 10 → Hệ 4</button>
+                    <button class="tab-btn" id="btn-tab-4to10" onclick="switchScaleTab('4to10')">Đổi từ Hệ 4 → Hệ 10</button>
+                </div>
+
+                <!-- Tab 1: 10 to 4 -->
+                <div id="tab-10to4" class="tab-pane active">
+                    <div class="form-group">
+                        <label class="form-label">Nhập điểm Hệ 10 (0.0 - 10.0)</label>
+                        <input type="number" id="inputScale10" class="form-control" step="0.1" min="0" max="10" value="" placeholder="Ví dụ: 8.2">
+                    </div>
+
+                    <div class="result-box active" style="margin-top: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                            <div>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Điểm Hệ 4</span>
+                                <div id="resScale4" class="result-value" style="font-size: 2.8rem; margin: 4px 0; color: #6366f1;">---</div>
+                            </div>
+                            <div>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Điểm Chữ</span>
+                                <div id="resLetter" class="result-value" style="font-size: 2.8rem; margin: 4px 0; color: #10b981;">---</div>
+                            </div>
+                            <div>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Xếp Loại</span>
+                                <div id="resRank" class="result-value" style="font-size: 1.8rem; margin: 12px 0; color: #f59e0b;">---</div>
+                            </div>
+                        </div>
+                        <p id="scaleDesc10" style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">Nhập điểm hệ 10 để xem quy đổi sang hệ 4 và điểm chữ.</p>
+                    </div>
+                </div>
+
+                <!-- Tab 2: 4 to 10 -->
+                <div id="tab-4to10" class="tab-pane">
+                    <div class="form-group">
+                        <label class="form-label">Nhập điểm Hệ 4 (0.0 - 4.0)</label>
+                        <input type="number" id="inputScale4" class="form-control" step="0.05" min="0" max="4" value="" placeholder="Ví dụ: 3.5">
+                    </div>
+
+                    <div class="result-box active" style="margin-top: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                            <div>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Hệ 10 tương đương</span>
+                                <div id="res4to10Score" class="result-value" style="font-size: 2.8rem; margin: 4px 0; color: #6366f1;">---</div>
+                            </div>
+                            <div>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Điểm Chữ</span>
+                                <div id="res4toLetter" class="result-value" style="font-size: 2.8rem; margin: 4px 0; color: #10b981;">---</div>
+                            </div>
+                            <div>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Xếp Loại</span>
+                                <div id="res4toRank" class="result-value" style="font-size: 1.8rem; margin: 12px 0; color: #f59e0b;">---</div>
+                            </div>
+                        </div>
+                        <p id="scaleDesc4" style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">Nhập điểm hệ 4 để xem quy đổi sang hệ 10 và điểm chữ.</p>
+                    </div>
+                </div>
+
+                <!-- Official Conversion Table -->
+                <div style="margin-top: 32px;">
+                    <h4 style="font-size: 1rem; color: #475569; margin-bottom: 12px;">
+                        <i class='bx bx-book-open'></i> Bảng Quy Đổi Chuẩn (Thông tư 08/2021/TT-BGDĐT)
+                    </h4>
+                    <div class="data-table-container">
+                        <table class="data-table" style="font-size: 0.9rem;">
+                            <thead>
+                                <tr>
+                                    <th>Điểm Hệ 10</th>
+                                    <th>Điểm Chữ</th>
+                                    <th>Điểm Hệ 4</th>
+                                    <th>Xếp Loại Học Lực</th>
+                                    <th>Đánh Giá Môn Học</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>9.0 – 10.0</strong></td><td><span class="badge badge-success">A+</span></td><td><strong>4.0</strong></td><td>Xuất sắc</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>8.5 – 8.9</strong></td><td><span class="badge badge-success">A</span></td><td><strong>4.0</strong></td><td>Giỏi</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>8.0 – 8.4</strong></td><td><span class="badge badge-primary">B+</span></td><td><strong>3.5</strong></td><td>Khá giỏi</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>7.0 – 7.9</strong></td><td><span class="badge badge-primary">B</span></td><td><strong>3.0</strong></td><td>Khá</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>6.5 – 6.9</strong></td><td><span class="badge badge-warning">C+</span></td><td><strong>2.5</strong></td><td>Trung bình khá</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>5.5 – 6.4</strong></td><td><span class="badge badge-warning">C</span></td><td><strong>2.0</strong></td><td>Trung bình</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>5.0 – 5.4</strong></td><td><span class="badge badge-warning">D+</span></td><td><strong>1.5</strong></td><td>Trung bình yếu</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>4.0 – 4.9</strong></td><td><span class="badge badge-warning">D</span></td><td><strong>1.0</strong></td><td>Trung bình yếu</td><td><span class="badge badge-success">Đạt</span></td></tr>
+                                <tr><td><strong>&lt; 4.0</strong></td><td><span class="badge badge-danger">F</span></td><td><strong>0.0</strong></td><td>Kém</td><td><span class="badge badge-danger">Không đạt (Học lại)</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html" class="active">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - 600 Câu</a></li>
+                    <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html">Máy tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/scale-convert.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

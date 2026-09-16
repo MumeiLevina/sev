@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Bit – Megabit – Megabyte (Dung Lượng Dữ Liệu) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">DỮ LIỆU</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Bit – Megabit – Megabyte</h1>
+                <p class="text-muted">Quy đổi chính xác giữa các đơn vị dung lượng bộ nhớ và tốc độ mạng: Bit, Byte, Kilobit, Megabit, Megabyte, Gigabyte, Terabyte.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập giá trị dung lượng</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập dung lượng..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #a855f7; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Megabit (Mb)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập dung lượng để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live multi-unit grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng Quy Đổi Sang Toàn Bộ Đơn Vị Bộ Nhớ & Tốc Độ
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                <!-- Download time calculator bonus -->
+                <div style="text-align: left; margin-top: 36px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-cloud-download' style="color: #7c3aed;"></i> Tiện Ích Mở Rộng: Tính Thời Gian Tải File Thực Tế
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+                        Khi nhà mạng quảng cáo gói cước <strong>100 Mbps (Megabit/giây)</strong>, tốc độ tải thực tế tối đa là <strong>12.5 MB/giây (Megabyte/giây)</strong> vì 1 Byte = 8 bit.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.85rem;">Dung lượng file (MB)</label>
+                            <input type="number" id="dlFileSize" class="form-control" value="" placeholder="Nhập dung lượng file..." min="1">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.85rem;">Tốc độ mạng (Mbps)</label>
+                            <input type="number" id="dlNetSpeed" class="form-control" value="" placeholder="Nhập tốc độ mạng..." min="1">
+                        </div>
+                        <div style="background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Thời gian tải dự kiến</div>
+                            <div id="dlTimeRes" style="font-size: 1.25rem; font-weight: 700; color: #059669; margin-top: 2px;">---</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation Box -->
+                <div style="text-align: left; margin-top: 28px;">
+                    <div class="callout callout-info">
+                        <strong>Quy tắc phân biệt Bit (b nhỏ) và Byte (B hoa):</strong><br>
+                        • <strong>1 Byte (B) = 8 bits (b)</strong>. Byte dùng để đo kích thước dung lượng file (hình ảnh, video, RAM, ổ cứng).<br>
+                        • <strong>Bit (b)</strong> thường dùng để đo tốc độ truyền tải mạng Internet (Mbps, Gbps).<br>
+                        • <strong>1 Megabyte (MB) = 1,024 KB = 8 Megabits (Mb)</strong>.
+                    </div>
+                </div>
+
+                <!-- Comprehensive Editorial Content for AdSense & Learning -->
+                <section class="tool-explanation-section">
+                    <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Đơn Vị Lưu Trữ Và Tốc Độ Mạng</h2>
+                    <p>Trong kỷ nguyên số, việc hiểu rõ các đơn vị đo lường dữ liệu là kỹ năng thiết yếu đối với sinh viên mọi ngành học. Hai đơn vị nền tảng nhất của tin học là <strong>Bit</strong> (đơn vị thông tin nhị phân nhỏ nhất gồm số 0 hoặc 1) và <strong>Byte</strong> (nhóm gồm 8 bits kết hợp lại để biểu diễn một ký tự văn bản hoặc mã lệnh).</p>
+
+                    <h3>1. Bảng đối chiếu các đơn vị dữ liệu số thông dụng</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Đơn vị</th>
+                                    <th>Ký hiệu</th>
+                                    <th>Hệ cơ số</th>
+                                    <th>Giá trị quy đổi</th>
+                                    <th>Ứng dụng thực tế</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Bit</strong></td>
+                                    <td>b (thường)</td>
+                                    <td>Nhị phân (Binary)</td>
+                                    <td>0 hoặc 1 (1 bit)</td>
+                                    <td>Trạng thái đóng/ngắt transistor bán dẫn, bit chẵn lẻ kiểm tra lỗi (parity)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Byte</strong></td>
+                                    <td>B (hoa)</td>
+                                    <td>Nhị phân</td>
+                                    <td>8 bits</td>
+                                    <td>Mã hóa 1 ký tự ASCII (ví dụ: chữ cái "A" = 01000001)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilobit</strong></td>
+                                    <td>Kb / kbit</td>
+                                    <td>Thập phân (SI)</td>
+                                    <td>1,000 bits</td>
+                                    <td>Băng thông âm thanh nén cũ, tốc độ modem quay số Dial-up (56 Kbps)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kilobyte</strong></td>
+                                    <td>KB</td>
+                                    <td>Nhị phân (1024)</td>
+                                    <td>1,024 Bytes</td>
+                                    <td>Kích thước file văn bản Word không hình ảnh, mã nguồn code (.js, .html, .py)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Megabit</strong></td>
+                                    <td>Mb / Mbit</td>
+                                    <td>Thập phân (SI)</td>
+                                    <td>1,000,000 bits</td>
+                                    <td>Tốc độ gói cước mạng Internet WiFi / cáp quang gia đình (ví dụ: gói 150 Mbps, 300 Mbps)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Megabyte</strong></td>
+                                    <td>MB</td>
+                                    <td>Nhị phân (1024)</td>
+                                    <td>1,024 KB (1,048,576 B)</td>
+                                    <td>Kích thước bài hát MP3 (4-10 MB), ảnh chụp điện thoại độ phân giải cao (3-12 MB)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gigabit</strong></td>
+                                    <td>Gb / Gbit</td>
+                                    <td>Thập phân (SI)</td>
+                                    <td>1,000,000,000 bits</td>
+                                    <td>Băng thông cổng mạng LAN Gigabit (1 Gbps), kết nối trục viễn thông 5G</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gigabyte</strong></td>
+                                    <td>GB</td>
+                                    <td>Nhị phân (1024)</td>
+                                    <td>1,024 MB</td>
+                                    <td>Bộ nhớ RAM laptop (8GB, 16GB, 32GB), dung lượng phim Full HD / 4K, gói cước 4G theo tháng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Terabyte</strong></td>
+                                    <td>TB</td>
+                                    <td>Nhị phân (1024)</td>
+                                    <td>1,024 GB</td>
+                                    <td>Dung lượng ổ cứng HDD / SSD gắn trong máy tính, ổ cứng di động backup, Cloud Google Drive</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Cách tính tốc độ tải file và giải mã bí ẩn dung lượng ổ cứng</h3>
+                    <ul>
+                        <li><strong>Công thức quy đổi Tốc độ mạng (Mbps) sang Tốc độ tải thực tế (MB/s):</strong> 
+                            <span class="formula-highlight">Tốc độ tải (MB/s) = Gói mạng (Mbps) ÷ 8</span><br>
+                            Khi đăng ký gói Internet <code>200 Mbps</code>, rất nhiều người lầm tưởng mình sẽ tải file với tốc độ 200 MB/giây. Nhưng thực tế 1 Byte = 8 bits, nên tốc độ tải tối đa lý thuyết qua Chrome hay IDM là: <span class="formula-highlight">200 ÷ 8 = 25 MB/s</span>. Một bộ phim 2.5 GB (2,500 MB) sẽ mất khoảng 100 giây (~1.6 phút) để tải xong.
+                        </li>
+                        <li><strong>Tại sao ổ cứng 1TB khi cắm vào máy tính Windows chỉ hiển thị ~931 GB?</strong><br>
+                            Đây không phải lỗi nhà sản xuất hay hàng giả. Các nhà sản xuất thiết bị lưu trữ (Western Digital, Seagate, Kingston, Apple) tính theo chuẩn thập phân SI: <code>1 TB = 10¹² Bytes = 1,000,000,000,000 Bytes</code>. Trong khi đó, hệ điều hành Windows tính theo chuẩn nhị phân (Binary): <code>1 GB = 1024 × 1024 × 1024 = 1,073,741,824 Bytes</code>. Do đó:<br>
+                            <span class="formula-highlight">1,000,000,000,000 ÷ 1,073,741,824 ≈ 931.32 GB</span> (chuẩn xác hơn là 931.32 GiB).
+                        </li>
+                    </ul>
+
+                    <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                    <div style="margin-top: 10px;">
+                        <p><strong>Hỏi: 1 GB bằng 1000 MB hay 1024 MB?</strong><br>
+                        Trả lời: Cả hai đều có cơ sở khoa học tùy theo ngữ cảnh. Theo Ủy ban Kỹ thuật Điện Quốc tế (IEC), 1 GB (Gigabyte) theo hệ thập phân là 1,000 MB (10⁹ bytes). Để tránh nhầm lẫn, tổ chức IEC đã đưa ra chuẩn <strong>GiB (Gibibyte)</strong> để chỉ chính xác 1,024 MiB (2³⁰ bytes). Tuy nhiên trong thực tế đời sống và giao diện hệ điều hành Windows, người ta vẫn gọi 1,024 MB là 1 GB.</p>
+
+                        <p><strong>Hỏi: Xem video YouTube hoặc Netflix chất lượng cao tốn bao nhiêu dung lượng dữ liệu 4G?</strong><br>
+                        Trả lời: Trung bình đối với video độ phân giải Full HD (1080p), tốc độ bit khoảng 4 - 6 Mbps, tiêu hao khoảng <strong>1.5 GB đến 2 GB dữ liệu mỗi giờ</strong>. Nếu xem ở chuẩn 4K Ultra HD, mức tiêu hao có thể lên tới <strong>7 GB đến 10 GB mỗi giờ</strong>.</p>
+
+                        <p><strong>Hỏi: Nên mua laptop có bộ nhớ RAM tối thiểu bao nhiêu cho sinh viên hiện nay?</strong><br>
+                        Trả lời: Với nhu cầu học tập cơ bản, lướt web nhiều tab, làm Word, Excel và xem video học tập, mức khuyến nghị tối thiểu là <strong>8 GB RAM</strong> (tốt nhất là <strong>16 GB RAM</strong> để đảm bảo máy chạy mượt mà đa nhiệm nhiều năm đại học).</p>
+                    </div>
+                </section>
+            </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links (Image 2) -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html" class="active">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('data', {
+                defaultFrom: 'mbyte',
+                defaultTo: 'mbit'
+            });
+
+            // Download time calculator logic
+            const sizeInput = document.getElementById('dlFileSize');
+            const speedInput = document.getElementById('dlNetSpeed');
+            const resEl = document.getElementById('dlTimeRes');
+
+            function calcDownloadTime() {
+                if (!sizeInput || !sizeInput.value.trim() || !speedInput || !speedInput.value.trim() || isNaN(parseFloat(sizeInput.value)) || isNaN(parseFloat(speedInput.value))) {
+                    if (resEl) resEl.textContent = '---';
+                    return;
+                }
+                const mb = parseFloat(sizeInput.value);
+                const mbps = parseFloat(speedInput.value) || 1;
+                const speedMBps = mbps / 8; // Convert Mbps to MB/s
+                const totalSeconds = mb / speedMBps;
+
+                if (totalSeconds < 60) {
+                    resEl.textContent = `${Math.round(totalSeconds)} giây`;
+                } else if (totalSeconds < 3600) {
+                    const m = Math.floor(totalSeconds / 60);
+                    const s = Math.round(totalSeconds % 60);
+                    resEl.textContent = `${m} phút ${s} giây`;
+                } else {
+                    const h = Math.floor(totalSeconds / 3600);
+                    const m = Math.floor((totalSeconds % 3600) / 60);
+                    resEl.textContent = `${h} giờ ${m} phút`;
+                }
+            }
+
+            sizeInput.addEventListener('input', calcDownloadTime);
+            speedInput.addEventListener('input', calcDownloadTime);
+            calcDownloadTime();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

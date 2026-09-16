@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Kilogam – Gam – Miligam – Oz (Khối Lượng) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">KHỐI LƯỢNG</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Kilogam – Gam – Miligam – Oz</h1>
+                <p class="text-muted">Quy đổi hai chiều giữa Kilogam (kg), Gam (g), Miligam (mg), Ounce (oz), Pound (lb), Tấn, Tạ, Yến và Vàng.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập khối lượng</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập khối lượng..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #10b981; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Gam (g)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập khối lượng để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng So Sánh Tất Cả Đơn Vị Khối Lượng
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                    <!-- Notes -->
+                    <div style="text-align: left; margin-top: 28px;">
+                        <div class="callout callout-info">
+                            <strong>Quy đổi phổ biến nhanh:</strong><br>
+                            • <strong>1 kg = 1,000 g = 1,000,000 mg ≈ 35.274 oz ≈ 2.2046 lb</strong>.<br>
+                            • <strong>1 Ounce (oz) = 28.3495 g</strong> (đơn vị cân thực phẩm, bơ sữa, bột mì quốc tế).<br>
+                            • <strong>1 Pound (lb) = 16 oz = 453.592 g ≈ 0.4536 kg</strong> (chuẩn tạ Gym phương Tây).<br>
+                            • <strong>1 Lượng vàng (cây vàng) = 10 chỉ = 37.5 g</strong> (1 chỉ vàng = 3.75 g).<br>
+                            • <strong>1 Tấn = 10 tạ = 100 yến = 1,000 kg</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Kiến Thức Về Đơn Vị Đo Khối Lượng & Trọng Lượng</h2>
+                        <p>Trong vật lý học, <strong>Khối lượng (Mass)</strong> là đại lượng đo lượng vật chất chứa trong một vật và không bao giờ thay đổi dù vật ở bất kỳ đâu trong vũ trụ. Ngược lại, <strong>Trọng lượng (Weight)</strong> là lực hút của trọng trường tác dụng lên vật đó ($P = m \cdot g$). Trong đời sống hàng ngày, chúng ta thường dùng lẫn hai khái niệm này thông qua các đơn vị như Kilogam, Gam, Pound hay Ounce.</p>
+
+                        <h3>1. Bảng đối chiếu các thang đo khối lượng thông dụng</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Đơn vị</th>
+                                        <th>Ký hiệu</th>
+                                        <th>Hệ thống</th>
+                                        <th>Quy đổi sang Gram (g)</th>
+                                        <th>Lĩnh vực ứng dụng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Miligam</strong></td>
+                                        <td>mg</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>0.001 g</td>
+                                        <td>Dược phẩm, thuốc tây, thành phần dinh dưỡng vi lượng</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Gam (Gram)</strong></td>
+                                        <td>g</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>Đơn vị gốc (1 g)</td>
+                                        <td>Nấu ăn, làm bánh, hóa học phòng thí nghiệm</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kilogam</strong></td>
+                                        <td>kg</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>1,000 g</td>
+                                        <td>Cân nặng cơ thể người, thực phẩm chợ búa, thương mại</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tấn (Metric Ton)</strong></td>
+                                        <td>tấn</td>
+                                        <td>Hệ mét (SI)</td>
+                                        <td>1,000,000 g (1,000 kg)</td>
+                                        <td>Vận tải container, nông sản xuất khẩu, vật liệu xây dựng</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pound (Cân Anh)</strong></td>
+                                        <td>lb hoặc lbs</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>453.59237 g (≈ 0.4536 kg)</td>
+                                        <td>Tạ tập thể hình (Gym), cân nặng hành lý máy bay quốc tế</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ounce (Aoxơ)</strong></td>
+                                        <td>oz</td>
+                                        <td>Anh/Mỹ</td>
+                                        <td>28.3495 g</td>
+                                        <td>Công thức làm bánh quốc tế, mỹ phẩm, bơ sữa nhập khẩu</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Lượng vàng (Cây vàng)</strong></td>
+                                        <td>cây</td>
+                                        <td>Đặc thù Việt Nam</td>
+                                        <td>37.5 g</td>
+                                        <td>Giao dịch kim hoàn, vàng miếng SJC, tích lũy tài sản</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Chỉ vàng</strong></td>
+                                        <td>chỉ</td>
+                                        <td>Đặc thù Việt Nam</td>
+                                        <td>3.75 g (1/10 cây)</td>
+                                        <td>Mua nhẫn trơn, trang sức cưới hỏi</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>2. Các công thức quy đổi nhanh trong đời sống</h3>
+                        <ul>
+                            <li><strong>Đổi Pound sang Kilogam:</strong> <span class="formula-highlight">kg = lb × 0.453592</span> hoặc nhẩm nhanh: <span class="formula-highlight">kg ≈ lb ÷ 2.2</span> (Ví dụ: Tạ đơn 50 lbs trong phòng Gym tương đương khoảng 22.7 kg).</li>
+                            <li><strong>Đổi Kilogam sang Pound:</strong> <span class="formula-highlight">lb = kg × 2.20462</span> (Ví dụ: Một người nặng 60 kg sẽ tương đương khoảng 132.3 lbs).</li>
+                            <li><strong>Đổi Ounce sang Gam:</strong> <span class="formula-highlight">g = oz × 28.35</span> (Ví dụ: 8 oz bơ lạt trong công thức làm bánh tương đương khoảng 227 gram).</li>
+                        </ul>
+
+                        <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: Ounce vàng (Ounce troy) có giống Ounce thường không?</strong><br>
+                            Trả lời: Không giống. Trong đo lường vàng bạc quốc tế, người ta dùng <strong>Troy Ounce (oz t)</strong> có khối lượng là <strong>31.1035 gram</strong>, nặng hơn Ounce thường (Avoirdupois Ounce = 28.3495 gram). 1 cây vàng Việt Nam (37.5g) xấp xỉ bằng 1.2056 Troy Ounce.</p>
+
+                            <p><strong>Hỏi: 1 tạ, 1 yến bằng bao nhiêu kg?</strong><br>
+                            Trả lời: Theo hệ đo lường dân gian Việt Nam: 1 Yến = <strong>10 kg</strong>; 1 Tạ = 10 yến = <strong>100 kg</strong>; 1 Tấn = 10 tạ = <strong>1,000 kg</strong>.</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html" class="active">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('weight', {
+                defaultFrom: 'kg',
+                defaultTo: 'g'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Héc-ta – Mẫu (Ruộng Đất 3 Miền Bắc Trung Nam) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">ĐẤT ĐAI</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Héc-ta – Mẫu (Bắc, Trung, Nam Bộ)</h1>
+                <p class="text-muted">Quy đổi chính xác giữa Héc-ta (ha) và đơn vị đo đất truyền thống: Mẫu Bắc Bộ, Mẫu Trung Bộ, Mẫu Nam Bộ (Công đất), Sào, Thước.</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập diện tích đất</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập diện tích đất..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #f59e0b; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Mẫu Bắc Bộ</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập diện tích đất để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Quy Đổi Đồng Thời Mọi Đơn Vị Đo Đất Đai
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                <!-- Comparison across regions -->
+                <div style="text-align: left; margin-top: 36px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-map-pin'></i> Bảng Quy Ước Đo Đất 3 Miền Việt Nam Chuẩn
+                    </h3>
+                    <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background: #f1f5f9; color: #334155; text-align: left; font-weight: 700;">
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Khu Vực</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">1 Mẫu</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">1 Sào (Công)</th>
+                                    <th style="padding: 12px 16px; border-bottom: 1px solid #e2e8f0;">Tỷ Lệ So Với 1 Héc-ta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px 14px; font-weight: 600; color: #0284c7;">Bắc Bộ</td>
+                                    <td style="padding: 10px 14px; font-weight: 700; color: #0f172a;">3,600 m² (10 sào)</td>
+                                    <td style="padding: 10px 14px;">360 m² (15 thước)</td>
+                                    <td style="padding: 10px 14px; color: #0284c7;">1 ha ≈ 2.78 mẫu (27.78 sào)</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px 14px; font-weight: 600; color: #16a34a;">Trung Bộ</td>
+                                    <td style="padding: 10px 14px; font-weight: 700; color: #0f172a;">5,000 m² (10 sào)</td>
+                                    <td style="padding: 10px 14px;">500 m²</td>
+                                    <td style="padding: 10px 14px; color: #16a34a;">1 ha = đúng 2 mẫu (20 sào)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 14px; font-weight: 600; color: #d97706;">Nam Bộ</td>
+                                    <td style="padding: 10px 14px; font-weight: 700; color: #0f172a;">10,000 m² (10 công)</td>
+                                    <td style="padding: 10px 14px;">1,000 m² (tầm nhỏ) / 1,296 m² (tầm điền)</td>
+                                    <td style="padding: 10px 14px; color: #d97706;">1 ha = đúng 1 mẫu Nam Bộ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Editorial Content for SEO & AdSense -->
+                <section class="tool-explanation-section">
+                    <h2><i class='bx bx-book-open'></i> Cẩm Nang Đo Đạc Diện Tích Đất Đai Cổ Truyền 3 Miền</h2>
+                    <p>Hệ thống đo diện tích ruộng đất truyền thống của Việt Nam (gồm <strong>Mẫu, Sào, Thước, Công</strong>) đã hình thành và gắn liền với nền văn minh lúa nước từ hàng ngàn năm trước. Mặc dù Luật Đất đai hiện hành của Nhà nước Việt Nam quy định thống nhất sử dụng đơn vị <strong>Mét vuông (m²)</strong> và <strong>Héc-ta (ha)</strong> trên Giấy chứng nhận quyền sử dụng đất (Sổ đỏ / Sổ hồng), nhưng trong giao dịch mua bán bất động sản thực tế và đời sống nông thôn, người dân vẫn sử dụng phổ biến các đơn vị cổ truyền.</p>
+
+                    <h3>1. Nguồn gốc sự khác biệt diện tích giữa Bắc, Trung, Nam</h3>
+                    <ul>
+                        <li><strong>Bắc Bộ (Đồng bằng sông Hồng):</strong> Đất chật người đông, ruộng đất được chia nhỏ theo khẩu. 1 Thước = 24 m²; 1 Sào = 15 Thước = <strong>360 m²</strong>; 1 Mẫu = 10 Sào = <strong>3.600 m²</strong>.</li>
+                        <li><strong>Trung Bộ (Duyên hải miền Trung):</strong> Phỏng theo chế độ đo đạc thời các vua nhà Nguyễn tại kinh đô Huế. 1 Sào = <strong>500 m²</strong>; 1 Mẫu = 10 Sào = <strong>5.000 m²</strong> (bằng đúng 1/2 Héc-ta).</li>
+                        <li><strong>Nam Bộ (Đồng bằng sông Cửu Long):</strong> Đất đai phì nhiêu, bao la trong thời kỳ khai hoang mở cõi. Người miền Nam không dùng từ "Sào" mà dùng từ <strong>"Công"</strong>:
+                            <ul>
+                                <li><strong>Công tầm nhỏ (tầm 3m):</strong> Cạnh vuông 10 tầm x 10 tầm = 30m x 30m = <strong>1.000 m²</strong>.</li>
+                                <li><strong>Công tầm lớn / tầm điền / tầm cắt (tầm 3m24):</strong> Cạnh vuông 32.4m x 32.4m = <strong>1.296 m²</strong>.</li>
+                                <li><strong>1 Mẫu Nam Bộ:</strong> 10 công nhỏ = <strong>10.000 m²</strong> (trùng khớp hoàn toàn với 1 Héc-ta theo chuẩn quốc tế).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3>2. Lưu ý pháp lý khi mua bán đất nông nghiệp và xem sổ đỏ</h3>
+                    <p>Khi đọc các thông tin rao bán đất nông nghiệp (như "Bán 3 công đất vườn", "Cần nhượng 5 sào ruộng"), người mua cần làm rõ:</p>
+                    <ol>
+                        <li>Thửa đất nằm tại địa phương nào để áp dụng chuẩn sào (360m² hay 500m²) hoặc chuẩn công (1.000m² hay 1.296m²).</li>
+                        <li>Luôn đối chiếu số liệu ghi trên <strong>Trang 2 của Sổ đỏ</strong> mục <em>"Diện tích: ... m² (bằng chữ: ... mét vuông)"</em> để biết chính xác diện tích pháp lý được nhà nước công nhận.</li>
+                    </ol>
+
+                    <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                    <div style="margin-top: 10px;">
+                        <p><strong>Hỏi: 1 sào đất bằng bao nhiêu mét vuông?</strong><br>
+                        Trả lời: Tùy vào vùng miền: Miền Bắc là <strong>360 m²</strong>, miền Trung là <strong>500 m²</strong>, còn ở miền Nam thường gọi là 1 công đất bằng <strong>1.000 m²</strong>.</p>
+
+                        <p><strong>Hỏi: 1 héc-ta bằng bao nhiêu mẫu đất?</strong><br>
+                        Trả lời: 1 ha (10.000 m²) bằng đúng <strong>1 mẫu Nam Bộ</strong>; bằng <strong>2 mẫu Trung Bộ</strong>; và xấp xỉ bằng <strong>2.78 mẫu Bắc Bộ</strong>.</p>
+                    </div>
+                </section>
+            </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html" class="active">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('land', {
+                defaultFrom: 'ha',
+                defaultTo: 'mau_bac'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

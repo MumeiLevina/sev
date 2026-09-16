@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Lít – Mililít – Megalít – Jigger (Thể Tích) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">THỂ TÍCH</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+            <div class="tool-page-header">
+                <h1>Chuyển Đổi Lít – Mililít – Megalít – Jigger</h1>
+                <p class="text-muted">Quy đổi thể tích dung dịch sinh hoạt, pha chế đồ uống (Jigger, fl oz, muỗng) và dung tích công nghiệp (Megalít, m³).</p>
+            </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Interactive Converter Box -->
+                <div class="converter-box">
+                    <div class="converter-flow">
+                        <!-- From input -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-in-circle'></i> Nhập thể tích</label>
+                            <input type="number" id="inputVal" class="form-control" value="" placeholder="Nhập thể tích..." step="any" required style="font-size: 1.3rem; font-weight: 700;">
+                            <label class="form-label mt-4" style="margin-top: 12px; margin-bottom: 4px;">Từ đơn vị</label>
+                            <select id="selectFrom" class="form-control"></select>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="swap-btn-container">
+                            <button type="button" id="btnSwap" class="btn-swap" title="Đổi chiều chuyển đổi">
+                                <i class='bx bx-transfer-alt'></i>
+                            </button>
+                        </div>
+
+                        <!-- To select -->
+                        <div class="converter-input-group">
+                            <label class="form-label"><i class='bx bx-log-out-circle'></i> Chuyển đổi sang đơn vị</label>
+                            <select id="selectTo" class="form-control" style="margin-top: 0;"></select>
+                        </div>
+                    </div>
+
+                    <!-- Main Conversion Result Card -->
+                    <div class="conversion-result-card">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Kết quả chuyển đổi</div>
+                        <div id="resMainVal" style="font-size: 3.2rem; font-weight: 800; color: #38bdf8; margin: 8px 0; word-break: break-all;">---</div>
+                        <div id="resUnitName" style="font-size: 1.1rem; color: var(--text-main); font-weight: 600;">Mililít (mL)</div>
+
+                        <div id="formulaText" class="conversion-formula-box">
+                            Nhập thể tích để xem kết quả quy đổi
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button type="button" id="btnCopyRes" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multi-unit live grid -->
+                <div style="text-align: left; margin-top: 32px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-grid-alt'></i> Bảng So Sánh Các Đơn Vị Thể Tích & Pha Chế
+                    </h3>
+                    <div id="multiUnitGrid" class="multi-unit-grid"></div>
+                </div>
+
+                    <!-- Notes -->
+                    <div style="text-align: left; margin-top: 28px;">
+                        <div class="callout callout-info">
+                            <strong>Ghi nhớ quy đổi nhanh trong pha chế & nấu ăn:</strong><br>
+                            • <strong>1 Lít (L) = 1,000 mL = 1 dm³ = 0.001 m³</strong>.<br>
+                            • <strong>1 Gallon Mỹ (US gal) = 3.7854 Lít = 128 fl oz</strong>.<br>
+                            • <strong>1 Fluid Ounce (fl oz Mỹ) ≈ 29.5735 mL</strong> (đơn vị ghi trên chai nước giải khát, siro).<br>
+                            • <strong>1 Cup (chén đong) = 250 mL | 1 Muỗng canh (Tablespoon - tbsp) = 15 mL | 1 Muỗng cà phê (Teaspoon - tsp) = 5 mL</strong>.<br>
+                            • <strong>1 Jigger tiêu chuẩn quốc tế = 1.5 fl oz ≈ 44.36 mL</strong> (ly đong bartender pha cocktail).
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Hướng Dẫn & Kiến Thức Về Đơn Vị Đo Thể Tích & Dung Tích</h2>
+                        <p><strong>Thể tích (Volume)</strong> là khoảng không gian ba chiều mà một chất lỏng, chất rắn hoặc chất khí chiếm chỗ. Trong đời sống, hóa học, dược phẩm và đặc biệt là ngành ẩm thực, pha chế (F&B), việc nắm vững bảng quy đổi dung tích giúp bạn pha chế chuẩn xác công thức mà không làm hỏng hương vị món ăn.</p>
+
+                        <h3>1. Bảng quy đổi các đơn vị đo thể tích thông dụng</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Đơn vị</th>
+                                        <th>Ký hiệu</th>
+                                        <th>Quy đổi sang Mililít (mL)</th>
+                                        <th>Quy đổi sang Lít (L)</th>
+                                        <th>Ứng dụng thực tế</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Mililít</strong></td>
+                                        <td>mL</td>
+                                        <td>1 mL</td>
+                                        <td>0.001 L</td>
+                                        <td>Liều lượng siro uống thuốc, ống hút nghiệm, mỹ phẩm serum</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Lít</strong></td>
+                                        <td>L hoặc l</td>
+                                        <td>1,000 mL</td>
+                                        <td>Đơn vị gốc (1 L)</td>
+                                        <td>Chai nước khoáng, bình sữa tươi, bình xăng xe máy</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mét khối</strong></td>
+                                        <td>m³</td>
+                                        <td>1,000,000 mL</td>
+                                        <td>1,000 L</td>
+                                        <td>Đo số nước sinh hoạt đồng hồ nước nhà trọ, thể tích bể bơi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Fluid Ounce (Ounce lỏng)</strong></td>
+                                        <td>fl oz</td>
+                                        <td>29.5735 mL</td>
+                                        <td>≈ 0.0296 L</td>
+                                        <td>Cỡ ly cà phê Starbucks (Tall 12oz, Grande 16oz, Venti 20oz)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cup (Cốc đong chuẩn)</strong></td>
+                                        <td>cup</td>
+                                        <td>250 mL (hoặc 240 mL Mỹ)</td>
+                                        <td>0.25 L</td>
+                                        <td>Đong sữa tươi, nước hầm, bột mì trong công thức làm bánh</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tablespoon (Muỗng canh)</strong></td>
+                                        <td>tbsp</td>
+                                        <td>15 mL</td>
+                                        <td>0.015 L</td>
+                                        <td>Đong dầu ăn, nước mắm, mật ong, giấm</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Teaspoon (Muỗng cà phê)</strong></td>
+                                        <td>tsp</td>
+                                        <td>5 mL</td>
+                                        <td>0.005 L</td>
+                                        <td>Đong tinh chất vani, muối, men nở bánh mì, bột nở</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Gallon Mỹ</strong></td>
+                                        <td>gal</td>
+                                        <td>3,785.41 mL</td>
+                                        <td>3.7854 L</td>
+                                        <td>Đơn vị bán xăng dầu, bình nước ngọt cỡ lớn tại Mỹ</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>2. Cỡ ly đồ uống chuẩn quốc tế tính theo Ounce (fl oz)</h3>
+                        <p>Khi bạn gọi đồ uống tại các chuỗi cà phê lớn (như Starbucks, Highland, Phúc Long), dung tích ly thường được thiết kế theo chuẩn Ounce lỏng (fl oz):</p>
+                        <ul>
+                            <li><strong>Size Nhỏ (Short / Small - 8 oz):</strong> Khoảng <strong>237 mL</strong>.</li>
+                            <li><strong>Size Vừa (Tall / Medium - 12 oz):</strong> Khoảng <strong>355 mL</strong>.</li>
+                            <li><strong>Size Lớn (Grande / Large - 16 oz):</strong> Khoảng <strong>473 mL</strong>.</li>
+                            <li><strong>Size Cực Đại (Venti / Extra Large - 20 oz):</strong> Khoảng <strong>591 mL</strong>.</li>
+                        </ul>
+
+                        <h3>3. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: Ounce cân nặng (oz) và Ounce chất lỏng (fl oz) có giống nhau không?</strong><br>
+                            Trả lời: Không giống. <code>oz</code> là đơn vị đo khối lượng (1 oz = 28.35g), còn <code>fl oz</code> là đơn vị đo thể tích chất lỏng (1 fl oz ≈ 29.57 mL). Chỉ riêng đối với nước tinh khiết (khối lượng riêng = 1 g/mL) thì 1 fl oz nước có khối lượng xấp xỉ 29.57 gram.</p>
+
+                            <p><strong>Hỏi: 1 khối nước sinh hoạt bằng bao nhiêu lít?</strong><br>
+                            Trả lời: 1 khối nước (1 mét khối - m³) bằng chính xác <strong>1,000 lít nước</strong>.</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Category Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ chuyển đổi</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="convert-length.html">Chuyển đổi Kilomét – Dặm – Yard – Feet</a></li>
+                    <li><a href="convert-weight.html">Chuyển đổi Kilogam – Gam – Miligam – Oz</a></li>
+                    <li><a href="convert-area.html">Chuyển đổi Héc ta – Mét vuông và Mét</a></li>
+                    <li><a href="convert-land.html">Chuyển đổi Héc-ta – Mẫu – Sào đất</a></li>
+                    <li><a href="convert-volume.html" class="active">Chuyển đổi Lít – Mililít – Megalít – Gallon</a></li>
+                    <li><a href="convert-temperature.html">Chuyển đổi Độ C – Độ F – Kelvin</a></li>
+                    <li><a href="convert-speed.html">Chuyển đổi km/h – m/s – mph – Knot</a></li>
+                    <li><a href="convert-time.html">Chuyển đổi Phút – Tuần – Giờ – Thế kỷ</a></li>
+                    <li><a href="convert-data.html">Chuyển đổi Bit – Megabit – Megabyte</a></li>
+                    <li><a href="convert-energy.html">Chuyển đổi Jun – Electonvon – Kilo Jun</a></li>
+                    <li><a href="convert-pressure.html">Chuyển đổi Bar – Pascal (Pa)</a></li>
+                    <li><a href="convert-frequency.html">Chuyển đổi MHz – GHz – Hz – kHz</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/converter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initConverterPage('volume', {
+                defaultFrom: 'l',
+                defaultTo: 'ml'
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

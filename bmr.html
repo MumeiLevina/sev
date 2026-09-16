@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tính Chỉ Số BMR - Tỷ Lệ Trao Đổi Chất Cơ Bản | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">BMR</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Công Cụ Tính Chỉ Số BMR</h1>
+                    <p class="text-muted">Tính mức năng lượng tối thiểu (kcal) cơ thể cần để duy trì sự sống ở trạng thái nghỉ ngơi hoàn toàn.</p>
+                </div>
+
+                <!-- Health Tabs Navigation -->
+                <div class="health-tabs">
+                    <a href="bmi.html" class="health-tab-link"><i class='bx bx-body'></i> Tính BMI</a>
+                    <a href="bmr.html" class="health-tab-link active"><i class='bx bx-flame'></i> Tính BMR</a>
+                    <a href="tdee.html" class="health-tab-link"><i class='bx bx-run'></i> Tính TDEE</a>
+                    <a href="calorie.html" class="health-tab-link"><i class='bx bx-dish'></i> Calo Cần Nạp</a>
+                </div>
+
+            <div class="tool-container wide glass-panel">
+                <form id="bmrForm">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-user'></i> Giới tính</label>
+                            <select id="bmrGender" class="form-control">
+                                <option value="male">Nam giới</option>
+                                <option value="female">Nữ giới</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-calendar'></i> Độ tuổi</label>
+                            <input type="number" id="bmrAge" class="form-control" value="" placeholder="VD: 20" min="10" max="120" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-ruler'></i> Chiều cao (cm)</label>
+                            <input type="number" id="bmrHeight" class="form-control" value="" placeholder="VD: 170" min="80" max="250" step="0.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class='bx bx-dumbbell'></i> Cân nặng (kg)</label>
+                            <input type="number" id="bmrWeight" class="form-control" value="" placeholder="VD: 60" min="20" max="300" step="0.5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class='bx bx-math'></i> Công thức tính toán</label>
+                        <select id="bmrFormula" class="form-control">
+                            <option value="mifflin" selected>Mifflin-St Jeor (Độ chính xác cao nhất hiện nay)</option>
+                            <option value="harris">Harris-Benedict Cải tiến (1984)</option>
+                        </select>
+                    </div>
+                </form>
+
+                <!-- BMR Result Display -->
+                <div class="result-box active" style="margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
+                    <span style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Chỉ số BMR hàng ngày</span>
+                    <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 10px 0;">
+                        <span id="bmrValDisplay" style="font-size: 3.8rem; font-weight: 800; color: #d97706; line-height: 1;">---</span>
+                        <span style="font-size: 1.4rem; color: #d97706; font-weight: 600;">kcal / ngày</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; text-align: left;">
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);"><i class='bx bx-time'></i> Mức đốt cháy mỗi giờ</span>
+                            <div id="bmrPerHour" style="font-size: 1.3rem; font-weight: 700; color: #0284c7; margin-top: 4px;">--- kcal / giờ</div>
+                        </div>
+                        <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);"><i class='bx bx-moon'></i> Khi ngủ 8 tiếng ban đêm</span>
+                            <div id="bmrSleep8" style="font-size: 1.3rem; font-weight: 700; color: #4f46e5; margin-top: 4px;">--- kcal</div>
+                        </div>
+                    </div>
+
+                    <div class="callout callout-info" style="text-align: left; margin-top: 20px; background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px 16px; border-radius: 6px; font-size: 0.88rem; color: #1e3a8a;">
+                        <i class='bx bx-info-circle'></i> <strong>Ý nghĩa chỉ số BMR:</strong> Đây là lượng calo tối thiểu tim, phổi, não và các tế bào cần để tồn tại. Tuyệt đối <strong>không nên nạp lượng calo thấp hơn BMR</strong> trong thời gian dài vì sẽ làm sụt giảm trao đổi chất, rụng tóc và suy nhược cơ thể.
+                    </div>
+
+                    <!-- Button to calculate TDEE -->
+                    <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 12px;">
+                        <a href="tdee.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 18px;">
+                            Bước tiếp theo: Tính tổng calo tiêu hao TDEE <i class='bx bx-right-arrow-alt'></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Organ Energy Consumption Breakdown -->
+                <div style="margin-top: 36px; text-align: left;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                        <i class='bx bx-pie-chart-alt'></i> Cơ Quan Tiêu Thụ BMR Trong Cơ Thể
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px 12px; border-radius: 8px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Gan & Tiêu hóa</div>
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #d97706; margin: 4px 0;">27%</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Chuyển hóa chất</div>
+                        </div>
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px 12px; border-radius: 8px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Não bộ</div>
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #0284c7; margin: 4px 0;">19%</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Tư duy & Thần kinh</div>
+                        </div>
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px 12px; border-radius: 8px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Cơ xương</div>
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #059669; margin: 4px 0;">18%</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Duy trì trương lực</div>
+                        </div>
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px 12px; border-radius: 8px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Thận</div>
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #7c3aed; margin: 4px 0;">10%</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Lọc máu bài tiết</div>
+                        </div>
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 14px 12px; border-radius: 8px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Trái tim</div>
+                            <div style="font-size: 1.35rem; font-weight: 700; color: #dc2626; margin: 4px 0;">7%</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Bơm máu tuần hoàn</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Sức Khoẻ & Thể Hình -->
+        <aside class="tool-category-sidebar">
+            <h3 class="tool-sidebar-title">Sức khoẻ & Thể hình</h3>
+            <ul class="tool-sidebar-links">
+                <li><a href="bmi.html">Công cụ tính BMI</a></li>
+                <li><a href="bmr.html" class="active">Công cụ tính chỉ số BMR</a></li>
+                <li><a href="tdee.html">Công cụ tính chỉ số TDEE</a></li>
+                <li><a href="calorie.html">Công cụ tính lượng Calo cần nạp</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <footer class="minimal-footer">
+        <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+    </footer>
+</div>
+
+    <script src="js/health-hub.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const genderEl = document.getElementById('bmrGender');
+            const ageEl = document.getElementById('bmrAge');
+            const heightEl = document.getElementById('bmrHeight');
+            const weightEl = document.getElementById('bmrWeight');
+            const formulaEl = document.getElementById('bmrFormula');
+
+            // Load saved data if present
+            const saved = getHealthData();
+            if (saved) {
+                genderEl.value = saved.gender || 'male';
+                if (saved.age) ageEl.value = saved.age;
+                if (saved.height) heightEl.value = saved.height;
+                if (saved.weight) weightEl.value = saved.weight;
+                formulaEl.value = saved.formula || 'mifflin';
+            }
+
+            function updateBMR() {
+                const w = parseFloat(weightEl.value) || 0;
+                const h = parseFloat(heightEl.value) || 0;
+                const a = parseInt(ageEl.value) || 0;
+                const g = genderEl.value;
+                const f = formulaEl.value;
+
+                if (h <= 0 || w <= 0 || a <= 0) {
+                    document.getElementById('bmrValDisplay').textContent = '---';
+                    document.getElementById('bmrPerHour').textContent = '--- kcal / giờ';
+                    document.getElementById('bmrSleep8').textContent = '--- kcal';
+                    return;
+                }
+
+                saveHealthData({ gender: g, age: a, height: h, weight: w, formula: f });
+
+                const bmr = calculateBMR(g, w, h, a, f);
+                document.getElementById('bmrValDisplay').textContent = bmr.toLocaleString('vi-VN');
+                document.getElementById('bmrPerHour').textContent = Math.round(bmr / 24) + ' kcal / giờ';
+                document.getElementById('bmrSleep8').textContent = Math.round((bmr / 24) * 8) + ' kcal';
+            }
+
+            genderEl.addEventListener('change', updateBMR);
+            ageEl.addEventListener('input', updateBMR);
+            heightEl.addEventListener('input', updateBMR);
+            weightEl.addEventListener('input', updateBMR);
+            formulaEl.addEventListener('change', updateBMR);
+
+            updateBMR();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

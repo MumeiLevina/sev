@@ -1,0 +1,24 @@
+{
+  "name": "student-micro-tools",
+  "version": "1.0.0",
+  "description": "Kinetic Tech - Bo Cong Cu Tien Ich Danh Cho Hoc Sinh, Sinh Vien",
+  "main": "index.html",
+  "scripts": {
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js",
+    "serve": "serve -l 3000 ."
+  },
+  "keywords": [
+    "student",
+    "tools",
+    "utilities",
+    "gpa",
+    "calculator"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.23.0",
+    "serve": "^14.2.4"
+  }
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính điểm thi cuối kỳ | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">ĐIỂM THI CUỐI KỲ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Công Cụ Tính Điểm Thi Cuối Kỳ</h1>
+                    <p class="text-muted">Nhập điểm quá trình và tỷ lệ trọng số để biết bạn cần bao nhiêu điểm cuối kỳ để đạt mục tiêu môn học.</p>
+                </div>
+
+                <div class="tool-container glass-panel">
+                <form id="finalExamForm">
+                    <div class="form-group">
+                        <label class="form-label">Mục tiêu bạn muốn đạt được</label>
+                        <select id="targetGrade" class="form-control">
+                            <option value="4.0">Chỉ cần qua môn (Điểm D: >= 4.0)</option>
+                            <option value="5.5">Điểm Trung bình khá (Điểm C: >= 5.5)</option>
+                            <option value="7.0" selected>Mục tiêu Khá (Điểm B: >= 7.0)</option>
+                            <option value="8.0">Mục tiêu Khá giỏi (Điểm B+: >= 8.0)</option>
+                            <option value="8.5">Mục tiêu Giỏi (Điểm A: >= 8.5)</option>
+                            <option value="9.0">Mục tiêu Xuất sắc (Điểm A+: >= 9.0)</option>
+                            <option value="custom">Mục tiêu tùy chọn (Tự nhập điểm)</option>
+                        </select>
+                    </div>
+
+                    <div id="customTargetGroup" class="form-group" style="display: none;">
+                        <label class="form-label">Điểm số mục tiêu mong muốn (Hệ 10)</label>
+                        <input type="number" id="customTargetScore" class="form-control" min="0" max="10" step="0.1" placeholder="Ví dụ: 7.8">
+                    </div>
+
+                    <h4 style="margin: 20px 0 10px; color: #475569; font-size: 1rem;">
+                        <i class='bx bx-list-check'></i> Các Điểm Thành Phần Quá Trình
+                    </h4>
+
+                    <!-- Row 1: Chuyên cần -->
+                    <div class="flex gap-4" style="margin-bottom: 12px;">
+                        <div style="flex: 2;">
+                            <label class="form-label" style="font-size: 0.85rem;">Điểm chuyên cần (Hệ 10)</label>
+                            <input type="number" id="attendanceScore" class="form-control" step="0.1" min="0" max="10" value="10">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="form-label" style="font-size: 0.85rem;">Tỷ lệ %</label>
+                            <input type="number" id="attendanceWeight" class="form-control comp-weight" min="0" max="100" value="10">
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Bài tập / Thường xuyên -->
+                    <div class="flex gap-4" style="margin-bottom: 12px;">
+                        <div style="flex: 2;">
+                            <label class="form-label" style="font-size: 0.85rem;">Điểm bài tập / Thực hành (Hệ 10)</label>
+                            <input type="number" id="homeworkScore" class="form-control" step="0.1" min="0" max="10" value="8.0">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="form-label" style="font-size: 0.85rem;">Tỷ lệ %</label>
+                            <input type="number" id="homeworkWeight" class="form-control comp-weight" min="0" max="100" value="20">
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Giữa kỳ -->
+                    <div class="flex gap-4" style="margin-bottom: 16px;">
+                        <div style="flex: 2;">
+                            <label class="form-label" style="font-size: 0.85rem;">Điểm thi giữa kỳ (Hệ 10)</label>
+                            <input type="number" id="midtermScore" class="form-control" step="0.1" min="0" max="10" value="7.0">
+                        </div>
+                        <div style="flex: 1;">
+                            <label class="form-label" style="font-size: 0.85rem;">Tỷ lệ %</label>
+                            <input type="number" id="midtermWeight" class="form-control comp-weight" min="0" max="100" value="20">
+                        </div>
+                    </div>
+
+                    <div class="callout callout-info flex justify-between align-center" style="padding: 10px 14px; margin-bottom: 20px;">
+                        <span>Trọng số bài thi cuối kỳ:</span>
+                        <strong id="finalWeightDisplay" style="font-size: 1.1rem; color: #475569;">50%</strong>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class='bx bx-calculator'></i> Tính Điểm Cuối Kỳ Cần Đạt
+                    </button>
+                </form>
+
+                <div id="finalResultBox" class="result-box">
+                    <p id="finalTargetText">Để đạt mục tiêu, điểm thi cuối kỳ bạn cần ít nhất:</p>
+                    <div id="requiredFinalScore" class="result-value">--</div>
+                    <p id="feasibilityNote" style="font-size: 0.95rem; font-weight: 500;"></p>
+
+                    <!-- Scenario Table -->
+                    <div style="margin-top: 20px; text-align: left;">
+                        <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">Bảng dự phóng điểm tổng kết:</h4>
+                        <div class="data-table-container" style="margin-bottom: 0;">
+                            <table class="data-table" style="font-size: 0.85rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Nếu điểm thi cuối kỳ là</th>
+                                        <th>Điểm tổng kết môn</th>
+                                        <th>Quy đổi Hệ 4 / Điểm chữ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scenarioTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </main>
+
+            <!-- Right Sidebar: Công cụ giáo dục -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                    <li><a href="final-exam.html" class="active">Công cụ tính điểm thi cuối kỳ</a></li>
+                    <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                    <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                    <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="cgpa.html">Công cụ tính GPA Tích luỹ</a></li>
+                    <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                    <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - 600 Câu</a></li>
+                    <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                    <li><a href="fraction.html">Máy tính phân số</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script src="js/final-exam.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

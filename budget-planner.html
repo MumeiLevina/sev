@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Chi Tiêu Sinh Viên & Quy Tắc 50/30/20 | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">TÀI CHÍNH</a>
+            <span class="nav-pill-btn active">CHI TIÊU SINH VIÊN</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Quản Lý Chi Tiêu Sinh Viên & Quy Tắc 50/30/20</h1>
+                    <p class="text-muted">Kiểm soát ngân sách tháng, cân đối giữa tiền trọ, ăn uống, vui chơi và tiết kiệm. Tránh tình trạng "cháy túi" cuối tháng.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px;">
+                        <!-- Input Sections -->
+                        <div>
+                            <!-- Income -->
+                            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+                                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                    <i class='bx bx-wallet' style="color: #10b981;"></i> 1. Tổng Thu Nhập Hàng Tháng (VND)
+                                </h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Gia đình chu cấp</label>
+                                        <input type="number" id="incFamily" class="form-control" value="4000000" step="100000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Làm thêm / Part-time</label>
+                                        <input type="number" id="incJob" class="form-control" value="2000000" step="100000">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Needs (50%) -->
+                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #166534; display: flex; align-items: center; gap: 8px;">
+                                        <i class='bx bx-home-alt'></i> 2. Nhu Cầu Thiết Yếu (Mục tiêu ~50%)
+                                    </h3>
+                                    <span id="badgeNeedsTotal" style="font-size: 0.85rem; font-weight: 700; color: #166534;">3,200,000 đ</span>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Tiền phòng trọ</label>
+                                        <input type="number" id="expRent" class="form-control" value="1800000" step="50000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Điện, nước, internet</label>
+                                        <input type="number" id="expUtilities" class="form-control" value="400000" step="50000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Ăn uống thiết yếu (chợ, cơm)</label>
+                                        <input type="number" id="expFood" class="form-control" value="1800000" step="100000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Xăng xe, xe buýt, gửi xe</label>
+                                        <input type="number" id="expTransport" class="form-control" value="300000" step="20000">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Wants (30%) -->
+                            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e40af; display: flex; align-items: center; gap: 8px;">
+                                        <i class='bx bx-coffee'></i> 3. Mong Muốn Cá Nhân (Mục tiêu ~30%)
+                                    </h3>
+                                    <span id="badgeWantsTotal" style="font-size: 0.85rem; font-weight: 700; color: #1e40af;">1,200,000 đ</span>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Cà phê, ăn ngoài với bạn</label>
+                                        <input type="number" id="expHangout" class="form-control" value="600000" step="50000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Mua sắm quần áo, đồ chơi</label>
+                                        <input type="number" id="expShopping" class="form-control" value="400000" step="50000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Xem phim, game, Netflix</label>
+                                        <input type="number" id="expEntertainment" class="form-control" value="200000" step="20000">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Savings (20%) -->
+                            <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 18px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #6b21a8; display: flex; align-items: center; gap: 8px;">
+                                        <i class='bx bx-piggy-bank'></i> 4. Tiết Kiệm & Quỹ Khẩn Cấp (Mục tiêu ~20%)
+                                    </h3>
+                                    <span id="badgeSavingsTotal" style="font-size: 0.85rem; font-weight: 700; color: #6b21a8;">500,000 đ</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size: 0.8rem;">Số tiền trích gửi tiết kiệm tháng này</label>
+                                    <input type="number" id="expSaving" class="form-control" value="500000" step="100000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Summary & Diagnosis -->
+                        <div>
+                            <div class="conversion-result-card" style="margin-top: 0; text-align: left;">
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Số dư khả dụng cuối tháng</div>
+                                <div id="resRemaining" style="font-size: 2.5rem; font-weight: 800; color: #10b981; margin: 4px 0;">
+                                    0 đ
+                                </div>
+                                <div id="resRemainingStatus" style="font-size: 0.88rem; font-weight: 600; color: #166534; margin-bottom: 16px;">
+                                    Ngân sách cân bằng lý tưởng
+                                </div>
+
+                                <div class="metric-row" style="margin: 12px 0;">
+                                    <div class="metric-box">
+                                        <div class="metric-label">Tổng thu nhập</div>
+                                        <div id="resTotalInc" class="metric-val primary" style="font-size: 1.2rem;">6,000,000 đ</div>
+                                    </div>
+                                    <div class="metric-box">
+                                        <div class="metric-label">Tổng chi + tiết kiệm</div>
+                                        <div id="resTotalExp" class="metric-val" style="font-size: 1.2rem; color: #d97706;">5,000,000 đ</div>
+                                    </div>
+                                </div>
+
+                                <!-- 50/30/20 Visual Proportion -->
+                                <h4 style="font-size: 0.92rem; font-weight: 700; color: #1e293b; margin-top: 20px; margin-bottom: 8px;">
+                                    Tỷ lệ phân bổ thực tế vs Chuẩn 50/30/20
+                                </h4>
+                                
+                                <div class="stacked-bar-container" style="height: 20px;">
+                                    <div id="barNeeds" class="stacked-bar-segment" style="width: 50%; background: #16a34a;" title="Thiết yếu"></div>
+                                    <div id="barWants" class="stacked-bar-segment" style="width: 30%; background: #2563eb;" title="Sở thích"></div>
+                                    <div id="barSavings" class="stacked-bar-segment" style="width: 20%; background: #9333ea;" title="Tiết kiệm"></div>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px; font-size: 0.85rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="display: flex; align-items: center; gap: 6px;">
+                                            <span style="width: 10px; height: 10px; background: #16a34a; border-radius: 50%;"></span> Nhu cầu thiết yếu:
+                                        </span>
+                                        <strong id="pctNeeds">50% (chuẩn: 50%)</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="display: flex; align-items: center; gap: 6px;">
+                                            <span style="width: 10px; height: 10px; background: #2563eb; border-radius: 50%;"></span> Mong muốn cá nhân:
+                                        </span>
+                                        <strong id="pctWants">30% (chuẩn: 30%)</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="display: flex; align-items: center; gap: 6px;">
+                                            <span style="width: 10px; height: 10px; background: #9333ea; border-radius: 50%;"></span> Tiết kiệm:
+                                        </span>
+                                        <strong id="pctSavings">20% (chuẩn: 20%)</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Advice Box -->
+                                <div id="adviceCard" class="callout callout-info" style="margin-top: 20px; font-size: 0.88rem;">
+                                    Đang phân tích thói quen chi tiêu của bạn...
+                                </div>
+
+                                <div style="display: flex; gap: 10px; margin-top: 18px;">
+                                    <button type="button" id="btnSaveBudget" class="btn btn-outline" style="font-size: 0.85rem; flex: 1;">
+                                        <i class='bx bx-save'></i> Lưu vào máy
+                                    </button>
+                                    <button type="button" id="btnResetBudget" class="btn btn-outline" style="font-size: 0.85rem;">
+                                        <i class='bx bx-refresh'></i> Mặc định
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Quy Tắc 50/30/20 Là Gì? Mẹo Quản Lý Chi Tiêu Sinh Viên</h2>
+                        <p><strong>Quy tắc ngân sách 50/30/20</strong> là phương pháp quản lý tài chính cá nhân nổi tiếng được giới thiệu bởi Thượng nghị sĩ Mỹ Elizabeth Warren trong cuốn sách <em>All Your Worth: The Ultimate Lifetime Money Plan</em>. Đây là kim chỉ nam giúp người trẻ phân bổ nguồn thu hợp lý mà không cần phải ghi chép chi li từng đồng lẻ.</p>
+                        
+                        <h3>1. Ba nhóm chi tiêu chính</h3>
+                        <ul>
+                            <li><strong>50% cho Nhu cầu thiết yếu (Needs):</strong> Những khoản tiền bắt buộc phải chi để duy trì cuộc sống hàng ngày (tiền thuê trọ, tiền điện nước, wifi, tiền ăn cơm/đi chợ, tiền xăng xe đi học). Nếu không có những thứ này bạn không thể sinh hoạt bình thường.</li>
+                            <li><strong>30% cho Mong muốn cá nhân (Wants):</strong> Những chi phí giúp nâng cao chất lượng cuộc sống và tinh thần (đi cà phê với bạn bè, ăn lẩu cuối tuần, xem phim rạp, mua sắm áo quần, du lịch ngắn ngày).</li>
+                            <li><strong>20% cho Tiết kiệm & Quỹ dự phòng (Savings):</strong> Khoản tiền dự phòng khi đau ốm, hỏng xe, hoặc tích lũy để mua laptop, học chứng chỉ IELTS/tin học hoặc đầu tư sau này.</li>
+                        </ul>
+
+                        <h3>2. Sinh viên nên làm gì nếu tiền trọ chiếm hơn 50% thu nhập?</h3>
+                        <p>Tại các thành phố lớn như Hà Nội hay TP.HCM, chi phí sinh hoạt đắt đỏ thường khiến nhóm thiết yếu của sinh viên vượt quá 60%. Khi đó, bạn có thể linh hoạt điều chỉnh thành <strong>60/25/15</strong> hoặc <strong>65/25/10</strong>, đồng thời áp dụng các giải pháp giảm tải:</p>
+                        <ul>
+                            <li>Tìm thêm 1-2 bạn ở ghép để chia sẻ tiền phòng và tiền điện nước.</li>
+                            <li>Tự nấu ăn tại phòng thay vì đi ăn ngoài hàng quán mỗi ngày.</li>
+                            <li>Tận dụng phương tiện công cộng (vé xe buýt sinh viên chỉ ~100k/tháng) để giảm chi phí xăng xe và sửa chữa.</li>
+                        </ul>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Finance Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Tài chính sinh viên</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compound-interest.html">Tính lãi suất kép & Tiết kiệm</a></li>
+                    <li><a href="budget-planner.html" class="active">Quản lý chi tiêu sinh viên (50/30/20)</a></li>
+                    <li><a href="room-splitter.html">Chia tiền phòng trọ & Điện nước</a></li>
+                    <li><a href="currency-converter.html">Quy đổi ngoại tệ (VND ↔ USD, EUR)</a></li>
+                    <li><a href="tax-calculator.html">Tính thuế TNCN & Lương Gross - Net</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        function formatVND(num) {
+            return Math.round(num).toLocaleString('vi-VN') + ' đ';
+        }
+
+        const inputIds = [
+            'incFamily', 'incJob',
+            'expRent', 'expUtilities', 'expFood', 'expTransport',
+            'expHangout', 'expShopping', 'expEntertainment',
+            'expSaving'
+        ];
+
+        function getVal(id) {
+            return parseFloat(document.getElementById(id).value) || 0;
+        }
+
+        function calculateBudget() {
+            const totalInc = getVal('incFamily') + getVal('incJob');
+            const totalNeeds = getVal('expRent') + getVal('expUtilities') + getVal('expFood') + getVal('expTransport');
+            const totalWants = getVal('expHangout') + getVal('expShopping') + getVal('expEntertainment');
+            const totalSaving = getVal('expSaving');
+            const totalSpent = totalNeeds + totalWants + totalSaving;
+            const remaining = totalInc - totalSpent;
+
+            // Badges
+            document.getElementById('badgeNeedsTotal').textContent = formatVND(totalNeeds);
+            document.getElementById('badgeWantsTotal').textContent = formatVND(totalWants);
+            document.getElementById('badgeSavingsTotal').textContent = formatVND(totalSaving);
+
+            // Metrics
+            document.getElementById('resTotalInc').textContent = formatVND(totalInc);
+            document.getElementById('resTotalExp').textContent = formatVND(totalSpent);
+
+            const remEl = document.getElementById('resRemaining');
+            const statusEl = document.getElementById('resRemainingStatus');
+
+            remEl.textContent = formatVND(remaining);
+            if (remaining > 0) {
+                remEl.style.color = '#10b981';
+                statusEl.textContent = `Dư dả ${formatVND(remaining)} — Tuyệt vời! Bạn có thể chuyển thêm vào quỹ tiết kiệm.`;
+                statusEl.style.color = '#166534';
+            } else if (remaining === 0) {
+                remEl.style.color = '#0284c7';
+                statusEl.textContent = 'Ngân sách vừa khít, cân đối thu chi hoàn hảo.';
+                statusEl.style.color = '#0369a1';
+            } else {
+                remEl.style.color = '#ef4444';
+                statusEl.textContent = `CẢNH BÁO: Bạn đang bội chi ${formatVND(Math.abs(remaining))}! Cần cắt giảm ăn ngoài hoặc mua sắm.`;
+                statusEl.style.color = '#991b1b';
+            }
+
+            // Percentages against total income
+            const pctNeeds = totalInc > 0 ? Math.round((totalNeeds / totalInc) * 100) : 0;
+            const pctWants = totalInc > 0 ? Math.round((totalWants / totalInc) * 100) : 0;
+            const pctSaving = totalInc > 0 ? Math.round((totalSaving / totalInc) * 100) : 0;
+
+            document.getElementById('pctNeeds').textContent = `${pctNeeds}% (mục tiêu 50%)`;
+            document.getElementById('pctWants').textContent = `${pctWants}% (mục tiêu 30%)`;
+            document.getElementById('pctSavings').textContent = `${pctSaving}% (mục tiêu 20%)`;
+
+            document.getElementById('barNeeds').style.width = `${pctNeeds}%`;
+            document.getElementById('barWants').style.width = `${pctWants}%`;
+            document.getElementById('barSavings').style.width = `${pctSaving}%`;
+
+            // Advice generation
+            const adviceEl = document.getElementById('adviceCard');
+            if (pctNeeds > 60) {
+                adviceEl.className = 'callout callout-warning';
+                adviceEl.innerHTML = `<i class='bx bx-error-circle'></i> <strong>Chi phí thiết yếu đang chiếm ${pctNeeds}% thu nhập!</strong> Tiền trọ và ăn uống đang quá nặng. Hãy cân nhắc tìm bạn ở ghép hoặc tự nấu ăn để giảm áp lực.`;
+            } else if (pctWants > 35) {
+                adviceEl.className = 'callout callout-warning';
+                adviceEl.innerHTML = `<i class='bx bx-coffee'></i> <strong>Khoản vui chơi/mua sắm đang chiếm ${pctWants}%!</strong> Bạn đang chi quá nhiều cho cà phê hoặc mua sắm bốc đồng. Hãy thử áp dụng quy tắc <em>"chờ 48 giờ trước khi mua món đồ không thiết yếu"</em>.`;
+            } else if (pctSaving >= 20 && remaining >= 0) {
+                adviceEl.className = 'callout callout-info';
+                adviceEl.innerHTML = `<i class='bx bx-check-double'></i> <strong>Chúc mừng! Bạn quản lý tài chính xuất sắc!</strong> Tỷ lệ tiết kiệm đạt ${pctSaving}% là con số rất lý tưởng đối với sinh viên. Hãy duy trì thói quen này để tạo đà sau khi tốt nghiệp.`;
+            } else {
+                adviceEl.className = 'callout callout-info';
+                adviceEl.innerHTML = `<i class='bx bx-info-circle'></i> Bạn đang cân đối ngân sách khá ổn. Hãy nhớ luôn trích khoản tiết kiệm đầu tiên ngay khi nhận tiền thay vì đợi tiêu xong mới tiết kiệm số dư!`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore from localStorage if present
+            const saved = localStorage.getItem('st_student_budget');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    inputIds.forEach(id => {
+                        if (data[id] !== undefined) document.getElementById(id).value = data[id];
+                    });
+                } catch (e) {}
+            }
+
+            calculateBudget();
+
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateBudget);
+            });
+
+            document.getElementById('btnSaveBudget').addEventListener('click', function() {
+                const data = {};
+                inputIds.forEach(id => data[id] = getVal(id));
+                localStorage.setItem('st_student_budget', JSON.stringify(data));
+                this.innerHTML = "<i class='bx bx-check' style='color: #10b981;'></i> Đã lưu vào máy!";
+                setTimeout(() => {
+                    this.innerHTML = "<i class='bx bx-save'></i> Lưu vào máy";
+                }, 1800);
+            });
+
+            document.getElementById('btnResetBudget').addEventListener('click', function() {
+                localStorage.removeItem('st_student_budget');
+                location.reload();
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

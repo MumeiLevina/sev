@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Mã QR Online Miễn Phí (URL, WiFi, Văn Bản) | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">VĂN BẢN</a>
+            <span class="nav-pill-btn active">TẠO MÃ QR</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Trình Tạo Mã QR Trực Tuyến Miễn Phí</h1>
+                    <p class="text-muted">Tạo mã QR cho link website, tài liệu Google Drive, chia sẻ nhanh WiFi phòng trọ, số điện thoại hoặc văn bản. Tải về ảnh PNG sắc nét.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px;">
+                        <!-- Left Input Form -->
+                        <div style="text-align: left;">
+                            <!-- Tabs for QR Types -->
+                            <div class="tool-tabs">
+                                <button type="button" class="tool-tab-btn active" data-type="url"><i class='bx bx-link'></i> Link / URL</button>
+                                <button type="button" class="tool-tab-btn" data-type="wifi"><i class='bx bx-wifi'></i> WiFi phòng</button>
+                                <button type="button" class="tool-tab-btn" data-type="text"><i class='bx bx-text'></i> Văn bản</button>
+                                <button type="button" class="tool-tab-btn" data-type="phone"><i class='bx bx-phone'></i> Số ĐT</button>
+                            </div>
+
+                            <!-- Pane 1: URL -->
+                            <div id="paneUrl" class="tool-tab-content active">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Nhập địa chỉ trang web hoặc link tài liệu</label>
+                                    <input type="url" id="qrInputUrl" class="form-control" value="https://studenttools.vn" placeholder="https://example.com/tai-lieu-on-thi">
+                                </div>
+                            </div>
+
+                            <!-- Pane 2: WiFi -->
+                            <div id="paneWifi" class="tool-tab-content">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Tên mạng WiFi (SSID)</label>
+                                    <input type="text" id="wifiSsid" class="form-control" placeholder="Ví dụ: PhongTro_102">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Mật khẩu WiFi</label>
+                                    <input type="text" id="wifiPass" class="form-control" placeholder="Nhập mật khẩu WiFi">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Chuẩn bảo mật</label>
+                                    <select id="wifiAuth" class="form-control">
+                                        <option value="WPA" selected>WPA / WPA2 / WPA3 (Phổ biến nhất)</option>
+                                        <option value="WEP">WEP</option>
+                                        <option value="nopass">Không có mật khẩu</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Pane 3: Free Text -->
+                            <div id="paneText" class="tool-tab-content">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Nhập nội dung văn bản tự do</label>
+                                    <textarea id="qrInputText" class="form-control" rows="4" placeholder="Nhập lời nhắn, danh thiếp hoặc thông tin cần quét..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Pane 4: Phone -->
+                            <div id="panePhone" class="tool-tab-content">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="tel" id="qrInputPhone" class="form-control" placeholder="0912345678">
+                                </div>
+                            </div>
+
+                            <!-- Customization -->
+                            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 16px; margin-top: 20px;">
+                                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bx-palette'></i> Tùy chọn hiển thị
+                                </h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Màu mã QR</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <input type="color" id="qrColorDark" value="#0f172a" style="width: 36px; height: 36px; border: none; cursor: pointer; border-radius: 6px;">
+                                            <span style="font-size: 0.82rem; color: #64748b;">Màu mã</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Kích thước (pixels)</label>
+                                        <select id="qrSizeSelect" class="form-control" style="font-size: 0.85rem;">
+                                            <option value="200">Nhỏ (200 × 200)</option>
+                                            <option value="260" selected>Vừa (260 × 260)</option>
+                                            <option value="350">Lớn (350 × 350)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right QR Preview -->
+                        <div>
+                            <div class="conversion-result-card" style="margin-top: 0; padding: 24px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;">
+                                    Hình ảnh mã QR
+                                </div>
+
+                                <!-- QR Canvas Container -->
+                                <div id="qrcodeBox" style="background: #ffffff; padding: 16px; border-radius: 12px; display: inline-flex; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-bottom: 16px;">
+                                    <!-- QRCode injected here -->
+                                </div>
+
+                                <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 16px;">
+                                    Quét bằng Camera điện thoại hoặc Zalo để mở nội dung
+                                </div>
+
+                                <div style="display: flex; gap: 10px; justify-content: center;">
+                                    <button type="button" id="btnDownloadQr" class="btn btn-primary" style="font-size: 0.88rem; padding: 8px 18px;">
+                                        <i class='bx bx-download'></i> Tải ảnh PNG
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Mã QR (Quick Response) Và Ứng Dụng Trong Học Tập</h2>
+                        <p><strong>Mã QR (Quick Response Code)</strong> là dạng mã vạch hai chiều (2D barcode) được phát triển bởi công ty Denso Wave vào năm 1994. Khác với mã vạch 1D truyền thống chỉ chứa được khoảng 20 ký tự số, mã QR có thể mã hóa tới hơn 7.000 ký tự số hoặc khoảng 3.000 ký tự chữ và số, cho phép lưu trữ trọn vẹn đường link, thông tin liên lạc và mạng WiFi.</p>
+                        
+                        <h3>1. Các ứng dụng tiện ích cho sinh viên</h3>
+                        <ul>
+                            <li><strong>Chia sẻ tài liệu thuyết trình (Slide presentation):</strong> Thay vì bắt cả lớp gõ đường link Google Drive dài dòng, bạn chỉ cần chèn một mã QR ở trang slide cuối để cả lớp dùng điện thoại quét và tải tài liệu chỉ trong 1 giây.</li>
+                            <li><strong>Chia sẻ WiFi phòng trọ không lo lộ mật khẩu:</strong> Tạo mã QR WiFi dán ở cửa phòng trọ hoặc bàn học. Bạn bè đến chơi chỉ cần mở camera quét là tự động kết nối internet mà không cần phải đánh vần từng ký tự mật khẩu phức tạp.</li>
+                            <li><strong>Gắn vào CV xin việc:</strong> Tạo mã QR dẫn thẳng đến Portfolio online, GitHub dự án, hoặc hồ sơ LinkedIn của bạn để nhà tuyển dụng dễ dàng theo dõi sản phẩm thực tế.</li>
+                        </ul>
+
+                        <h3>2. Câu hỏi thường gặp (FAQ)</h3>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Hỏi: Mã QR tạo ở đây có thời hạn sử dụng không?</strong><br>
+                            Trả lời: Hoàn toàn không có thời hạn (vĩnh viễn). Đây là <em>Mã QR tĩnh (Static QR Code)</em>, nội dung được mã hóa trực tiếp vào các ô vuông đen trắng của hình ảnh nên sẽ hoạt động mãi mãi mà không phụ thuộc vào bất kỳ máy chủ nào.</p>
+                            <p><strong>Hỏi: Tại sao điện thoại quét mã WiFi không tự kết nối?</strong><br>
+                            Trả lời: Hầu hết điện thoại iPhone (iOS) và Android đời mới đều tự nhận diện định dạng <code>WIFI:S:Tên;T:WPA;P:MậtKhẩu;;</code> và hỏi bạn có muốn kết nối hay không. Hãy đảm bảo bạn đã gõ chính xác tên WiFi (phân biệt chữ hoa, chữ thường).</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Text & Productivity Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Văn bản & Năng suất</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="word-counter.html">Đếm từ & Ký tự trực tuyến</a></li>
+                    <li><a href="password-generator.html">Tạo mật khẩu mạnh & An toàn</a></li>
+                    <li><a href="qr-generator.html" class="active">Tạo mã QR trực tuyến</a></li>
+                    <li><a href="convert-base.html">Chuyển đổi cơ số (Hệ đếm IT)</a></li>
+                    <li><a href="stopwatch-timer.html">Đồng hồ bấm giờ & Hẹn giờ</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentType = 'url';
+        let qrcodeInstance = null;
+
+        function getQrDataString() {
+            if (currentType === 'url') {
+                return document.getElementById('qrInputUrl').value.trim() || 'https://studenttools.vn';
+            } else if (currentType === 'wifi') {
+                const ssid = document.getElementById('wifiSsid').value.trim();
+                const pass = document.getElementById('wifiPass').value.trim();
+                const auth = document.getElementById('wifiAuth').value;
+                if (!ssid) return 'WIFI:S:KineticTech;T:WPA;P:12345678;;';
+                return `WIFI:S:${ssid};T:${auth};P:${pass};;`;
+            } else if (currentType === 'text') {
+                return document.getElementById('qrInputText').value.trim() || 'Chào mừng bạn đến với Kinetic Tech!';
+            } else if (currentType === 'phone') {
+                const phone = document.getElementById('qrInputPhone').value.trim();
+                return phone ? `tel:${phone}` : 'tel:0912345678';
+            }
+            return 'https://studenttools.vn';
+        }
+
+        function renderQRCode() {
+            const container = document.getElementById('qrcodeBox');
+            container.innerHTML = '';
+
+            const data = getQrDataString();
+            const size = parseInt(document.getElementById('qrSizeSelect').value, 10) || 260;
+            const darkColor = document.getElementById('qrColorDark').value || '#000000';
+
+            if (typeof QRCode !== 'undefined') {
+                qrcodeInstance = new QRCode(container, {
+                    text: data,
+                    width: size,
+                    height: size,
+                    colorDark: darkColor,
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } else {
+                container.innerHTML = '<p style="color: #ef4444; font-size: 0.85rem;">Không tải được thư viện QR. Vui lòng kiểm tra kết nối mạng.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQRCode();
+
+            // Tab switching
+            const tabs = document.querySelectorAll('.tool-tab-btn');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    currentType = tab.getAttribute('data-type');
+                    document.querySelectorAll('.tool-tab-content').forEach(pane => pane.classList.remove('active'));
+
+                    if (currentType === 'url') document.getElementById('paneUrl').classList.add('active');
+                    if (currentType === 'wifi') document.getElementById('paneWifi').classList.add('active');
+                    if (currentType === 'text') document.getElementById('paneText').classList.add('active');
+                    if (currentType === 'phone') document.getElementById('panePhone').classList.add('active');
+
+                    renderQRCode();
+                });
+            });
+
+            // Live updates on inputs
+            const inputs = ['qrInputUrl', 'wifiSsid', 'wifiPass', 'wifiAuth', 'qrInputText', 'qrInputPhone', 'qrColorDark', 'qrSizeSelect'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', renderQRCode);
+                    el.addEventListener('change', renderQRCode);
+                }
+            });
+
+            // Download PNG
+            document.getElementById('btnDownloadQr').addEventListener('click', function() {
+                const img = document.querySelector('#qrcodeBox img');
+                const canvas = document.querySelector('#qrcodeBox canvas');
+
+                let src = '';
+                if (img && img.src) {
+                    src = img.src;
+                } else if (canvas) {
+                    src = canvas.toDataURL('image/png');
+                }
+
+                if (src) {
+                    const a = document.createElement('a');
+                    a.href = src;
+                    a.download = `QRCode_KineticTech_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    alert('Chưa tạo được hình ảnh QR!');
+                }
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

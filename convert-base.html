@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển Đổi Cơ Số – Nhị Phân, Thập Phân, Bát Phân, Hex | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">VĂN BẢN & NĂNG SUẤT</a>
+            <span class="nav-pill-btn active">CHUYỂN ĐỔI CƠ SỐ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Chuyển Đổi Cơ Số & Hệ Đếm (Nhị Phân, Thập Phân, Hex)</h1>
+                    <p class="text-muted">Đổi qua lại đồng thời giữa các hệ đếm: Binary (Cơ số 2), Octal (Cơ số 8), Decimal (Cơ số 10), Hexadecimal (Cơ số 16) và cơ số tùy chọn.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <!-- Real-time Multi-base Inputs -->
+                    <div style="display: flex; flex-direction: column; gap: 18px; text-align: left;">
+                        
+                        <!-- Decimal (10) -->
+                        <div class="base-row" style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 14px 18px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="form-label" style="margin: 0; font-weight: 700; color: #1e293b;">
+                                    <i class='bx bx-calculator' style="color: #0284c7;"></i> Thập phân (Decimal – Base 10)
+                                </label>
+                                <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 2px 8px;" onclick="copyInputVal('baseDec')">
+                                    <i class='bx bx-copy'></i> Sao chép
+                                </button>
+                            </div>
+                            <input type="text" id="baseDec" class="form-control" value="" placeholder="Nhập số thập phân..." style="font-family: monospace; font-size: 1.15rem; font-weight: 700;">
+                        </div>
+
+                        <!-- Binary (2) -->
+                        <div class="base-row" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 14px 18px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="form-label" style="margin: 0; font-weight: 700; color: #166534;">
+                                    <i class='bx bx-code-block' style="color: #16a34a;"></i> Nhị phân (Binary – Base 2)
+                                </label>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <span id="binaryNibbleDisplay" style="font-size: 0.8rem; color: #166534; font-family: monospace;"></span>
+                                    <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 2px 8px;" onclick="copyInputVal('baseBin')">
+                                        <i class='bx bx-copy'></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="text" id="baseBin" class="form-control" value="" placeholder="Nhập số nhị phân (0-1)..." style="font-family: monospace; font-size: 1.15rem; font-weight: 700; color: #15803d;">
+                        </div>
+
+                        <!-- Hexadecimal (16) -->
+                        <div class="base-row" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 18px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="form-label" style="margin: 0; font-weight: 700; color: #1e40af;">
+                                    <i class='bx bx-hash' style="color: #2563eb;"></i> Thập lục phân (Hexadecimal – Base 16)
+                                </label>
+                                <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 2px 8px;" onclick="copyInputVal('baseHex')">
+                                    <i class='bx bx-copy'></i> Sao chép
+                                </button>
+                            </div>
+                            <input type="text" id="baseHex" class="form-control" value="" placeholder="Nhập số Hex (0-9, A-F)..." style="font-family: monospace; font-size: 1.15rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase;">
+                        </div>
+
+                        <!-- Octal (8) -->
+                        <div class="base-row" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 18px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="form-label" style="margin: 0; font-weight: 700; color: #92400e;">
+                                    <i class='bx bx-circle' style="color: #d97706;"></i> Bát phân (Octal – Base 8)
+                                </label>
+                                <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 2px 8px;" onclick="copyInputVal('baseOct')">
+                                    <i class='bx bx-copy'></i> Sao chép
+                                </button>
+                            </div>
+                            <input type="text" id="baseOct" class="form-control" value="" placeholder="Nhập số bát phân (0-7)..." style="font-family: monospace; font-size: 1.15rem; font-weight: 700; color: #b45309;">
+                        </div>
+
+                        <!-- Custom Base (2 - 36) -->
+                        <div class="base-row" style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 14px 18px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <label class="form-label" style="margin: 0; font-weight: 700; color: #6b21a8;">
+                                        Cơ số tùy chọn:
+                                    </label>
+                                    <select id="customBaseSelect" style="padding: 2px 8px; border-radius: 6px; border: 1px solid #d8b4fe; font-size: 0.85rem; font-weight: 600;"></select>
+                                </div>
+                                <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 2px 8px;" onclick="copyInputVal('baseCustom')">
+                                    <i class='bx bx-copy'></i> Sao chép
+                                </button>
+                            </div>
+                            <input type="text" id="baseCustom" class="form-control" value="" placeholder="Kết quả cơ số tùy chọn..." style="font-family: monospace; font-size: 1.15rem; font-weight: 700; color: #7e22ce; text-transform: uppercase;">
+                        </div>
+                    </div>
+
+                    <!-- Step-by-step conversion card -->
+                    <div style="text-align: left; margin-top: 32px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-bulb'></i> Các Bước Giải Chi Tiết (Từ Thập Phân Sang Nhị Phân & Hex)
+                        </h3>
+                        <div id="stepExplanationBox" class="formula-highlight" style="font-family: monospace; font-size: 0.88rem; line-height: 1.7; white-space: pre-wrap;">
+                            <!-- JS generates steps -->
+                        </div>
+                    </div>
+
+                    <!-- Hex / Dec / Bin 4-bit Table -->
+                    <div style="text-align: left; margin-top: 32px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-table'></i> Bảng Quy Đổi 16 Giá Trị Hex Tiêu Chuẩn (4-Bit Nibble)
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table" style="font-family: monospace; font-size: 0.88rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Decimal (10)</th>
+                                        <th>Hexadecimal (16)</th>
+                                        <th>Binary (4-bit)</th>
+                                        <th>Decimal (10)</th>
+                                        <th>Hexadecimal (16)</th>
+                                        <th>Binary (4-bit)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>0</td><td><strong>0</strong></td><td>0000</td><td>8</td><td><strong>8</strong></td><td>1000</td></tr>
+                                    <tr><td>1</td><td><strong>1</strong></td><td>0001</td><td>9</td><td><strong>9</strong></td><td>1001</td></tr>
+                                    <tr><td>2</td><td><strong>2</strong></td><td>0010</td><td>10</td><td><strong>A</strong></td><td>1010</td></tr>
+                                    <tr><td>3</td><td><strong>3</strong></td><td>0011</td><td>11</td><td><strong>B</strong></td><td>1011</td></tr>
+                                    <tr><td>4</td><td><strong>4</strong></td><td>0100</td><td>12</td><td><strong>C</strong></td><td>1100</td></tr>
+                                    <tr><td>5</td><td><strong>5</strong></td><td>0101</td><td>13</td><td><strong>D</strong></td><td>1101</td></tr>
+                                    <tr><td>6</td><td><strong>6</strong></td><td>0110</td><td>14</td><td><strong>E</strong></td><td>1110</td></tr>
+                                    <tr><td>7</td><td><strong>7</strong></td><td>0111</td><td>15</td><td><strong>F</strong></td><td>1111</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Cơ Số Là Gì? Ứng Dụng Trong Ngành Công Nghệ Thông Tin</h2>
+                        <p><strong>Cơ số (Radix hoặc Base)</strong> là số lượng chữ số độc nhất (bao gồm cả chữ số 0) được sử dụng để biểu diễn các số trong một hệ thống đếm vị trí. Trong toán học và khoa học máy tính, việc chuyển đổi giữa các hệ cơ số là kiến thức nền tảng bắt buộc của mọi sinh viên CNTT.</p>
+                        
+                        <h3>1. Bốn hệ cơ số quan trọng nhất</h3>
+                        <ul>
+                            <li><strong>Hệ thập phân (Decimal - Base 10):</strong> Sử dụng 10 chữ số từ <code>0 – 9</code>. Đây là hệ đếm tiêu chuẩn trong đời sống hàng ngày của con người.</li>
+                            <li><strong>Hệ nhị phân (Binary - Base 2):</strong> Chỉ sử dụng 2 chữ số <code>0</code> và <code>1</code>. Máy tính điện tử sử dụng hệ nhị phân vì mạch điện tử chỉ có hai trạng thái vật lý: đóng (0 - không có điện) và mở (1 - có điện áp).</li>
+                            <li><strong>Hệ thập lục phân (Hexadecimal - Base 16):</strong> Sử dụng 16 ký tự từ <code>0 – 9</code> và <code>A – F</code> (với A=10, B=11, C=12, D=13, E=14, F=15). Mỗi ký tự Hex biểu diễn chính xác <strong>4 bit nhị phân (1 Nibble)</strong>, giúp lập trình viên đọc và ghi mã máy, mã màu CSS (ví dụ <code>#FFFFFF</code>), và địa chỉ ô nhớ RAM một cách gọn gàng.</li>
+                            <li><strong>Hệ bát phân (Octal - Base 8):</strong> Sử dụng 8 chữ số từ <code>0 – 7</code>. Mỗi chữ số bát phân tương ứng với <strong>3 bit nhị phân</strong>, thường gặp trong phân quyền tập tin trên hệ điều hành Linux (ví dụ <code>chmod 755</code>).</li>
+                        </ul>
+
+                        <h3>2. Thuật toán chuyển đổi từ hệ thập phân sang cơ số N</h3>
+                        <p>Để đổi một số nguyên dương từ hệ 10 sang cơ số N, ta liên tục chia số đó cho N và ghi lại số dư. Quá trình dừng lại khi thương số bằng 0. Kết quả là chuỗi các số dư đọc theo thứ tự <strong>từ dưới lên trên (từ số dư cuối cùng đến số dư đầu tiên)</strong>.</p>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Text & Productivity Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Văn bản & Năng suất</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="word-counter.html">Đếm từ & Ký tự trực tuyến</a></li>
+                    <li><a href="password-generator.html">Tạo mật khẩu mạnh & An toàn</a></li>
+                    <li><a href="qr-generator.html">Tạo mã QR trực tuyến</a></li>
+                    <li><a href="convert-base.html" class="active">Chuyển đổi cơ số (Hệ đếm IT)</a></li>
+                    <li><a href="stopwatch-timer.html">Đồng hồ bấm giờ & Hẹn giờ</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyInputVal(id) {
+            const val = document.getElementById(id).value;
+            navigator.clipboard.writeText(val).then(() => {
+                alert('Đã sao chép: ' + val);
+            });
+        }
+
+        let isUpdating = false;
+
+        function updateFromDec(decVal) {
+            if (isNaN(decVal) || decVal < 0) {
+                return;
+            }
+
+            const bin = decVal.toString(2);
+            const hex = decVal.toString(16).toUpperCase();
+            const oct = decVal.toString(8);
+            const customBase = parseInt(document.getElementById('customBaseSelect').value, 10) || 36;
+            const custom = decVal.toString(customBase).toUpperCase();
+
+            document.getElementById('baseBin').value = bin;
+            document.getElementById('baseHex').value = hex;
+            document.getElementById('baseOct').value = oct;
+            document.getElementById('baseCustom').value = custom;
+
+            // Group binary by 4-bit nibbles
+            const paddedBin = bin.padStart(Math.ceil(bin.length / 4) * 4, '0');
+            const nibbles = paddedBin.match(/.{1,4}/g)?.join(' ') || bin;
+            document.getElementById('binaryNibbleDisplay').textContent = nibbles;
+
+            // Generate step explanation
+            generateSteps(decVal);
+        }
+
+        function generateSteps(n) {
+            if (n === 0) {
+                document.getElementById('stepExplanationBox').textContent = 'Giá trị = 0';
+                return;
+            }
+
+            let temp = n;
+            let binSteps = `--- ĐỔI ${n} SANG NHỊ PHÂN (CHIA LẤY DƯ CHO 2) ---\n`;
+            let binRemainders = [];
+            while (temp > 0) {
+                const rem = temp % 2;
+                const next = Math.floor(temp / 2);
+                binSteps += `${temp} ÷ 2 = ${next} (dư ${rem})\n`;
+                binRemainders.unshift(rem);
+                temp = next;
+            }
+            binSteps += `=> Đọc ngược từ dưới lên: ${binRemainders.join('')} (Base 2)\n\n`;
+
+            temp = n;
+            let hexSteps = `--- ĐỔI ${n} SANG HEXADECIMAL (CHIA LẤY DƯ CHO 16) ---\n`;
+            let hexRemainders = [];
+            const hexChars = '0123456789ABCDEF';
+            while (temp > 0) {
+                const rem = temp % 16;
+                const next = Math.floor(temp / 16);
+                hexSteps += `${temp} ÷ 16 = ${next} (dư ${rem} = '${hexChars[rem]}')\n`;
+                hexRemainders.unshift(hexChars[rem]);
+                temp = next;
+            }
+            hexSteps += `=> Đọc ngược từ dưới lên: ${hexRemainders.join('')} (Base 16)`;
+
+            document.getElementById('stepExplanationBox').textContent = binSteps + hexSteps;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate custom base select
+            const customSel = document.getElementById('customBaseSelect');
+            for (let i = 2; i <= 36; i++) {
+                const opt = new Option(`Base ${i}`, i);
+                if (i === 36) opt.selected = true;
+                customSel.add(opt);
+            }
+
+            const decEl = document.getElementById('baseDec');
+            const binEl = document.getElementById('baseBin');
+            const hexEl = document.getElementById('baseHex');
+            const octEl = document.getElementById('baseOct');
+            const customEl = document.getElementById('baseCustom');
+
+            decEl.addEventListener('input', () => {
+                if (isUpdating) return;
+                isUpdating = true;
+                const val = parseInt(decEl.value.trim(), 10);
+                if (!isNaN(val)) updateFromDec(val);
+                isUpdating = false;
+            });
+
+            binEl.addEventListener('input', () => {
+                if (isUpdating) return;
+                isUpdating = true;
+                const val = parseInt(binEl.value.replace(/[^01]/g, ''), 2);
+                if (!isNaN(val)) {
+                    decEl.value = val;
+                    updateFromDec(val);
+                }
+                isUpdating = false;
+            });
+
+            hexEl.addEventListener('input', () => {
+                if (isUpdating) return;
+                isUpdating = true;
+                const clean = hexEl.value.replace(/[^0-9a-fA-F]/g, '');
+                const val = parseInt(clean, 16);
+                if (!isNaN(val)) {
+                    decEl.value = val;
+                    updateFromDec(val);
+                }
+                isUpdating = false;
+            });
+
+            octEl.addEventListener('input', () => {
+                if (isUpdating) return;
+                isUpdating = true;
+                const clean = octEl.value.replace(/[^0-7]/g, '');
+                const val = parseInt(clean, 8);
+                if (!isNaN(val)) {
+                    decEl.value = val;
+                    updateFromDec(val);
+                }
+                isUpdating = false;
+            });
+
+            customEl.addEventListener('input', () => {
+                if (isUpdating) return;
+                isUpdating = true;
+                const base = parseInt(customSel.value, 10);
+                const val = parseInt(customEl.value.trim(), base);
+                if (!isNaN(val)) {
+                    decEl.value = val;
+                    updateFromDec(val);
+                }
+                isUpdating = false;
+            });
+
+            customSel.addEventListener('change', () => {
+                const decVal = parseInt(decEl.value, 10);
+                if (!isNaN(decVal)) updateFromDec(decVal);
+            });
+
+            updateFromDec(255);
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

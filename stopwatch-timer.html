@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đồng Hồ Bấm Giờ & Hẹn Giờ Đếm Ngược Online | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">VĂN BẢN & NĂNG SUẤT</a>
+            <span class="nav-pill-btn active">BẤM GIỜ & HẸN GIỜ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Đồng Hồ Bấm Giờ & Hẹn Giờ Đếm Ngược</h1>
+                    <p class="text-muted">Đo thời gian làm bài thi chính xác đến mili-giây, ghi lại vòng (Lap) và hẹn giờ đếm ngược có chuông báo thông minh cho sinh viên.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <!-- Tabs -->
+                    <div class="tool-tabs" style="justify-content: center; margin-bottom: 28px;">
+                        <button type="button" class="tool-tab-btn active" id="tabBtnStopwatch"><i class='bx bx-stopwatch'></i> Đồng hồ bấm giờ (Stopwatch)</button>
+                        <button type="button" class="tool-tab-btn" id="tabBtnTimer"><i class='bx bx-timer'></i> Hẹn giờ đếm ngược (Countdown)</button>
+                    </div>
+
+                    <!-- TAB 1: STOPWATCH -->
+                    <div id="paneStopwatch" class="tool-tab-content active">
+                        <div style="background: #0f172a; border-radius: 16px; padding: 40px 20px; text-align: center; color: #f8fafc; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                            <div id="stopwatchDisplay" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 4rem; font-weight: 800; color: #38bdf8; letter-spacing: 2px;">
+                                00:00:00<span style="font-size: 2.2rem; color: #94a3b8;">.00</span>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div style="display: flex; justify-content: center; gap: 14px; margin-top: 30px; flex-wrap: wrap;">
+                                <button type="button" id="btnSwStart" class="btn btn-primary" style="padding: 12px 32px; font-size: 1rem; font-weight: 700;">
+                                    <i class='bx bx-play'></i> Bắt đầu
+                                </button>
+                                <button type="button" id="btnSwLap" class="btn btn-outline" style="padding: 12px 24px; color: #ffffff; border-color: #475569; display: none;">
+                                    <i class='bx bx-flag'></i> Vòng (Lap)
+                                </button>
+                                <button type="button" id="btnSwReset" class="btn btn-outline" style="padding: 12px 24px; color: #cbd5e1; border-color: #475569;">
+                                    <i class='bx bx-reset'></i> Đặt lại
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Lap Times Table -->
+                        <div id="lapTableContainer" style="margin-top: 30px; display: none; text-align: left;">
+                            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-list-ul'></i> Lịch sử các vòng (Laps)
+                            </h3>
+                            <div style="max-height: 250px; overflow-y: auto;">
+                                <table class="calc-table" id="lapTable" style="font-family: monospace; font-size: 0.92rem;">
+                                    <thead>
+                                        <tr>
+                                            <th># Vòng</th>
+                                            <th>Thời gian vòng</th>
+                                            <th>Tổng tích lũy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: COUNTDOWN TIMER -->
+                    <div id="paneTimer" class="tool-tab-content">
+                        <!-- Presets -->
+                        <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <button type="button" class="btn-swap timer-preset-btn" data-sec="60" style="width: auto; height: auto; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem;">1 phút</button>
+                            <button type="button" class="btn-swap timer-preset-btn" data-sec="300" style="width: auto; height: auto; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem;">5 phút</button>
+                            <button type="button" class="btn-swap timer-preset-btn" data-sec="900" style="width: auto; height: auto; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem;">15 phút</button>
+                            <button type="button" class="btn-swap timer-preset-btn" data-sec="1500" style="width: auto; height: auto; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem; background: #e0f2fe; color: #0284c7; font-weight: 700;">25p (Pomodoro)</button>
+                            <button type="button" class="btn-swap timer-preset-btn" data-sec="2700" style="width: auto; height: auto; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem;">45 phút (Tiết học)</button>
+                            <button type="button" class="btn-swap timer-preset-btn" data-sec="3600" style="width: auto; height: auto; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem;">60 phút</button>
+                        </div>
+
+                        <!-- Timer Box -->
+                        <div style="background: #0f172a; border-radius: 16px; padding: 40px 20px; text-align: center; color: #f8fafc; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                            <!-- Timer display -->
+                            <div id="timerDisplay" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 4.5rem; font-weight: 800; color: #10b981; letter-spacing: 2px;">
+                                25:00
+                            </div>
+
+                            <!-- Progress Ring Line -->
+                            <div style="max-width: 400px; margin: 16px auto;">
+                                <div class="stacked-bar-container" style="height: 10px; background: #334155;">
+                                    <div id="timerProgressBar" class="stacked-bar-segment" style="width: 100%; background: #10b981;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Inputs to customize duration -->
+                            <div id="timerInputsRow" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; font-size: 0.88rem; color: #94a3b8;">
+                                <span>Tùy chỉnh:</span>
+                                <input type="number" id="inputTimerHours" min="0" max="23" value="0" style="width: 54px; text-align: center; padding: 4px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #ffffff;"> giờ
+                                <input type="number" id="inputTimerMins" min="0" max="59" value="25" style="width: 54px; text-align: center; padding: 4px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #ffffff;"> phút
+                                <input type="number" id="inputTimerSecs" min="0" max="59" value="0" style="width: 54px; text-align: center; padding: 4px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #ffffff;"> giây
+                            </div>
+
+                            <!-- Controls -->
+                            <div style="display: flex; justify-content: center; gap: 14px; margin-top: 24px;">
+                                <button type="button" id="btnTimerStart" class="btn btn-primary" style="padding: 12px 32px; font-size: 1rem; font-weight: 700; background: #10b981; border-color: #10b981;">
+                                    <i class='bx bx-play'></i> Bắt đầu
+                                </button>
+                                <button type="button" id="btnTimerReset" class="btn btn-outline" style="padding: 12px 24px; color: #cbd5e1; border-color: #475569;">
+                                    <i class='bx bx-reset'></i> Đặt lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Chiến Lược Quản Lý Thời Gian Trong Phòng Thi & Ôn Tập</h2>
+                        <p>Thời gian là yếu tố quyết định tới 50% thành bại trong các bài thi trắc nghiệm THPT Quốc gia, bài thi Đánh giá năng lực hay chứng chỉ tiếng Anh (IELTS, TOEIC). Rèn luyện phản xạ căn thời gian chính xác tại nhà là chìa khóa để đạt điểm tối đa.</p>
+                        
+                        <h3>1. Quy tắc chia thời gian thi trắc nghiệm</h3>
+                        <ul>
+                            <li><strong>Vòng 1 (Làm câu nhận biết & thông hiểu):</strong> Dành khoảng 30 - 45 giây cho mỗi câu hỏi lý thuyết dễ. Giải quyết dứt điểm 60-70% số lượng câu đầu tiên trong 1/3 thời lượng làm bài.</li>
+                            <li><strong>Vòng 2 (Làm câu vận dụng):</strong> Dành 1.5 - 2 phút cho mỗi câu bài tập trung bình. Đánh dấu câu khó để lại sau.</li>
+                            <li><strong>Vòng 3 (Xử lý câu vận dụng cao & rà soát):</strong> Dành 10 phút cuối giờ để kiểm tra lại toàn bộ phiếu trả lời trắc nghiệm, đảm bảo không tô lệch dòng, không bỏ sót bất kỳ câu nào.</li>
+                        </ul>
+
+                        <h3>2. Phương pháp Pomodoro (25 phút tập trung cao độ)</h3>
+                        <p>Kỹ thuật <strong>Pomodoro</strong> do Francesco Cirillo phát triển: Học tập tập trung cao độ trong đúng <strong>25 phút</strong> (không lướt mạng xã hội, không trả lời tin nhắn), sau đó nghỉ ngắn <strong>5 phút</strong>. Cứ sau 4 chu kỳ như vậy thì nghỉ dài 15 - 30 phút. Phương pháp này giúp não bộ sinh viên duy trì sự tỉnh táo và khả năng ghi nhớ kiến thức tốt hơn gấp nhiều lần so với việc ngồi lì hàng giờ liền.</p>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Text & Productivity Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Văn bản & Năng suất</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="word-counter.html">Đếm từ & Ký tự trực tuyến</a></li>
+                    <li><a href="password-generator.html">Tạo mật khẩu mạnh & An toàn</a></li>
+                    <li><a href="qr-generator.html">Tạo mã QR trực tuyến</a></li>
+                    <li><a href="convert-base.html">Chuyển đổi cơ số (Hệ đếm IT)</a></li>
+                    <li><a href="stopwatch-timer.html" class="active">Đồng hồ bấm giờ & Hẹn giờ</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Web Audio API Beep synthesizer
+        function playBeepSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                for (let i = 0; i < 3; i++) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + i * 0.25); // A5 note
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime + i * 0.25);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.25 + 0.18);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + i * 0.25);
+                    osc.stop(audioCtx.currentTime + i * 0.25 + 0.2);
+                }
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        /* ── STOPWATCH LOGIC ── */
+        let swRunning = false;
+        let swStartTime = 0;
+        let swElapsedTime = 0;
+        let swInterval = null;
+        let swLaps = [];
+
+        function formatStopwatch(ms) {
+            const totalSec = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSec / 3600);
+            const mins = Math.floor((totalSec % 3600) / 60);
+            const secs = totalSec % 60;
+            const centis = Math.floor((ms % 1000) / 10);
+
+            const hh = String(hours).padStart(2, '0');
+            const mm = String(mins).padStart(2, '0');
+            const ss = String(secs).padStart(2, '0');
+            const cc = String(centis).padStart(2, '0');
+
+            return `${hh}:${mm}:${ss}<span style="font-size: 2.2rem; color: #94a3b8;">.${cc}</span>`;
+        }
+
+        function updateStopwatch() {
+            const now = performance.now();
+            const current = swElapsedTime + (now - swStartTime);
+            document.getElementById('stopwatchDisplay').innerHTML = formatStopwatch(current);
+        }
+
+        function toggleStopwatch() {
+            const btn = document.getElementById('btnSwStart');
+            const lapBtn = document.getElementById('btnSwLap');
+
+            if (!swRunning) {
+                swRunning = true;
+                swStartTime = performance.now();
+                swInterval = setInterval(updateStopwatch, 25);
+                btn.innerHTML = "<i class='bx bx-pause'></i> Tạm dừng";
+                btn.style.background = '#f59e0b';
+                btn.style.borderColor = '#f59e0b';
+                lapBtn.style.display = 'inline-block';
+            } else {
+                swRunning = false;
+                clearInterval(swInterval);
+                swElapsedTime += performance.now() - swStartTime;
+                btn.innerHTML = "<i class='bx bx-play'></i> Tiếp tục";
+                btn.style.background = '#0284c7';
+                btn.style.borderColor = '#0284c7';
+            }
+        }
+
+        function resetStopwatch() {
+            swRunning = false;
+            clearInterval(swInterval);
+            swStartTime = 0;
+            swElapsedTime = 0;
+            swLaps = [];
+            document.getElementById('stopwatchDisplay').innerHTML = '00:00:00<span style="font-size: 2.2rem; color: #94a3b8;">.00</span>';
+            const btn = document.getElementById('btnSwStart');
+            btn.innerHTML = "<i class='bx bx-play'></i> Bắt đầu";
+            btn.style.background = '#0284c7';
+            btn.style.borderColor = '#0284c7';
+            document.getElementById('btnSwLap').style.display = 'none';
+            document.getElementById('lapTableContainer').style.display = 'none';
+            document.querySelector('#lapTable tbody').innerHTML = '';
+        }
+
+        function recordLap() {
+            if (!swRunning) return;
+            const now = performance.now();
+            const total = swElapsedTime + (now - swStartTime);
+            const prevLapTotal = swLaps.length > 0 ? swLaps[swLaps.length - 1].total : 0;
+            const lapTime = total - prevLapTotal;
+
+            swLaps.push({ num: swLaps.length + 1, lapTime, total });
+
+            const container = document.getElementById('lapTableContainer');
+            container.style.display = 'block';
+
+            const tbody = document.querySelector('#lapTable tbody');
+            tbody.innerHTML = '';
+
+            // Find min and max
+            const minTime = Math.min(...swLaps.map(l => l.lapTime));
+            const maxTime = Math.max(...swLaps.map(l => l.lapTime));
+
+            swLaps.slice().reverse().forEach(l => {
+                const tr = document.createElement('tr');
+                let badge = '';
+                if (swLaps.length >= 2) {
+                    if (l.lapTime === minTime) tr.style.color = '#10b981';
+                    if (l.lapTime === maxTime) tr.style.color = '#ef4444';
+                }
+                const lapFormatted = (l.lapTime / 1000).toFixed(2) + 's';
+                const totalFormatted = (l.total / 1000).toFixed(2) + 's';
+                tr.innerHTML = `
+                    <td><strong>Vòng ${l.num}</strong></td>
+                    <td style="font-weight: 700;">${lapFormatted}</td>
+                    <td>${totalFormatted}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* ── COUNTDOWN TIMER LOGIC ── */
+        let timerRunning = false;
+        let timerTotalSeconds = 1500; // 25 min default
+        let timerRemainingSeconds = 1500;
+        let timerInterval = null;
+
+        function formatTimerDisplay(secs) {
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            const s = secs % 60;
+
+            if (h > 0) {
+                return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            }
+            return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timerDisplay').textContent = formatTimerDisplay(timerRemainingSeconds);
+            const pct = timerTotalSeconds > 0 ? (timerRemainingSeconds / timerTotalSeconds) * 100 : 0;
+            document.getElementById('timerProgressBar').style.width = `${pct}%`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('btnTimerStart');
+
+            if (!timerRunning) {
+                if (timerRemainingSeconds <= 0) {
+                    resetTimer();
+                }
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    timerRemainingSeconds--;
+                    updateTimerUI();
+
+                    if (timerRemainingSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        playBeepSound();
+                        alert('⏰ Hết giờ làm bài / Pomodoro kết thúc!');
+                        btn.innerHTML = "<i class='bx bx-play'></i> Bắt đầu";
+                        btn.style.background = '#10b981';
+                        btn.style.borderColor = '#10b981';
+                    }
+                }, 1000);
+
+                btn.innerHTML = "<i class='bx bx-pause'></i> Tạm dừng";
+                btn.style.background = '#f59e0b';
+                btn.style.borderColor = '#f59e0b';
+            } else {
+                timerRunning = false;
+                clearInterval(timerInterval);
+                btn.innerHTML = "<i class='bx bx-play'></i> Tiếp tục";
+                btn.style.background = '#10b981';
+                btn.style.borderColor = '#10b981';
+            }
+        }
+
+        function resetTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            const h = parseInt(document.getElementById('inputTimerHours').value, 10) || 0;
+            const m = parseInt(document.getElementById('inputTimerMins').value, 10) || 0;
+            const s = parseInt(document.getElementById('inputTimerSecs').value, 10) || 0;
+            timerTotalSeconds = h * 3600 + m * 60 + s;
+            if (timerTotalSeconds <= 0) timerTotalSeconds = 1500;
+            timerRemainingSeconds = timerTotalSeconds;
+
+            const btn = document.getElementById('btnTimerStart');
+            btn.innerHTML = "<i class='bx bx-play'></i> Bắt đầu";
+            btn.style.background = '#10b981';
+            btn.style.borderColor = '#10b981';
+            updateTimerUI();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab switching
+            const swTab = document.getElementById('tabBtnStopwatch');
+            const tmTab = document.getElementById('tabBtnTimer');
+            const swPane = document.getElementById('paneStopwatch');
+            const tmPane = document.getElementById('paneTimer');
+
+            swTab.addEventListener('click', () => {
+                swTab.classList.add('active');
+                tmTab.classList.remove('active');
+                swPane.classList.add('active');
+                tmPane.classList.remove('active');
+            });
+
+            tmTab.addEventListener('click', () => {
+                tmTab.classList.add('active');
+                swTab.classList.remove('active');
+                tmPane.classList.add('active');
+                swPane.classList.remove('active');
+            });
+
+            // Stopwatch events
+            document.getElementById('btnSwStart').addEventListener('click', toggleStopwatch);
+            document.getElementById('btnSwLap').addEventListener('click', recordLap);
+            document.getElementById('btnSwReset').addEventListener('click', resetStopwatch);
+
+            // Timer events
+            document.getElementById('btnTimerStart').addEventListener('click', toggleTimer);
+            document.getElementById('btnTimerReset').addEventListener('click', resetTimer);
+
+            // Timer presets
+            document.querySelectorAll('.timer-preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const sec = parseInt(btn.getAttribute('data-sec'), 10);
+                    const h = Math.floor(sec / 3600);
+                    const m = Math.floor((sec % 3600) / 60);
+                    const s = sec % 60;
+                    document.getElementById('inputTimerHours').value = h;
+                    document.getElementById('inputTimerMins').value = m;
+                    document.getElementById('inputTimerSecs').value = s;
+                    resetTimer();
+                });
+            });
+
+            ['inputTimerHours', 'inputTimerMins', 'inputTimerSecs'].forEach(id => {
+                document.getElementById(id).addEventListener('change', resetTimer);
+            });
+
+            resetTimer();
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

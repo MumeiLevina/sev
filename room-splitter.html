@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chia Tiền Phòng Trọ & Hóa Đơn Điện Nước Sinh Viên | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">TÀI CHÍNH</a>
+            <span class="nav-pill-btn active">CHIA TIỀN TRỌ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Chia Tiền Phòng Trọ & Hóa Đơn Điện Nước</h1>
+                    <p class="text-muted">Tính toán tiền phòng, điện nước theo công tơ, wifi, rác và chia đều cho từng bạn. Tạo tin nhắn hóa đơn đẹp mắt copy gửi nhóm Zalo/Messenger.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px;">
+                        <!-- Left: Input Form -->
+                        <div>
+                            <!-- Roommates -->
+                            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                                        <i class='bx bx-group' style="color: #0284c7;"></i> Thành viên trong phòng (<span id="memberCountDisplay">3</span> người)
+                                    </h3>
+                                    <button type="button" id="btnAddMember" class="btn btn-outline" style="font-size: 0.78rem; padding: 4px 10px;">
+                                        <i class='bx bx-plus'></i> Thêm bạn
+                                    </button>
+                                </div>
+                                <div id="memberListContainer" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                    <!-- Populated via JS -->
+                                </div>
+                            </div>
+
+                            <!-- Rent & Utilities -->
+                            <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+                                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                                    <i class='bx bx-receipt' style="color: #0284c7;"></i> Khoản chi phí phòng trọ (VND)
+                                </h3>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label" style="font-size: 0.85rem;">Tiền phòng cố định tháng</label>
+                                    <input type="number" id="billRent" class="form-control" value="" placeholder="VD: 3000000" step="100000">
+                                </div>
+
+                                <!-- Electricity Section -->
+                                <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+                                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.9rem; color: #92400e; margin-bottom: 8px;">
+                                        <span><i class='bx bx-bolt-circle'></i> Tiền điện</span>
+                                        <span id="elecTotalDisplay">0 đ</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                        <div>
+                                            <label style="font-size: 0.75rem; color: #78350f;">Số cũ (kWh)</label>
+                                            <input type="number" id="elecOld" class="form-control" value="" placeholder="Số cũ" style="font-size: 0.85rem; padding: 6px;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.75rem; color: #78350f;">Số mới (kWh)</label>
+                                            <input type="number" id="elecNew" class="form-control" value="" placeholder="Số mới" style="font-size: 0.85rem; padding: 6px;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.75rem; color: #78350f;">Giá/kWh (đ)</label>
+                                            <input type="number" id="elecPrice" class="form-control" value="" placeholder="3500" step="100" style="font-size: 0.85rem; padding: 6px;">
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 0.78rem; color: #b45309; margin-top: 6px;" id="elecUsageText">
+                                        Tiêu thụ: 0 kWh × 0 đ = 0 đ
+                                    </div>
+                                </div>
+
+                                <!-- Water Section -->
+                                <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+                                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.9rem; color: #0369a1; margin-bottom: 8px;">
+                                        <span><i class='bx bx-droplet'></i> Tiền nước</span>
+                                        <span id="waterTotalDisplay">0 đ</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                        <div>
+                                            <label style="font-size: 0.75rem; color: #0369a1;">Cách tính</label>
+                                            <select id="waterCalcType" class="form-control" style="font-size: 0.85rem; padding: 6px;">
+                                                <option value="fixed_person">Cố định theo người</option>
+                                                <option value="meter">Theo đồng hồ (khối m³)</option>
+                                                <option value="lump_sum">Tổng tiền cả phòng</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.75rem; color: #0369a1;" id="waterInputLabel">Giá / Người (VND)</label>
+                                            <input type="number" id="waterInputValue" class="form-control" value="" placeholder="VD: 50000" step="5000" style="font-size: 0.85rem; padding: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Other Services -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Wifi / Internet (VND)</label>
+                                        <input type="number" id="billWifi" class="form-control" value="" placeholder="VD: 220000" step="10000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size: 0.8rem;">Rác / Dịch vụ chung (VND)</label>
+                                        <input type="number" id="billTrash" class="form-control" value="" placeholder="VD: 60000" step="5000">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Results & Bill Message -->
+                        <div>
+                            <div class="conversion-result-card" style="margin-top: 0; text-align: left;">
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Mỗi người cần đóng</div>
+                                <div id="resPerPerson" style="font-size: 2.6rem; font-weight: 800; color: #0284c7; margin: 4px 0;">
+                                    ---
+                                </div>
+                                <div style="font-size: 0.88rem; color: #64748b; margin-bottom: 16px;">
+                                    Tổng chi phí cả phòng: <strong id="resTotalBill" style="color: #111827;">---</strong>
+                                </div>
+
+                                <!-- Breakdown breakdown table -->
+                                <table class="calc-table" style="font-size: 0.85rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>Khoản mục</th>
+                                            <th>Cả phòng</th>
+                                            <th>Mỗi bạn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="billDetailRows">
+                                        <!-- JS populates -->
+                                    </tbody>
+                                </table>
+
+                                <!-- Prepared Chat Message for Zalo -->
+                                <div style="margin-top: 20px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                        <span style="font-size: 0.82rem; font-weight: 700; color: #475569;">Tin nhắn gửi Zalo / Messenger:</span>
+                                    </div>
+                                    <textarea id="zaloMessageText" class="form-control" rows="6" readonly style="font-family: monospace; font-size: 0.82rem; line-height: 1.45; background: #f8fafc;"></textarea>
+                                </div>
+
+                                <div style="display: flex; gap: 10px; margin-top: 14px;">
+                                    <button type="button" id="btnCopyZalo" class="btn btn-primary" style="font-size: 0.88rem; flex: 1; padding: 10px;">
+                                        <i class='bx bx-copy'></i> Sao chép tin nhắn Zalo
+                                    </button>
+                                    <button type="button" id="btnSaveRoom" class="btn btn-outline" style="font-size: 0.88rem; padding: 10px;">
+                                        <i class='bx bx-save'></i> Lưu phòng
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Kinh Nghiệm Quản Lý & Chia Tiền Trọ Văn Minh Cho Sinh Viên</h2>
+                        <p>Ở ghép phòng trọ là giải pháp tối ưu chi phí cho hàng triệu sinh viên đại học. Tuy nhiên, nếu các khoản chi phí điện, nước, internet không được thống kê rõ ràng, minh bạch từ đầu tháng thì rất dễ nảy sinh bất đồng giữa bạn bè cùng phòng.</p>
+                        
+                        <h3>1. Các quy tắc chia tiền phòng trọ phổ biến</h3>
+                        <ul>
+                            <li><strong>Chia đều theo đầu người:</strong> Áp dụng cho tiền phòng, tiền rác, wifi và quỹ gia vị chung. Đây là cách công bằng và dễ áp dụng nhất.</li>
+                            <li><strong>Cách tính tiền điện:</strong> Lấy chỉ số mới trừ chỉ số cũ ra số kWh (số điện) đã sử dụng trong tháng, sau đó nhân với đơn giá do chủ nhà quy định (thường từ 3.000đ đến 4.000đ/kWh đối với nhà trọ tư nhân).</li>
+                            <li><strong>Trường hợp về quê dài ngày:</strong> Nên thống nhất từ trước quy định nếu một thành viên về quê từ 1-2 tuần trở lên (như dịp Tết hoặc nghỉ hè): Tiền phòng và wifi vẫn chia đều vì giữ chỗ, còn tiền điện nước có thể được giảm trừ theo thỏa thuận nội bộ phòng.</li>
+                        </ul>
+
+                        <h3>2. Những lưu ý khi ký hợp đồng thuê trọ sinh viên</h3>
+                        <p>Trước khi chuyển vào, hãy kiểm tra và chụp ảnh lại chỉ số công tơ điện và đồng hồ nước cùng với chủ nhà. Hãy ghi rõ giá điện, giá nước và các khoản phụ phí (tiền vệ sinh, gửi xe, máy giặt chung) ngay trong hợp đồng để tránh tranh cãi sau này.</p>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Finance Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Tài chính sinh viên</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compound-interest.html">Tính lãi suất kép & Tiết kiệm</a></li>
+                    <li><a href="budget-planner.html">Quản lý chi tiêu sinh viên (50/30/20)</a></li>
+                    <li><a href="room-splitter.html" class="active">Chia tiền phòng trọ & Điện nước</a></li>
+                    <li><a href="currency-converter.html">Quy đổi ngoại tệ (VND ↔ USD, EUR)</a></li>
+                    <li><a href="tax-calculator.html">Tính thuế TNCN & Lương Gross - Net</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        function formatVND(num) {
+            return Math.round(num).toLocaleString('vi-VN') + ' đ';
+        }
+
+        let members = [];
+
+        function renderMembers() {
+            const container = document.getElementById('memberListContainer');
+            container.innerHTML = '';
+            if (members.length === 0) {
+                container.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">Chưa có thành viên nào. Hãy bấm "+ Thêm bạn cùng phòng" ở trên.</span>';
+            } else {
+                members.forEach((m, idx) => {
+                    const tag = document.createElement('div');
+                    tag.style.cssText = 'background: #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;';
+                    tag.innerHTML = `
+                        <span>${m}</span>
+                        <button type="button" style="background: none; border: none; cursor: pointer; color: #ef4444; font-size: 1rem; line-height: 1;" onclick="removeMember(${idx})">&times;</button>
+                    `;
+                    container.appendChild(tag);
+                });
+            }
+            document.getElementById('memberCountDisplay').textContent = members.length;
+        }
+
+        function removeMember(idx) {
+            members.splice(idx, 1);
+            renderMembers();
+            calculateRoom();
+        }
+
+        function calculateRoom() {
+            const numMembers = members.length;
+            const rent = parseFloat(document.getElementById('billRent').value) || 0;
+
+            // Electricity
+            const elecOld = parseFloat(document.getElementById('elecOld').value) || 0;
+            const elecNew = parseFloat(document.getElementById('elecNew').value) || 0;
+            const elecPrice = parseFloat(document.getElementById('elecPrice').value) || 0;
+            const elecKwh = Math.max(0, elecNew - elecOld);
+            const totalElec = elecKwh * elecPrice;
+
+            document.getElementById('elecTotalDisplay').textContent = formatVND(totalElec);
+            document.getElementById('elecUsageText').textContent = `Tiêu thụ: ${elecKwh} kWh × ${formatVND(elecPrice)} = ${formatVND(totalElec)}`;
+
+            // Water
+            const waterType = document.getElementById('waterCalcType').value;
+            const waterVal = parseFloat(document.getElementById('waterInputValue').value) || 0;
+            let totalWater = 0;
+            if (waterType === 'fixed_person') {
+                totalWater = waterVal * (numMembers || 1);
+            } else {
+                totalWater = waterVal;
+            }
+            document.getElementById('waterTotalDisplay').textContent = formatVND(totalWater);
+
+            // Others
+            const wifi = parseFloat(document.getElementById('billWifi').value) || 0;
+            const trash = parseFloat(document.getElementById('billTrash').value) || 0;
+
+            const grandTotal = rent + totalElec + totalWater + wifi + trash;
+
+            if (grandTotal === 0 || numMembers === 0) {
+                document.getElementById('resPerPerson').textContent = '---';
+                document.getElementById('resTotalBill').textContent = grandTotal > 0 ? formatVND(grandTotal) : '---';
+                const tbody = document.getElementById('billDetailRows');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 12px; color: var(--text-muted);">Vui lòng nhập chi phí và thêm thành viên</td></tr>';
+                document.getElementById('zaloMessageText').value = 'Nhập thông tin chi phí và thêm bạn cùng phòng để tạo tin nhắn Zalo tự động...';
+                return;
+            }
+
+            const perPerson = Math.round(grandTotal / numMembers);
+
+            document.getElementById('resPerPerson').textContent = formatVND(perPerson);
+            document.getElementById('resTotalBill').textContent = formatVND(grandTotal);
+
+            // Table
+            const tbody = document.getElementById('billDetailRows');
+            tbody.innerHTML = `
+                <tr><td>Tiền phòng</td><td>${formatVND(rent)}</td><td>${formatVND(rent / numMembers)}</td></tr>
+                <tr><td>Tiền điện (${elecKwh} số)</td><td>${formatVND(totalElec)}</td><td>${formatVND(totalElec / numMembers)}</td></tr>
+                <tr><td>Tiền nước</td><td>${formatVND(totalWater)}</td><td>${formatVND(totalWater / numMembers)}</td></tr>
+                <tr><td>Wifi Internet</td><td>${formatVND(wifi)}</td><td>${formatVND(wifi / numMembers)}</td></tr>
+                <tr><td>Rác & dịch vụ</td><td>${formatVND(trash)}</td><td>${formatVND(trash / numMembers)}</td></tr>
+            `;
+
+            // Zalo message formatting
+            const dateStr = new Date().toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
+            const msg = 
+`📢 THÔNG BÁO TIỀN PHÒNG (${dateStr})
+---------------------------------
+🏠 Tiền phòng: ${formatVND(rent)}
+⚡ Tiền điện (${elecKwh} kWh): ${formatVND(totalElec)}
+💧 Tiền nước: ${formatVND(totalWater)}
+📶 Mạng Wifi: ${formatVND(wifi)}
+🗑️ Rác/Dịch vụ: ${formatVND(trash)}
+---------------------------------
+💰 TỔNG HÓA ĐƠN: ${formatVND(grandTotal)}
+👥 SỐ NGƯỜI: ${numMembers} bạn (${members.join(', ')})
+👉 MỖI BẠN ĐÓNG: ${formatVND(perPerson)}
+
+Mọi người chuyển khoản sớm trước hạn nhé! Cảm ơn cả phòng ❤️`;
+
+            document.getElementById('zaloMessageText').value = msg;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore saved
+            const saved = localStorage.getItem('st_room_members');
+            if (saved) {
+                try { members = JSON.parse(saved); } catch (e) {}
+            }
+            renderMembers();
+            calculateRoom();
+
+            document.getElementById('btnAddMember').addEventListener('click', () => {
+                const name = prompt('Nhập tên bạn cùng phòng mới:');
+                if (name && name.trim()) {
+                    members.push(name.trim());
+                    renderMembers();
+                    calculateRoom();
+                }
+            });
+
+            document.getElementById('waterCalcType').addEventListener('change', function() {
+                const label = document.getElementById('waterInputLabel');
+                if (this.value === 'fixed_person') {
+                    label.textContent = 'Giá / Người (VND)';
+                    document.getElementById('waterInputValue').value = '50000';
+                } else if (this.value === 'meter') {
+                    label.textContent = 'Tổng tiền nước theo đồng hồ (VND)';
+                    document.getElementById('waterInputValue').value = '150000';
+                } else {
+                    label.textContent = 'Tổng tiền nước trọn gói (VND)';
+                    document.getElementById('waterInputValue').value = '150000';
+                }
+                calculateRoom();
+            });
+
+            ['billRent', 'elecOld', 'elecNew', 'elecPrice', 'waterInputValue', 'billWifi', 'billTrash'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateRoom);
+            });
+
+            document.getElementById('btnCopyZalo').addEventListener('click', function() {
+                const text = document.getElementById('zaloMessageText').value;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.innerHTML = "<i class='bx bx-check' style='color: #10b981;'></i> Đã sao chép tin nhắn Zalo!";
+                    setTimeout(() => {
+                        this.innerHTML = "<i class='bx bx-copy'></i> Sao chép tin nhắn Zalo";
+                    }, 2000);
+                });
+            });
+
+            document.getElementById('btnSaveRoom').addEventListener('click', function() {
+                localStorage.setItem('st_room_members', JSON.stringify(members));
+                this.innerHTML = "<i class='bx bx-check' style='color: #10b981;'></i> Đã lưu phòng!";
+                setTimeout(() => {
+                    this.innerHTML = "<i class='bx bx-save'></i> Lưu phòng";
+                }, 1800);
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

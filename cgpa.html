@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính GPA Tích luỹ | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">CÔNG CỤ</a>
+            <span class="nav-pill-btn active">TÍNH GPA TÍCH LUỸ</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Công Cụ Tính GPA / CPA Tích Luỹ</h1>
+                    <p class="text-muted">Tính điểm trung bình tích lũy hệ 4 và hệ 10 cho sinh viên đại học, cao đẳng theo từng tín chỉ môn học.</p>
+                </div>
+
+            <div class="tool-container wide glass-panel">
+                <!-- Summary Dashboard -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">GPA / CPA Tích luỹ (Hệ 4)</span>
+                        <div id="cpa4Display" style="font-size: 2.4rem; font-weight: 800; color: #16a34a; margin: 6px 0;">0.00</div>
+                        <span id="rankBadge" class="badge badge-success">--</span>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Điểm Tích luỹ (Hệ 10)</span>
+                        <div id="cpa10Display" style="font-size: 2.4rem; font-weight: 800; color: #004bb5; margin: 6px 0;">0.00</div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Thang điểm 10</span>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Tổng Số Tín Chỉ</span>
+                        <div id="totalCreditsDisplay" style="font-size: 2.4rem; font-weight: 800; color: #d97706; margin: 6px 0;">0</div>
+                        <span id="totalSubjectsDisplay" style="font-size: 0.8rem; color: var(--text-muted);">0 môn học</span>
+                    </div>
+                </div>
+
+                <!-- Table Header Actions -->
+                <div class="flex justify-between align-center" style="margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="font-size: 1.1rem; color: var(--text-main);"><i class='bx bx-table'></i> Danh Sách Môn Học</h3>
+                    <div class="flex gap-2">
+                        <button type="button" id="btnClearAll" class="btn" style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 8px 14px; font-size: 0.85rem; border-radius: 6px; font-weight: 600;">
+                            <i class='bx bx-trash'></i> Xóa tất cả
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Courses Table -->
+                <div class="data-table-container">
+                    <table class="data-table" id="coursesTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">#</th>
+                                <th>Tên Môn Học</th>
+                                <th style="width: 110px;">Số Tín Chỉ</th>
+                                <th style="width: 140px;">Điểm Chữ</th>
+                                <th style="width: 110px;">Điểm Hệ 4</th>
+                                <th style="width: 50px;">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="courseTableBody">
+                            <!-- Rows rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex justify-between align-center" style="margin-top: 16px;">
+                    <button type="button" id="btnAddCourse" class="btn btn-primary">
+                        <i class='bx bx-plus-circle' style="margin-right: 6px;"></i> Thêm Môn Học Mới
+                    </button>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">
+                        <i class='bx bx-save'></i> Tự động lưu dữ liệu trên trình duyệt
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Công cụ giáo dục -->
+        <aside class="tool-category-sidebar">
+            <h3 class="tool-sidebar-title">Công cụ giáo dục</h3>
+            <ul class="tool-sidebar-links">
+                <li><a href="sat.html">Công cụ tính điểm SAT</a></li>
+                <li><a href="ielts.html">Công cụ tính điểm thi IELTS</a></li>
+                <li><a href="transcript.html">Công cụ tính điểm xét học bạ THPT</a></li>
+                <li><a href="high-school.html">Công cụ tính điểm xét tốt nghiệp THPT 2026</a></li>
+                <li><a href="cgpa.html" class="active">Công cụ tính GPA Tích luỹ</a></li>
+                <li><a href="scale-convert.html">Quy Đổi Điểm Hệ 4 Sang Hệ 10</a></li>
+                <li><a href="b2-theory.html">Thi thử lý thuyết B2 Online - 600 Câu</a></li>
+                <li><a href="gpa-subject.html">Tính điểm tổng kết (GPA) môn học</a></li>
+                <li><a href="fraction.html">Máy tính phân số</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <footer class="minimal-footer">
+        <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+    </footer>
+</div>
+
+    <script src="js/cgpa.js"></script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

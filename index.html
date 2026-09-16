@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ - Kinetic Tech</title>
+    <meta name="description" content="Bộ 30 công cụ miễn phí dành cho sinh viên và học sinh: tính GPA, BMI, chuyển đổi đơn vị, nén file, thi thử B2 và nhiều hơn nữa.">
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Search Bar ── */
+        .hub-search-wrapper {
+            max-width: 600px;
+            margin: 0 auto 36px auto;
+        }
+        .hub-search-box {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 50px;
+            padding: 8px 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+        .hub-search-box:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+        }
+        .hub-search-icon {
+            font-size: 1.3rem;
+            color: #64748b;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .hub-search-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 0.95rem;
+            color: #111827;
+            background: transparent;
+        }
+        .hub-search-input::placeholder { color: #94a3b8; }
+        .hub-search-kbd {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* ── Filter Pills ── */
+        .hub-filter-pills {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+        .filter-pill {
+            background: #e6e5df;
+            border: none;
+            border-radius: 50px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .filter-pill:hover { background: #dad8cf; color: #111827; }
+        .filter-pill.active { background: #004bb5; color: #ffffff; }
+
+        /* ── Flat Section Layout ── */
+        .tool-section {
+            margin-bottom: 32px;
+        }
+        .tool-section-header {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 4px;
+        }
+        .tool-flat-list {
+            list-style: none;
+            padding: 0;
+        }
+        .tool-flat-list li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 4px;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 0.93rem;
+            line-height: 1.45;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.12s ease, color 0.12s ease;
+        }
+        .tool-flat-list li:last-child a {
+            border-bottom: none;
+        }
+        .tool-flat-list li a:hover {
+            background: #f8fafc;
+            color: #004bb5;
+        }
+        .tool-flat-list li a i {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            flex-shrink: 0;
+            width: 22px;
+            text-align: center;
+        }
+        .tool-flat-list li a:hover i {
+            color: #004bb5;
+        }
+
+        /* ── Search States ── */
+        .tool-link-hidden { display: none !important; }
+        .tool-section-hidden { display: none !important; }
+        .no-results-message {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn active">TRANG CHỦ</a>
+            <span class="nav-pill-btn active">CÔNG CỤ</span>
+        </div>
+
+        <!-- Hero -->
+        <header class="tools-hero-section">
+            <div class="doodle-icon">
+                <svg viewBox="0 0 160 160" width="135" height="135" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M52 24L58 18M55 22L61 26M49 19L55 25" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M40 36C42 29 48 25 55 26L122 37C129 38 134 45 133 52L124 110C123 117 116 122 109 121L46 111C39 110 34 104 35 97L40 36Z" fill="#2563eb"/>
+                    <path d="M56 90C48 62 64 45 78 50C92 55 68 88 85 88C99 88 92 56 104 56C116 56 109 84 118 80" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M34 118C30 126 27 134 29 140C32 146 41 145 40 134C39 123 32 124 31 130" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1 class="tools-hero-title">CÔNG CỤ</h1>
+            <div class="doodle-icon">
+                <svg viewBox="0 0 160 160" width="135" height="135" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M36 50C24 38 36 16 52 22C66 27 48 55 62 50C72 44 68 22 54 28" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M78 38C102 38 122 56 126 82C130 110 118 138 96 144C74 150 56 136 52 110C48 80 56 38 78 38Z" fill="#f95710"/>
+                    <path d="M82 66C86 61 92 61 96 66" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M104 70C108 65 114 65 118 70" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M100 78C101 80 103 80 104 78" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M58 98Q68 92 78 98T98 98T118 98" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M60 110Q70 104 80 110T100 110T120 110" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M64 122Q74 116 84 122T104 122T118 122" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="hub-search-wrapper">
+            <div class="hub-search-box">
+                <span class="hub-search-icon"><i class='bx bx-search'></i></span>
+                <input type="text" id="toolSearchInput" class="hub-search-input" placeholder="Tìm nhanh công cụ (ví dụ: GPA, BMI, nén file, B2, IELTS...)" autocomplete="off">
+                <span class="hub-search-kbd">Ctrl + K</span>
+            </div>
+            <div class="hub-filter-pills">
+                <button type="button" class="filter-pill active" data-cat="all">Tất cả</button>
+                <button type="button" class="filter-pill" data-cat="chuyen-doi">Chuyển đổi</button>
+                <button type="button" class="filter-pill" data-cat="hoc-tap">Học tập & Thi cử</button>
+                <button type="button" class="filter-pill" data-cat="tai-chinh">Tài chính</button>
+                <button type="button" class="filter-pill" data-cat="van-ban">Văn bản & Năng suất</button>
+                <button type="button" class="filter-pill" data-cat="suc-khoe">Sức khoẻ</button>
+                <button type="button" class="filter-pill" data-cat="xu-ly-tep">Xử lý tệp</button>
+            </div>
+        </div>
+
+        <div id="noResultsMessage" class="no-results-message">
+            <i class='bx bx-search-alt' style="font-size: 2.5rem; color: #94a3b8; display: block; margin-bottom: 8px;"></i>
+            Không tìm thấy công cụ nào phù hợp với từ khóa "<strong id="searchQueryText"></strong>".
+        </div>
+
+        <!-- Flat Tool Directory -->
+        <main id="toolDirectory">
+
+            <!-- Section 1: Chuyển đổi Đơn Vị -->
+            <div class="tool-section" data-category="chuyen-doi">
+                <div class="tool-section-header">Chuyển đổi Đơn Vị</div>
+                <ul class="tool-flat-list">
+                    <li><a href="convert-temperature.html"><i class='bx bx-sun'></i> Chuyển đổi Nhiệt độ (Độ C, Độ F, Kelvin, Rankine)</a></li>
+                    <li><a href="convert-speed.html"><i class='bx bx-tachometer'></i> Chuyển đổi Tốc độ & Vận tốc (km/h, m/s, mph, Knot)</a></li>
+                    <li><a href="convert-length.html"><i class='bx bx-ruler'></i> Chuyển đổi Chiều dài (Km, Dặm, Yard, Feet, Inch)</a></li>
+                    <li><a href="convert-weight.html"><i class='bx bx-dumbbell'></i> Chuyển đổi Khối lượng (Kg, Gam, Oz, Pound)</a></li>
+                    <li><a href="convert-area.html"><i class='bx bx-square'></i> Chuyển đổi Diện tích (m², km², ha, Acre)</a></li>
+                    <li><a href="convert-land.html"><i class='bx bx-landscape'></i> Chuyển đổi Diện tích Đất Việt Nam (Sào, Mẫu, Công)</a></li>
+                    <li><a href="convert-volume.html"><i class='bx bx-droplet'></i> Chuyển đổi Thể tích (Lít, ml, Gallon, Cup)</a></li>
+                    <li><a href="convert-time.html"><i class='bx bx-time-five'></i> Chuyển đổi Thời gian (Giây, Phút, Giờ, Tuần, Năm)</a></li>
+                    <li><a href="convert-data.html"><i class='bx bx-data'></i> Chuyển đổi Dung lượng (Byte, KB, MB, GB, TB)</a></li>
+                    <li><a href="convert-energy.html"><i class='bx bx-bolt-circle'></i> Chuyển đổi Năng lượng (Joule, Cal, kWh, BTU)</a></li>
+                    <li><a href="convert-pressure.html"><i class='bx bx-tachometer'></i> Chuyển đổi Áp suất (Pa, Bar, Atm, mmHg, PSI)</a></li>
+                    <li><a href="convert-frequency.html"><i class='bx bx-broadcast'></i> Chuyển đổi Tần số (Hz, kHz, MHz, GHz, RPM)</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 2: Học Tập & Thi Cử -->
+            <div class="tool-section" data-category="hoc-tap">
+                <div class="tool-section-header">Học Tập & Thi Cử</div>
+                <ul class="tool-flat-list">
+                    <li><a href="gpa.html"><i class='bx bx-calculator'></i> Tính điểm GPA ngược (Điểm thi tối thiểu để qua môn)</a></li>
+                    <li><a href="cgpa.html"><i class='bx bx-bar-chart-alt-2'></i> Tính GPA Tích lũy toàn khóa (CPA)</a></li>
+                    <li><a href="gpa-subject.html"><i class='bx bx-book-open'></i> Tính điểm tổng kết môn học</a></li>
+                    <li><a href="scale-convert.html"><i class='bx bx-transfer'></i> Quy đổi điểm Hệ 4 ↔ Hệ 10 ↔ Điểm chữ</a></li>
+                    <li><a href="high-school.html"><i class='bx bx-medal'></i> Tính điểm xét tốt nghiệp THPT 2026</a></li>
+                    <li><a href="transcript.html"><i class='bx bx-file'></i> Tính điểm xét học bạ THPT</a></li>
+                    <li><a href="ielts.html"><i class='bx bx-globe'></i> Tính điểm IELTS Overall</a></li>
+                    <li><a href="sat.html"><i class='bx bx-edit'></i> Tính điểm Digital SAT 1600</a></li>
+                    <li><a href="fraction.html"><i class='bx bx-math'></i> Máy tính phân số (Cộng, Trừ, Nhân, Chia chi tiết)</a></li>
+                    <li><a href="b2-theory.html"><i class='bx bx-car'></i> Thi thử lý thuyết lái xe B2 — 600 câu</a></li>
+                    <li><a href="planner.html"><i class='bx bx-calendar-check'></i> Pomodoro & Lịch ôn thi thông minh</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 3: Tài Chính -->
+            <div class="tool-section" data-category="tai-chinh">
+                <div class="tool-section-header">Tài Chính</div>
+                <ul class="tool-flat-list">
+                    <li><a href="compound-interest.html"><i class='bx bx-coin-stack'></i> Tính lãi suất kép & Tiết kiệm tích lũy theo năm</a></li>
+                    <li><a href="currency-converter.html"><i class='bx bx-dollar-circle'></i> Quy đổi ngoại tệ trực tuyến (VND ↔ USD, EUR, JPY, GBP)</a></li>
+                    <li><a href="tax-calculator.html"><i class='bx bx-receipt'></i> Tính thuế thu nhập cá nhân (TNCN) & Lương Gross sang Net</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 4: Văn Bản & Năng Suất -->
+            <div class="tool-section" data-category="van-ban">
+                <div class="tool-section-header">Văn Bản & Năng Suất</div>
+                <ul class="tool-flat-list">
+                    <li><a href="word-counter.html"><i class='bx bx-text'></i> Đếm từ, ký tự, câu & Thời gian đọc văn bản</a></li>
+                    <li><a href="password-generator.html"><i class='bx bx-shield-quarter'></i> Tạo mật khẩu mạnh, ngẫu nhiên & Đo độ bảo mật</a></li>
+                    <li><a href="qr-generator.html"><i class='bx bx-qr-scan'></i> Tạo mã QR trực tuyến (Link, WiFi phòng trọ, Văn bản)</a></li>
+                    <li><a href="convert-base.html"><i class='bx bx-code-alt'></i> Chuyển đổi hệ cơ số (Nhị phân, Thập phân, Bát phân, Hex)</a></li>
+                    <li><a href="stopwatch-timer.html"><i class='bx bx-stopwatch'></i> Đồng hồ bấm giờ (Stopwatch) & Hẹn giờ Pomodoro</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 5: Sức Khỏe & Dinh Dưỡng -->
+            <div class="tool-section" data-category="suc-khoe">
+                <div class="tool-section-header">Sức Khỏe & Dinh Dưỡng</div>
+                <ul class="tool-flat-list">
+                    <li><a href="bmi.html"><i class='bx bx-body'></i> Tính chỉ số BMI (Chuẩn WHO & Châu Á)</a></li>
+                    <li><a href="bmr.html"><i class='bx bx-flame'></i> Tính chỉ số BMR (Trao đổi chất cơ bản)</a></li>
+                    <li><a href="tdee.html"><i class='bx bx-run'></i> Tính chỉ số TDEE (Tổng tiêu hao năng lượng)</a></li>
+                    <li><a href="calorie.html"><i class='bx bx-dish'></i> Phân bổ Calo & Macros theo mục tiêu</a></li>
+                </ul>
+            </div>
+
+            <!-- Section 6: Xử Lý Tệp -->
+            <div class="tool-section" data-category="xu-ly-tep">
+                <div class="tool-section-header">Xử Lý Tệp & Tài Liệu</div>
+                <ul class="tool-flat-list">
+                    <li><a href="subtitle-extractor.html"><i class='bx bx-brain' style="color: #6366f1;"></i> Bóc Sub Video & Audio Tự Động (AI Whisper) <span style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; margin-left: 6px;">AI FREE 1H</span></a></li>
+                    <li><a href="compressor.html"><i class='bx bx-archive-in'></i> Nén file ảnh & tài liệu trực tuyến</a></li>
+                    <li><a href="file-converter.html"><i class='bx bx-file-find'></i> Chuyển đổi định dạng file (Ảnh, PDF, Office)</a></li>
+                    <li><a href="pdf-extractor.html"><i class='bx bx-text'></i> Trích xuất văn bản & tách trang PDF</a></li>
+                </ul>
+            </div>
+
+        </main>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <!-- Search & Filter -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('toolSearchInput');
+            const filterPills = document.querySelectorAll('.filter-pill');
+            const toolSections = document.querySelectorAll('.tool-section');
+            const noResults = document.getElementById('noResultsMessage');
+            const queryDisplay = document.getElementById('searchQueryText');
+
+            let currentCategory = 'all';
+
+            // Ctrl + K shortcut
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                    e.preventDefault();
+                    if (searchInput) { searchInput.focus(); searchInput.select(); }
+                }
+                if (e.key === 'Escape' && searchInput && document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    filterTools();
+                    searchInput.blur();
+                }
+            });
+
+            function filterTools() {
+                const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+                let totalVisible = 0;
+
+                toolSections.forEach(section => {
+                    const sectionCat = section.getAttribute('data-category');
+                    const isCatMatch = (currentCategory === 'all' || currentCategory === sectionCat);
+
+                    if (!isCatMatch) {
+                        section.classList.add('tool-section-hidden');
+                        return;
+                    }
+
+                    const items = section.querySelectorAll('li');
+                    let visibleInSection = 0;
+
+                    items.forEach(li => {
+                        const text = li.textContent.toLowerCase();
+                        if (!query || text.includes(query)) {
+                            li.classList.remove('tool-link-hidden');
+                            visibleInSection++;
+                            totalVisible++;
+                        } else {
+                            li.classList.add('tool-link-hidden');
+                        }
+                    });
+
+                    section.classList.toggle('tool-section-hidden', visibleInSection === 0);
+                });
+
+                if (totalVisible === 0 && query) {
+                    noResults.style.display = 'block';
+                    queryDisplay.textContent = query;
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+
+            if (searchInput) searchInput.addEventListener('input', filterTools);
+
+            filterPills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    filterPills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    currentCategory = pill.getAttribute('data-cat');
+                    filterTools();
+                });
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>

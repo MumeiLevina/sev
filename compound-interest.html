@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Lãi Suất Kép & Tiết Kiệm Tích Lũy Online | Kinetic Tech</title>
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Breadcrumbs -->
+        <div class="breadcrumb-container">
+            <a href="index.html" class="nav-pill-btn">TRANG CHỦ</a>
+            <a href="index.html" class="nav-pill-btn">TÀI CHÍNH</a>
+            <span class="nav-pill-btn active">LÃI SUẤT KÉP</span>
+        </div>
+
+        <div class="tool-page-wrapper">
+            <main class="tool-main-content">
+                <div class="tool-page-header">
+                    <h1>Tính Lãi Suất Kép & Kế Hoạch Tiết Kiệm</h1>
+                    <p class="text-muted">Mô phỏng sức mạnh lãi kép khi gửi tiết kiệm tích lũy hoặc đầu tư. Xem biểu đồ tăng trưởng và bảng phân bổ tiền gốc vs tiền lãi qua từng năm.</p>
+                </div>
+
+                <div class="tool-container wide glass-panel">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <!-- Input Form -->
+                        <div class="calc-input-section">
+                            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-coin-stack' style="color: #0284c7;"></i> Thông số gửi tiết kiệm
+                            </h3>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">Số tiền gốc ban đầu (VND)</label>
+                                <input type="number" id="initPrincipal" class="form-control" value="10000000" step="500000">
+                                <span style="font-size: 0.8rem; color: #64748b;" id="initPrincipalLabel">10,000,000 đ</span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">Tiền gửi thêm định kỳ hàng tháng (VND)</label>
+                                <input type="number" id="monthlyDeposit" class="form-control" value="1000000" step="100000">
+                                <span style="font-size: 0.8rem; color: #64748b;" id="monthlyDepositLabel">1,000,000 đ/tháng</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Lãi suất (% / năm)</label>
+                                    <input type="number" id="annualRate" class="form-control" value="7.5" step="0.1" min="0.1" max="100">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Thời gian gửi (Năm)</label>
+                                    <input type="number" id="durationYears" class="form-control" value="5" min="1" max="50">
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">Tần suất ghép lãi (Kỳ hạn)</label>
+                                <select id="compoundFreq" class="form-control">
+                                    <option value="12" selected>Hàng tháng (12 lần/năm)</option>
+                                    <option value="4">Hàng quý (4 lần/năm)</option>
+                                    <option value="1">Hàng năm (1 lần/năm)</option>
+                                </select>
+                            </div>
+
+                            <button type="button" id="btnCalcCompound" class="btn btn-primary" style="width: 100%; margin-top: 10px; font-weight: 700; padding: 12px;">
+                                <i class='bx bx-calculator'></i> Tính toán kết quả
+                            </button>
+                        </div>
+
+                        <!-- Result Summary Card -->
+                        <div class="conversion-result-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Tổng giá trị sau đáo hạn</div>
+                                <div id="resTotalVal" style="font-size: 2.6rem; font-weight: 800; color: #0284c7; margin: 6px 0; word-break: break-all;">
+                                    86,522,000 đ
+                                </div>
+
+                                <div class="metric-row" style="margin-top: 16px;">
+                                    <div class="metric-box">
+                                        <div class="metric-label">Tổng vốn gốc</div>
+                                        <div id="resTotalPrincipal" class="metric-val primary" style="font-size: 1.25rem;">70,000,000 đ</div>
+                                    </div>
+                                    <div class="metric-box">
+                                        <div class="metric-label">Tổng tiền lãi</div>
+                                        <div id="resTotalInterest" class="metric-val success" style="font-size: 1.25rem;">16,522,000 đ</div>
+                                    </div>
+                                </div>
+
+                                <!-- Visual Proportion Bar -->
+                                <div style="margin-top: 16px; text-align: left;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; color: #475569; margin-bottom: 4px;">
+                                        <span id="barPrincipalPct">Tiền gốc: 81%</span>
+                                        <span id="barInterestPct" style="color: #10b981;">Tiền lãi: 19%</span>
+                                    </div>
+                                    <div class="stacked-bar-container">
+                                        <div id="barPrincipalSeg" class="stacked-bar-segment" style="width: 81%; background: #0284c7;" title="Tiền gốc"></div>
+                                        <div id="barInterestSeg" class="stacked-bar-segment" style="width: 19%; background: #10b981;" title="Tiền lãi"></div>
+                                    </div>
+                                </div>
+
+                                <div class="callout callout-info" style="margin-top: 16px; font-size: 0.86rem; text-align: left;">
+                                    <i class='bx bx-trending-up'></i> Nhờ ghép lãi kép liên tục, bạn thu về thêm <strong id="interestDiff">~4,200,000 đ</strong> tiền lãi so với hình thức để tiền chết hoặc gửi lãi đơn thông thường!
+                                </div>
+                            </div>
+
+                            <button type="button" id="btnCopyCompound" class="btn btn-outline" style="font-size: 0.85rem; padding: 8px 16px; margin-top: 16px;">
+                                <i class='bx bx-copy'></i> Sao chép kết quả
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Year by Year Breakdown Table -->
+                    <div style="text-align: left; margin-top: 36px;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-table'></i> Bảng Chi Tiết Tăng Trưởng Tài Sản Theo Từng Năm
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table class="calc-table" id="yearlyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Năm</th>
+                                        <th>Tổng vốn nộp lũy kế</th>
+                                        <th>Tiền lãi kiếm được trong năm</th>
+                                        <th>Tổng tiền lãi tích lũy</th>
+                                        <th>Số dư cuối năm</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Content for SEO & AdSense -->
+                    <section class="tool-explanation-section">
+                        <h2><i class='bx bx-book-open'></i> Lãi Suất Kép Là Gì? Tại Sao Sinh Viên Nên Bắt Đầu Sớm?</h2>
+                        <p><strong>Lãi suất kép (Compound Interest)</strong> là hiện tượng phát sinh khi số tiền lãi của kỳ trước được gộp chung vào số vốn gốc để tiếp tục sinh lãi trong các kỳ tiếp theo. Nói cách khác, đây chính là cơ chế <em>"lãi mẹ đẻ lãi con"</em>.</p>
+                        
+                        <h3>1. Công thức tính lãi suất kép cơ bản</h3>
+                        <div class="formula-highlight">
+                            A = P × (1 + r/n)^(n×t)
+                        </div>
+                        <p>Trong đó:</p>
+                        <ul>
+                            <li><strong>A:</strong> Số tiền tổng cộng nhận được trong tương lai.</li>
+                            <li><strong>P:</strong> Số tiền gốc ban đầu (Principal).</li>
+                            <li><strong>r:</strong> Lãi suất hàng năm (dạng số thập phân, ví dụ 7% = 0.07).</li>
+                            <li><strong>n:</strong> Số lần ghép lãi trong một năm (12 nếu theo tháng, 4 nếu theo quý).</li>
+                            <li><strong>t:</strong> Số năm gửi tiền.</li>
+                        </ul>
+                        <p>Khi có thêm khoản gửi đều đặn định kỳ mỗi tháng (PMT), giá trị lũy kế sẽ tăng trưởng theo cấp số nhân vô cùng mạnh mẽ sau 5 đến 10 năm.</p>
+
+                        <h3>2. Quy tắc 72 — Ước tính thời gian nhân đôi tài sản</h3>
+                        <p>Một mẹo tài chính kinh điển là <strong>Quy tắc 72</strong>: Lấy 72 chia cho tỷ lệ lãi suất hàng năm sẽ ra số năm cần thiết để tài khoản của bạn tăng gấp đôi. Ví dụ: Nếu bạn đầu tư với lãi suất 8%/năm, số tiền của bạn sẽ nhân đôi sau khoảng <code>72 / 8 = 9 năm</code>.</p>
+
+                        <h3>3. Bài học tài chính cho sinh viên</h3>
+                        <ul>
+                            <li><strong>Bắt đầu sớm quan trọng hơn số tiền nhiều:</strong> Một sinh viên tiết kiệm 500.000đ mỗi tháng từ năm 18 tuổi sẽ có khối tài sản lớn hơn nhiều so với người bắt đầu gửi 2.000.000đ mỗi tháng nhưng ở tuổi 30, bởi vì sức mạnh lãi kép nằm ở biến số <em>Thời gian (t)</em>.</li>
+                            <li><strong>Kiên trì và không rút vốn giữa chừng:</strong> Những năm đầu tiên lãi suất trông có vẻ ít, nhưng từ năm thứ 5 đến thứ 10 trở đi, đường cong tăng trưởng sẽ dốc đứng.</li>
+                        </ul>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Right Column: Finance Sidebar Links -->
+            <aside class="tool-category-sidebar">
+                <h3 class="tool-sidebar-title">Tài chính</h3>
+                <ul class="tool-sidebar-links">
+                    <li><a href="compound-interest.html" class="active">Tính lãi suất kép & Tiết kiệm</a></li>
+                    <li><a href="currency-converter.html">Quy đổi ngoại tệ (VND ↔ USD, EUR)</a></li>
+                    <li><a href="tax-calculator.html">Tính thuế TNCN & Lương Gross - Net</a></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="minimal-footer">
+            <p>&copy; 2026 Kinetic Tech. Bộ công cụ hỗ trợ sinh viên & học sinh.</p>
+        </footer>
+    </div>
+
+    <script>
+        function formatVND(num) {
+            return Math.round(num).toLocaleString('vi-VN') + ' đ';
+        }
+
+        function calculateCompound() {
+            const P = parseFloat(document.getElementById('initPrincipal').value) || 0;
+            const PMT = parseFloat(document.getElementById('monthlyDeposit').value) || 0;
+            const annualRate = (parseFloat(document.getElementById('annualRate').value) || 0) / 100;
+            const years = parseInt(document.getElementById('durationYears').value, 10) || 1;
+            const compoundFreq = parseInt(document.getElementById('compoundFreq').value, 10) || 12;
+
+            document.getElementById('initPrincipalLabel').textContent = formatVND(P);
+            document.getElementById('monthlyDepositLabel').textContent = formatVND(PMT) + '/tháng';
+
+            // Month-by-month simulation
+            const totalMonths = years * 12;
+            const monthlyRate = annualRate / 12;
+            let currentBalance = P;
+            let totalDeposited = P;
+
+            let yearlyData = [];
+            let interestThisYear = 0;
+            let totalInterestCum = 0;
+
+            for (let m = 1; m <= totalMonths; m++) {
+                // Interest earned this month on current balance
+                const interestEarned = currentBalance * monthlyRate;
+                currentBalance += interestEarned;
+                interestThisYear += interestEarned;
+                totalInterestCum += interestEarned;
+
+                // Deposit added at end of month
+                currentBalance += PMT;
+                totalDeposited += PMT;
+
+                if (m % 12 === 0) {
+                    const yr = m / 12;
+                    yearlyData.push({
+                        year: yr,
+                        totalDeposited: totalDeposited,
+                        interestYear: interestThisYear,
+                        totalInterest: totalInterestCum,
+                        balance: currentBalance
+                    });
+                    interestThisYear = 0;
+                }
+            }
+
+            const finalBalance = currentBalance;
+            const finalDeposited = totalDeposited;
+            const finalInterest = totalInterestCum;
+
+            // UI update
+            document.getElementById('resTotalVal').textContent = formatVND(finalBalance);
+            document.getElementById('resTotalPrincipal').textContent = formatVND(finalDeposited);
+            document.getElementById('resTotalInterest').textContent = formatVND(finalInterest);
+
+            const principalPct = Math.round((finalDeposited / finalBalance) * 100) || 0;
+            const interestPct = 100 - principalPct;
+
+            document.getElementById('barPrincipalPct').textContent = `Tiền gốc: ${principalPct}%`;
+            document.getElementById('barInterestPct').textContent = `Tiền lãi: ${interestPct}%`;
+            document.getElementById('barPrincipalSeg').style.width = `${principalPct}%`;
+            document.getElementById('barInterestSeg').style.width = `${interestPct}%`;
+
+            // Comparison with simple interest without compounding
+            const simpleInterest = (P * annualRate * years) + (PMT * 12 * years * annualRate * (years / 2));
+            const diff = Math.max(0, finalInterest - simpleInterest);
+            document.getElementById('interestDiff').textContent = '+' + formatVND(diff);
+
+            // Populate table
+            const tbody = document.querySelector('#yearlyTable tbody');
+            tbody.innerHTML = '';
+            yearlyData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>Năm ${row.year}</strong></td>
+                    <td>${formatVND(row.totalDeposited)}</td>
+                    <td style="color: #10b981; font-weight: 600;">+${formatVND(row.interestYear)}</td>
+                    <td style="color: #0284c7;">${formatVND(row.totalInterest)}</td>
+                    <td><strong>${formatVND(row.balance)}</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateCompound();
+
+            ['initPrincipal', 'monthlyDeposit', 'annualRate', 'durationYears', 'compoundFreq'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateCompound);
+            });
+
+            document.getElementById('btnCalcCompound').addEventListener('click', calculateCompound);
+
+            document.getElementById('btnCopyCompound').addEventListener('click', function() {
+                const total = document.getElementById('resTotalVal').textContent;
+                const principal = document.getElementById('resTotalPrincipal').textContent;
+                const interest = document.getElementById('resTotalInterest').textContent;
+                const text = `Kết quả Lãi Suất Kép - Kinetic Tech:\n- Tổng số tiền nhận: ${total}\n- Vốn gốc tích lũy: ${principal}\n- Tiền lãi nhận được: ${interest}`;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.innerHTML = "<i class='bx bx-check' style='color: #10b981;'></i> Đã sao chép!";
+                    setTimeout(() => {
+                        this.innerHTML = "<i class='bx bx-copy'></i> Sao chép kết quả";
+                    }, 1800);
+                });
+            });
+        });
+    </script>
+    <script src="js/site-components.js"></script>
+</body>
+</html>
