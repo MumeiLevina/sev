@@ -1,13 +1,33 @@
 # Kinetic Tech — robots.txt
-# https://studenttools.vn/robots.txt
+# https://kinetictech.icu/robots.txt
 
 User-agent: *
 Allow: /
 Disallow: /pdf-converter-service/
+Disallow: /subtitle-service/
+Disallow: /deploy/
+Disallow: /api/
 
-# Google
+# Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
 
-# Sitemap
-Sitemap: https://studenttools.vn/sitemap.xml
+User-agent: Googlebot-Image
+Allow: /banner.png
+Allow: /favicon.svg
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Social Media Link Previews (Facebook, Zalo, Messenger, Twitter)
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# XML Sitemap
+Sitemap: https://kinetictech.icu/sitemap.xml
