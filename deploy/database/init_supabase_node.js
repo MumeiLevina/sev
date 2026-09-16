@@ -25,7 +25,10 @@ if (!connectionString && fs.existsSync(ENV_FILE)) {
 }
 
 if (!connectionString) {
-    connectionString = 'postgresql://postgres:HoshinoMeito1@db.aweptkkrfxdrhalsjwei.supabase.co:5432/postgres';
+    console.error('❌ [Error] DATABASE_URL is not configured.');
+    console.error('👉 Please set DATABASE_URL environment variable or define it in subtitle-service/.env');
+    console.error('   Example: DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres"');
+    process.exit(1);
 }
 
 console.log('════════════════════════════════════════════════════════');

@@ -1,39 +1,182 @@
-# ── Environment & Secrets ──
+# ==============================================================================
+# KINETIC TECH — BẢO MẬT & GIT IGNORE TOÀN DIỆN
+# Tự động loại bỏ và ngăn chặn rò rỉ API Keys, Mật khẩu, Secrets & Dữ liệu nhạy cảm
+# ==============================================================================
+
+# ── 1. CÁC TỆP MÔI TRƯỜNG & KHÓA BÍ MẬT (ENV & SECRETS) ──
+# Chặn toàn bộ file .env ở mọi thư mục gốc và thư mục con
 .env
-.env.production
+.env*
+*.env
+*.env.*
+**/.env
+**/.env.*
 .env.local
-*.env.production
-pdf-converter-service/.env
-subtitle-service/.env
+.env.development.local
+.env.test.local
+.env.production
+.env.production.local
+.env.staging
+
+# Ngoại lệ: Cho phép các file mẫu cấu hình (không chứa key thật) lên git
+!.env.example
+!*.env.example
+!**/.env.example
+!.env.production.template
+!deploy/.env.production.template
+
+# ── 2. KHÓA BẢO MẬT, CHỨNG CHỈ SỐ & THẺ XÁC THỰC ──
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*.pfx
+*.pkcs12
+*.keystore
+*.jks
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# File cấu hình chứa Token hoặc Service Account Credentials (Google, AWS, v.v.)
+*secrets*.json
+*credential*.json
+*service-account*.json
+client_secret*.json
+firebase-adminsdk*.json
+auth_token*
+*token*.json
+.npmrc
+.pypirc
+.netrc
+.aws/
+.gcp/
+.azure/
+
+# ── 3. CƠ SỞ DỮ LIỆU CỤC BỘ & THÔNG TIN TÀI KHOẢN ──
 .local_users_db.json
-scratch/
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.db-journal
+dump.rdb
+*.sql.gz
+*.dump
+*.backup
 
-# ── OS Generated ──
+# ── 4. DỮ LIỆU TẢI LÊN CỦA NGƯỜI DÙNG & TỆP TẠM (USER UPLOADS & RUNTIME) ──
+uploads/
+**/uploads/
+storage/
+**/storage/
+temp/
+**/temp/
+tmp/
+**/tmp/
+*.temp
+*.tmp
+minio_data/
+postgres_data/
+redis_data/
+
+# Các tệp video/audio người dùng tải lên để tách sub hoặc chuyển đổi (tránh đẩy lên git)
+*.mp4
+*.mp3
+*.wav
+*.m4a
+*.webm
+*.mov
+*.avi
+*.mkv
+*.flac
+*.aac
+*.ogg
+
+# ── 5. PYTHON & CELERY / REDIS WORKER ──
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+**/.venv/
+venv/
+**/venv/
+ENV/
+env.bak/
+venv.bak/
+celerybeat-schedule
+celerybeat.pid
+
+# ── 6. NODEJS & FRONTEND DEPENDENCIES ──
+node_modules/
+**/node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnp/
+.pnp.js
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+
+# ── 7. NHẬT KÝ HỆ THỐNG (LOGS) ──
+*.log
+logs/
+**/logs/
+*.pid
+*.seed
+*.pid.lock
+
+# ── 8. HỆ ĐIỀU HÀNH & FILE RÁC HỆ THỐNG (OS ARTIFACTS) ──
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-Desktop.ini
+[Dd]esktop.ini
+$RECYCLE.BIN/
 
-# ── IDE ──
+# ── 9. CẤU HÌNH TRÌNH SOẠN THẢO (IDE & EDITORS) ──
 .vscode/
+!.vscode/extensions.json
 .idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 *.swp
 *.swo
 *~
 
-# ── Node ──
-node_modules/
-package-lock.json
-
-# ── Python ──
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-venv/
-
-# ── Docker (local volumes, not needed in repo) ──
-docker-compose.override.yml
-
-# ── Logs ──
-*.log
-logs/
+# ── 10. AI AGENT SCRATCH & SYSTEM CACHE ──
+scratch/
+**/scratch/
+.gemini/
+.system_generated/

@@ -80,7 +80,7 @@ nano .env.production
 Điền các giá trị quan trọng:
 ```env
 # ── Khóa bí mật OpenAI ──
-SUB_OPENAI_API_KEY=sk-proj-cZdeJx6VY9woc0jx... (Khóa OpenAI của bạn)
+SUB_OPENAI_API_KEY=sk-proj-your-actual-openai-api-key-here
 
 # ── Khóa bảo mật JWT (đăng nhập) ──
 SUB_JWT_SECRET_KEY=mot_chuoi_ngau_nhien_dai_it_nhat_32_ky_tu_bao_mat_2026
