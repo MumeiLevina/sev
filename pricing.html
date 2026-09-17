@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bảng Giá & Nâng Cấp Gói | Kinetic Tech</title>
-    <meta name="description" content="Nâng cấp gói Pro hoặc mua thêm giờ bóc phụ đề AI của Kinetic Tech. Thanh toán nhanh qua PayOS, VNPay, MoMo. Giá chỉ từ 9,000đ." />
+    <meta name="description" content="Nâng cấp gói Pro hoặc mua thêm giờ bóc phụ đề AI của Kinetic Tech. Thanh toán tự động qua VietQR (PayOS). Giá chỉ từ 9,000đ." />
     <link rel="canonical" href="https://kinetictech.icu/pricing.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Kinetic Tech" />
     <meta property="og:url" content="https://kinetictech.icu/pricing.html" />
     <meta property="og:title" content="Bảng Giá & Nâng Cấp Gói | Kinetic Tech" />
-    <meta property="og:description" content="Mua thêm giờ bóc sub AI, nâng cấp Pro chỉ từ 9,000đ. Thanh toán qua PayOS, VNPay, MoMo." />
+    <meta property="og:description" content="Mua thêm giờ bóc sub AI, nâng cấp Pro chỉ từ 9,000đ. Thanh toán tự động qua VietQR (PayOS)." />
     <meta property="og:image" content="https://kinetictech.icu/banner.png" />
     <script>
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -859,7 +859,7 @@
         </div>
         <div class="faq-item" onclick="toggleFaq(this)">
             <button class="faq-q">Thanh toán qua những cổng nào? <i class='bx bx-plus'></i></button>
-            <div class="faq-a">Kinetic Tech hỗ trợ <strong>PayOS (VietQR, thẻ ATM nội địa), VNPay, MoMo</strong> và <strong>Stripe</strong> (thẻ Visa/Mastercard quốc tế). Thanh toán an toàn, mã hóa 256-bit SSL.</div>
+            <div class="faq-a">Kinetic Tech hiện hỗ trợ thanh toán tự động qua <strong>PayOS (Mã VietQR quét bằng mọi app ngân hàng & ví MoMo)</strong>. Các cổng thanh toán VNPay và Stripe quốc tế sẽ được mở thêm trong thời gian tới. Thanh toán an toàn, mã hóa 256-bit SSL.</div>
         </div>
         <div class="faq-item" onclick="toggleFaq(this)">
             <button class="faq-q">Sau khi thanh toán, quota có được cộng ngay không? <i class='bx bx-plus'></i></button>
@@ -911,14 +911,15 @@
                 </div>
 
                 <p class="payment-methods-label">Chọn phương thức thanh toán</p>
-                <div class="payment-methods-grid">
-                    <button class="payment-method-btn selected" id="pm-payos" onclick="selectPaymentMethod('payos', this)">
+                <div class="payment-methods-grid" style="grid-template-columns: 1fr;">
+                    <button class="payment-method-btn selected" id="pm-payos" onclick="selectPaymentMethod('payos', this)" style="width: 100%;">
                         <div class="pm-icon pm-payos">PAY<br>OS</div>
                         <div>
-                            <div class="pm-name">PayOS</div>
-                            <div class="pm-sub">VietQR · ATM · Thẻ Quốc Tế</div>
+                            <div class="pm-name" style="font-weight: 700;">PayOS — Chuyển khoản VietQR</div>
+                            <div class="pm-sub">Quét mã QR tự động bằng mọi ứng dụng ngân hàng hoặc MoMo</div>
                         </div>
                     </button>
+                    <!-- ── CÁC CỔNG THANH TOÁN TẠM ẨN (Bỏ comment để bật lại khi tích hợp xong) ──
                     <button class="payment-method-btn" id="pm-vnpay" onclick="selectPaymentMethod('vnpay', this)">
                         <div class="pm-icon pm-vnpay">VN<br>PAY</div>
                         <div>
@@ -940,6 +941,7 @@
                             <div class="pm-sub">Visa · Mastercard quốc tế</div>
                         </div>
                     </button>
+                    ── HẾT PHẦN TẠM ẨN ── -->
                 </div>
 
                 <button class="pay-btn" id="pay-submit-btn" onclick="submitPayment()">
