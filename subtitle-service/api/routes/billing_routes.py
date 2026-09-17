@@ -71,7 +71,7 @@ def get_plans():
                     "Xử lý song song đa luồng tối đa tốc độ",
                     "Ưu tiên hàng đợi cao nhất (VIP Priority)",
                     "Dung lượng tệp lên tới 500MB",
-                    "Hỗ trợ bóc sub đa ngôn ngữ (100+ thứ tiếng)",
+                    "Tự động nhận diện đa ngôn ngữ thông minh",
                     "Hỗ trợ kỹ thuật 24/7 riêng biệt",
                 ],
                 recommended=False,

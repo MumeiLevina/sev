@@ -122,6 +122,7 @@ function hashPassword(password) {
 // ── In-Memory Job & User Store with JSON Persistence ──
 const jobs = new Map();
 const passwordResetTokens = new Map(); // email.toLowerCase() -> { code: '123456', expiresAt: number }
+const pendingPayments = new Map(); // paymentId -> payment object
 
 function loadUsersDb() {
     const map = new Map();
@@ -245,6 +246,39 @@ function getAuthUser(req) {
     if (!payload || !payload.email) return null;
     const account = localUsers.get(payload.email.toLowerCase());
     return account ? account.user : null;
+}
+
+// ── Payment Fulfillment & Account Upgrade ──
+function activatePayment(paymentId, payment) {
+    if (!payment) return;
+    payment.status = 'completed';
+    payment.completed_at = new Date().toISOString();
+
+    const email = payment.user_email ? payment.user_email.toLowerCase() : null;
+    if (email && localUsers.has(email)) {
+        const account = localUsers.get(email);
+        if (account && account.user) {
+            const u = account.user;
+            const now = new Date();
+            const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+            if (payment.sku === 'pro_monthly') {
+                u.plan = 'pro';
+                u.quota_limit_seconds = 36000; // 10 hours
+                u.plan_expires_at = expiresAt;
+            } else if (payment.sku === 'premium_monthly') {
+                u.plan = 'premium';
+                u.quota_limit_seconds = 360000; // 100 hours or unlimited
+                u.plan_expires_at = expiresAt;
+            } else if (payment.quota_seconds > 0) {
+                // Top-up packages (topup_1h, topup_5h, topup_20h, etc.)
+                u.quota_limit_seconds = (u.quota_limit_seconds || 3600) + payment.quota_seconds;
+            }
+
+            saveUsersDb(email);
+            console.log(`[Payment Activated] Account ${email} upgraded successfully. Plan: ${u.plan}, Limit: ${u.quota_limit_seconds}s`);
+        }
+    }
 }
 
 // ── Quota Store (simulates PostgreSQL usage_logs fallback) ──
@@ -1046,8 +1080,13 @@ const server = http.createServer((req, res) => {
 
                 if (PAYOS_CLIENT_ID && PAYOS_API_KEY && PAYOS_CHECKSUM_KEY && payment_method === 'payos') {
                     try {
+                        const desc = (description || sku || 'KineticTech').substring(0, 25);
+                        const cancelUrl = `${BASE_URL}/pricing.html?payment=cancelled`;
+                        const returnUrl = `${BASE_URL}/pricing.html?payment=success&pid=${paymentId}`;
+
                         // Generate PayOS checksum (HMAC-SHA256)
-                        const checksumData = `amount=${amount}&cancelUrl=${BASE_URL}/pricing.html?payment=cancelled&description=${description}&orderCode=${orderCode}&returnUrl=${BASE_URL}/pricing.html?payment=success`;
+                        // PayOS expects sorted keys: amount, cancelUrl, description, orderCode, returnUrl
+                        const checksumData = `amount=${amount}&cancelUrl=${cancelUrl}&description=${desc}&orderCode=${orderCode}&returnUrl=${returnUrl}`;
                         const checksum = crypto
                             .createHmac('sha256', PAYOS_CHECKSUM_KEY)
                             .update(checksumData)
@@ -1063,9 +1102,9 @@ const server = http.createServer((req, res) => {
                             body: JSON.stringify({
                                 orderCode,
                                 amount,
-                                description: (description || sku).substring(0, 25),
-                                cancelUrl: `${BASE_URL}/pricing.html?payment=cancelled`,
-                                returnUrl: `${BASE_URL}/pricing.html?payment=success&pid=${paymentId}`,
+                                description: desc,
+                                cancelUrl,
+                                returnUrl,
                                 signature: checksum,
                                 buyerName: authUser.display_name || authUser.email.split('@')[0],
                                 buyerEmail: authUser.email
