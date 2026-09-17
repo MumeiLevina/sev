@@ -11,11 +11,11 @@
     // Auto-detect environment:
     // - Local dev server (port 3000): Use relative '/api/v1'
     // - Local Docker Nginx (port 8090): Use 'http://localhost:8090/api/v1'
-    // - Production domain: Use 'https://sub-api.studenttools.vn/api/v1'
+    const currentDomain = location.hostname.replace(/^www\./, '');
     const API_BASE = window.SUBTITLE_API_URL || (
         location.hostname === 'localhost' || location.hostname === '127.0.0.1'
             ? (location.port === '3000' ? '/api/v1' : 'http://localhost:8090/api/v1')
-            : 'https://sub-api.studenttools.vn/api/v1'
+            : `https://sub-api.${currentDomain}/api/v1`
     );
 
     // ── Local Storage Keys ──

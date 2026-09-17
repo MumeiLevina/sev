@@ -123,6 +123,7 @@ function hashPassword(password) {
 const jobs = new Map();
 const passwordResetTokens = new Map(); // email.toLowerCase() -> { code: '123456', expiresAt: number }
 const pendingPayments = new Map(); // paymentId -> payment object
+const conversionJobs = new Map(); // jobId -> conversion job object
 
 function loadUsersDb() {
     const map = new Map();
@@ -711,6 +712,133 @@ const server = http.createServer((req, res) => {
             'Content-Length': buffer.length
         });
         return res.end(buffer);
+    }
+
+    // ═══════════════════════════════════════════════════
+    // PDF CONVERSION API: POST /api/v1/conversions
+    // ═══════════════════════════════════════════════════
+    if (pathname === '/api/v1/conversions' && req.method === 'POST') {
+        const contentType = req.headers['content-type'] || '';
+        const boundaryMatch = /boundary=([^\s;]+)/i.exec(contentType);
+
+        if (!boundaryMatch) {
+            return sendJson(res, 400, { detail: 'Request must be multipart/form-data' });
+        }
+
+        const boundary = boundaryMatch[1];
+        const chunks = [];
+
+        req.on('data', chunk => chunks.push(chunk));
+        req.on('end', () => {
+            try {
+                const bodyBuf = Buffer.concat(chunks);
+                const parts = parseMultipart(bodyBuf, boundary);
+
+                const filePart = parts.find(p => p.filename && p.data && p.data.length > 0);
+                const formatPart = parts.find(p => p.name === 'target_format');
+
+                if (!filePart) {
+                    return sendJson(res, 400, { detail: 'Không tìm thấy tệp được tải lên.' });
+                }
+
+                const targetFormat = formatPart ? formatPart.data.toString().trim().toLowerCase() : 'docx';
+                const jobId = crypto.randomUUID();
+                const origName = filePart.filename || 'document.pdf';
+                const baseName = origName.substring(0, origName.lastIndexOf('.')) || origName;
+                const resultFilename = `${baseName}.${targetFormat}`;
+
+                const job = {
+                    id: jobId,
+                    status: 'queued',
+                    progress: 15,
+                    current_step: 'queued_in_broker',
+                    original_filename: origName,
+                    target_format: targetFormat,
+                    result_filename: resultFilename,
+                    file_data: filePart.data,
+                    created_at: Date.now(),
+                    duration_ms: 0
+                };
+                conversionJobs.set(jobId, job);
+
+                // Simulate realistic conversion progression for dev
+                setTimeout(() => {
+                    job.status = 'processing';
+                    job.progress = 45;
+                    job.current_step = 'converting';
+                }, 400);
+
+                setTimeout(() => {
+                    job.progress = 85;
+                    job.current_step = 'storing_result';
+                }, 900);
+
+                setTimeout(() => {
+                    job.status = 'completed';
+                    job.progress = 100;
+                    job.current_step = 'completed';
+                    job.duration_ms = 1400;
+                    job.result = {
+                        filename: resultFilename,
+                        file_size_bytes: filePart.data.length
+                    };
+                }, 1400);
+
+                return sendJson(res, 202, {
+                    success: true,
+                    job_id: jobId,
+                    status: 'queued',
+                    source_format: origName.split('.').pop() || 'pdf',
+                    target_format: targetFormat,
+                    original_filename: origName,
+                    created_at: new Date().toISOString()
+                });
+            } catch (e) {
+                return sendJson(res, 400, { detail: 'Dữ liệu không hợp lệ.' });
+            }
+        });
+        return;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // PDF CONVERSION API: GET /api/v1/conversions/:id/download
+    // ═══════════════════════════════════════════════════
+    const convDownloadMatch = pathname.match(/^\/api\/v1\/conversions\/([^\/]+)\/download$/);
+    if (convDownloadMatch && req.method === 'GET') {
+        const jobId = convDownloadMatch[1];
+        const job = conversionJobs.get(jobId);
+        if (!job || !job.file_data) {
+            return sendJson(res, 404, { detail: 'Không tìm thấy tệp kết quả.' });
+        }
+
+        res.writeHead(200, {
+            'Content-Type': 'application/octet-stream',
+            'Content-Disposition': `attachment; filename="${encodeURIComponent(job.result_filename)}"`,
+            'Content-Length': job.file_data.length,
+            'Access-Control-Allow-Origin': '*'
+        });
+        return res.end(job.file_data);
+    }
+
+    // ═══════════════════════════════════════════════════
+    // PDF CONVERSION API: GET /api/v1/conversions/:id
+    // ═══════════════════════════════════════════════════
+    const convStatusMatch = pathname.match(/^\/api\/v1\/conversions\/([^\/]+)$/);
+    if (convStatusMatch && req.method === 'GET') {
+        const jobId = convStatusMatch[1];
+        const job = conversionJobs.get(jobId);
+        if (!job) {
+            return sendJson(res, 404, { detail: 'Không tìm thấy tác vụ.' });
+        }
+        return sendJson(res, 200, {
+            success: true,
+            job_id: job.id,
+            status: job.status,
+            progress: job.progress,
+            current_step: job.current_step,
+            duration_ms: job.duration_ms || (Date.now() - job.created_at),
+            result: job.status === 'completed' ? job.result : null
+        });
     }
 
     // ═══════════════════════════════════════════════════
