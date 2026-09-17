@@ -43,12 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // BACKEND API CLIENT & ASYNC JOB CONTROLLER
     // ==========================================
-    const currentDomain = location.hostname.replace(/^www\./, '');
-    const API_BASE = window.PDF_API_URL || (
-        location.hostname === 'localhost' || location.hostname === '127.0.0.1'
-            ? (location.port === '3000' ? '/api/v1' : 'http://localhost:8080/api/v1')
-            : `https://pdf-api.${currentDomain}/api/v1`
-    );
+    // Relative path /api/v1 routes directly to dev-server.js on both Render (kinetictech.icu) and Localhost
+    const API_BASE = window.PDF_API_URL || '/api/v1';
     let isBackendOnline = false;
 
     async function checkBackendHealth() {
