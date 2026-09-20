@@ -763,15 +763,15 @@
                 <div class="card-badge">⭐ Phổ biến nhất</div>
                 <div class="plan-name" style="color:#7c3aed">Pro</div>
                 <div class="plan-price">
-                    <span class="amount">49<small style="font-size:1.5rem">K</small></span>
+                    <span class="amount">149<small style="font-size:1.5rem">K</small></span>
                     <span class="period">/tháng</span>
                 </div>
                 <p class="plan-quota"><strong>10 giờ (600 phút)</strong> bóc sub tốc độ cao</p>
-                <button class="plan-cta pro-cta" id="btn-buy-pro" onclick="openPaymentModal('pro_monthly', 'Gói Pro (1 tháng)', 49000, 36000)">
+                <button class="plan-cta pro-cta" id="btn-buy-pro" onclick="openPaymentModal('pro_monthly', 'Gói Pro (1 tháng)', 149000, 36000)">
                     🚀 Nâng cấp lên Pro
                 </button>
                 <ul class="plan-features">
-                    <li><i class='bx bx-check-circle'></i> <strong>600 phút</strong> bóc sub mỗi tháng</li>
+                    <li><i class='bx bx-check-circle'></i> <strong>10 giờ (600 phút)</strong> bóc sub mỗi tháng</li>
                     <li><i class='bx bx-check-circle'></i> Hàng đợi ưu tiên cấp 1</li>
                     <li><i class='bx bx-check-circle'></i> Video lên tới 200MB</li>
                     <li><i class='bx bx-check-circle'></i> Tự động ngắt câu thông minh</li>
@@ -785,18 +785,18 @@
             <div class="pricing-card">
                 <div class="plan-name" style="color:#db2777">Premium VIP</div>
                 <div class="plan-price">
-                    <span class="amount">99<small style="font-size:1.5rem">K</small></span>
+                    <span class="amount">449<small style="font-size:1.5rem">K</small></span>
                     <span class="period">/tháng</span>
                 </div>
-                <p class="plan-quota"><strong>Không giới hạn</strong> thời lượng sử dụng</p>
-                <button class="plan-cta premium-cta" onclick="openPaymentModal('premium_monthly', 'Gói Premium VIP (1 tháng)', 99000, 0)">
+                <p class="plan-quota"><strong>35 giờ (2.100 phút)</strong> thời lượng sử dụng</p>
+                <button class="plan-cta premium-cta" onclick="openPaymentModal('premium_monthly', 'Gói Premium VIP (1 tháng)', 449000, 126000)">
                     💎 Đăng ký Premium
                 </button>
                 <ul class="plan-features">
-                    <li><i class='bx bx-check-circle'></i> <strong>Không giới hạn</strong> thời lượng</li>
-                    <li><i class='bx bx-check-circle'></i> Xử lý song song đa luồng</li>
-                    <li><i class='bx bx-check-circle'></i> Hàng đợi VIP Priority</li>
-                    <li><i class='bx bx-check-circle'></i> Video lên tới 500MB</li>
+                    <li><i class='bx bx-check-circle'></i> <strong>Ưu tiên xử lý cao nhất (VIP Priority — Luôn chạy trước)</strong></li>
+                    <li><i class='bx bx-check-circle'></i> <strong>35 giờ (2.100 phút)</strong> bóc sub mỗi tháng</li>
+                    <li><i class='bx bx-check-circle'></i> Xử lý song song đa luồng tối đa</li>
+                    <li><i class='bx bx-check-circle'></i> Video dung lượng lên tới 500MB</li>
                     <li><i class='bx bx-check-circle'></i> Tự động nhận diện đa ngôn ngữ</li>
                     <li><i class='bx bx-check-circle'></i> API access riêng biệt</li>
                     <li><i class='bx bx-check-circle'></i> Hỗ trợ kỹ thuật 24/7</li>
@@ -906,7 +906,7 @@
                     </div>
                     <div class="order-row order-total">
                         <span class="label" style="font-weight:700;color:#111">Tổng thanh toán</span>
-                        <span class="value" id="order-total-price">49,000đ</span>
+                        <span class="value" id="order-total-price">149,000đ</span>
                     </div>
                 </div>
 
@@ -946,7 +946,7 @@
 
                 <button class="pay-btn" id="pay-submit-btn" onclick="submitPayment()">
                     <i class='bx bx-lock-alt'></i>
-                    <span id="pay-btn-text">Thanh toán an toàn 49,000đ</span>
+                    <span id="pay-btn-text">Thanh toán an toàn 149,000đ</span>
                 </button>
                 <p class="pay-note">🔒 Mã hóa SSL 256-bit · Không lưu thông tin thẻ · Hoàn tiền trong 24h</p>
             </div>
@@ -972,11 +972,6 @@
                     <div class="progress-bar-fill" style="width:30%"></div>
                 </div>
                 <p style="font-size:0.82rem;color:#64748b">Hệ thống tự động xác nhận sau khi bạn thanh toán thành công</p>
-                <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #cbd5e1">
-                    <button type="button" class="btn btn-outline" id="btn-demo-confirm" onclick="confirmDemoPayment()" style="font-size:0.82rem;padding:7px 14px;color:#059669;border:1.5px solid #86efac;background:#f0fdf4;border-radius:8px;font-weight:700;cursor:pointer">
-                        <i class='bx bx-check-shield'></i> Xác nhận thanh toán thử nghiệm (Demo)
-                    </button>
-                </div>
                 <button onclick="closePaymentModal()" style="margin-top:14px;background:none;border:none;color:#94a3b8;font-size:0.83rem;cursor:pointer">Hủy giao dịch</button>
             </div>
 
@@ -1187,35 +1182,6 @@
             }
         }
 
-        async function confirmDemoPayment() {
-            if (!currentPaymentId) return;
-            const token = getAuthToken();
-            try {
-                const res = await fetch(`${API_BASE}/api/v1/billing/confirm-demo`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ payment_id: currentPaymentId })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    if (pollingInterval) clearInterval(pollingInterval);
-                    document.getElementById('success-msg').textContent = data.message || 'Thanh toán demo thành công!';
-                    document.getElementById('success-tx-id').textContent = data.payment_ref || currentPaymentId.substring(0, 12).toUpperCase();
-                    document.getElementById('success-quota').textContent =
-                        currentOrder.quotaSec === 0 ? '∞ Không giới hạn' : `+${Math.round((data.quota_added_seconds || currentOrder.quotaSec) / 60)} phút`;
-                    showStep(3);
-                    loadUserPlan();
-                } else {
-                    alert(data.detail || 'Không thể xác nhận demo.');
-                }
-            } catch (e) {
-                alert('Lỗi kết nối: ' + e.message);
-            }
-        }
-
         function startPolling(paymentId) {
             const token = getAuthToken();
             let attempts = 0;
@@ -1348,10 +1314,10 @@
             if (autoBuySku) {
                 window.history.replaceState({}, document.title, window.location.pathname);
                 const knownPlans = {
-                    'pro': { sku: 'pro_monthly', name: 'Gói Pro (1 tháng)', price: 49000, quotaSec: 36000 },
-                    'pro_monthly': { sku: 'pro_monthly', name: 'Gói Pro (1 tháng)', price: 49000, quotaSec: 36000 },
-                    'premium': { sku: 'premium_monthly', name: 'Gói Premium VIP (1 tháng)', price: 99000, quotaSec: 0 },
-                    'premium_monthly': { sku: 'premium_monthly', name: 'Gói Premium VIP (1 tháng)', price: 99000, quotaSec: 0 },
+                    'pro': { sku: 'pro_monthly', name: 'Gói Pro (1 tháng)', price: 149000, quotaSec: 36000 },
+                    'pro_monthly': { sku: 'pro_monthly', name: 'Gói Pro (1 tháng)', price: 149000, quotaSec: 36000 },
+                    'premium': { sku: 'premium_monthly', name: 'Gói Premium VIP (1 tháng)', price: 449000, quotaSec: 126000 },
+                    'premium_monthly': { sku: 'premium_monthly', name: 'Gói Premium VIP (1 tháng)', price: 449000, quotaSec: 126000 },
                     'topup_1h': { sku: 'topup_1h', name: 'Mua thêm 1 giờ bóc sub', price: 9000, quotaSec: 3600 },
                     'topup_5h': { sku: 'topup_5h', name: 'Mua thêm 5 giờ bóc sub', price: 35000, quotaSec: 18000 },
                     'topup_20h': { sku: 'topup_20h', name: 'Mua thêm 20 giờ bóc sub', price: 99000, quotaSec: 72000 }

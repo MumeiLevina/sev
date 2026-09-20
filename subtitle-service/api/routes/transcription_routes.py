@@ -36,6 +36,14 @@ router = APIRouter(prefix="/api/v1/transcriptions", tags=["Transcription"])
 
 # ── Celery Client ──
 celery_client = Celery("subtitle_tasks", broker=REDIS_URL)
+celery_client.conf.update(
+    broker_transport_options={
+        "priority_steps": list(range(10)),
+        "sep": ":",
+        "queue_order_strategy": "priority",
+    },
+    task_default_priority=5,
+)
 
 # ── MinIO Client ──
 minio_client = Minio(
@@ -131,13 +139,29 @@ async def create_transcription_job(
             detail=f"Lỗi lưu trữ tệp tin vào MinIO: {str(e)}",
         )
 
-    # 5. Create TranscriptionJob Record
+    # 5. Determine Job Priority based on user subscription plan
+    # Premium: Priority 9 (VIP Priority — processed first)
+    # Pro: Priority 6 (High priority)
+    # Free: Priority 2 (Standard priority)
+    if user.plan == UserPlan.PREMIUM:
+        task_priority = 9
+        initial_step = "Hàng đợi VIP Priority — Ưu tiên xử lý cao nhất..."
+        create_msg = "Job đã được đưa vào hàng đợi ưu tiên cao nhất (VIP Priority — Xử lý trước)."
+    elif user.plan == UserPlan.PRO:
+        task_priority = 6
+        initial_step = "Hàng đợi Pro — Ưu tiên xử lý cấp 1..."
+        create_msg = "Job đã được đưa vào hàng đợi ưu tiên Pro."
+    else:
+        task_priority = 2
+        initial_step = "Hàng đợi tiêu chuẩn — Đang chờ xử lý..."
+        create_msg = "Job đã được tạo thành công và đang được đưa vào hàng đợi xử lý."
+
     job = TranscriptionJob(
         id=job_id,
         user_id=user.id,
         status=JobStatus.QUEUED,
         progress=0,
-        current_step="Đang chờ trong hàng đợi...",
+        current_step=initial_step,
         original_filename=filename,
         file_size_bytes=file_size,
         language=language,
@@ -148,16 +172,16 @@ async def create_transcription_job(
     db.commit()
     db.refresh(job)
 
-    # 6. Dispatch Celery Task
+    # 6. Dispatch Celery Task with Plan-Based Priority
     try:
-        celery_client.send_task("process_transcription", args=[str(job.id)])
+        celery_client.send_task("process_transcription", args=[str(job.id)], priority=task_priority)
     except Exception as e:
         print(f"[Celery Dispatch Error] {e}")
 
     return TranscriptionCreateResponse(
         job_id=job.id,
         status="queued",
-        message="Job đã được tạo thành công và đang được đưa vào hàng đợi xử lý.",
+        message=create_msg,
     )
 
 

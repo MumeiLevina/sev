@@ -304,7 +304,7 @@ function activatePayment(paymentId, payment) {
                 u.plan_expires_at = expiresAt;
             } else if (payment.sku === 'premium_monthly') {
                 u.plan = 'premium';
-                u.quota_limit_seconds = 360000; // 100 hours or unlimited
+                u.quota_limit_seconds = 126000; // 35 hours (35 * 3600)
                 u.plan_expires_at = expiresAt;
             } else if (payment.quota_seconds > 0) {
                 // Top-up packages (topup_1h, topup_5h, topup_20h, etc.)
@@ -405,6 +405,44 @@ function sendJson(res, statusCode, data) {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     });
     res.end(body);
+}
+
+// ── Priority Queue for Transcription Tasks ──
+// Premium: Priority 3 (Highest - processed first)
+// Pro: Priority 2 (High)
+// Free: Priority 1 (Standard)
+const MAX_CONCURRENT_TRANSCRIBE = 2;
+let runningTranscribeCount = 0;
+const transcribePriorityQueue = [];
+
+function enqueueTranscribeTask(task) {
+    // task = { jobId, filePart, language, userEmail, plan, priority, createdAt }
+    transcribePriorityQueue.push(task);
+    // Sort descending by priority (Premium first), then FIFO by createdAt
+    transcribePriorityQueue.sort((a, b) => {
+        if (b.priority !== a.priority) return b.priority - a.priority;
+        return a.createdAt - b.createdAt;
+    });
+    console.log(`[Priority Queue] Enqueued job ${task.jobId} (Tier: ${task.plan.toUpperCase()}, Priority: ${task.priority}). Active queue: ${transcribePriorityQueue.length}`);
+    processNextTranscribeTask();
+}
+
+async function processNextTranscribeTask() {
+    if (runningTranscribeCount >= MAX_CONCURRENT_TRANSCRIBE || transcribePriorityQueue.length === 0) {
+        return;
+    }
+    const nextTask = transcribePriorityQueue.shift();
+    runningTranscribeCount++;
+    console.log(`[Priority Queue] Dispatching job ${nextTask.jobId} (Tier: ${nextTask.plan.toUpperCase()}, Priority: ${nextTask.priority}). Remaining in queue: ${transcribePriorityQueue.length}`);
+
+    try {
+        await handleTranscribeJob(nextTask.jobId, nextTask.filePart, nextTask.language, nextTask.userEmail);
+    } catch (err) {
+        console.error(`[Priority Queue Error] Job ${nextTask.jobId}:`, err);
+    } finally {
+        runningTranscribeCount--;
+        processNextTranscribeTask();
+    }
 }
 
 // ── Handle Transcribe with OpenAI Whisper API ──
@@ -624,26 +662,44 @@ const server = http.createServer((req, res) => {
 
                 const language = langPart ? langPart.data.toString().trim() : 'zh';
                 const outputFormat = formatPart ? formatPart.data.toString().trim() : 'srt';
-                const jobId = crypto.randomUUID();
+                const userPlan = (authUser ? (authUser.plan || 'free') : 'free').toLowerCase();
+                const priority = userPlan === 'premium' ? 3 : (userPlan === 'pro' ? 2 : 1);
+                const initialStep = userPlan === 'premium'
+                    ? 'Hàng đợi VIP Priority — Đang được ưu tiên xử lý trước...'
+                    : (userPlan === 'pro'
+                        ? 'Hàng đợi Pro — Ưu tiên xử lý cấp 1...'
+                        : 'Hàng đợi tiêu chuẩn — Đang chờ xử lý...');
 
                 jobs.set(jobId, {
                     id: jobId,
                     status: 'queued',
                     progress: 10,
-                    current_step: 'Đang tải tệp tin...',
+                    current_step: initialStep,
                     original_filename: filePart.filename,
                     language: language,
                     output_format: outputFormat,
+                    plan: userPlan,
+                    priority: priority,
                     created_at: new Date().toISOString()
                 });
 
-                // Start transcription process in background
-                handleTranscribeJob(jobId, filePart, language, userEmailForJob);
+                // Start transcription via Priority Queue (Premium processed first)
+                enqueueTranscribeTask({
+                    jobId,
+                    filePart,
+                    language,
+                    userEmail: userEmailForJob,
+                    plan: userPlan,
+                    priority,
+                    createdAt: Date.now()
+                });
 
                 return sendJson(res, 201, {
                     job_id: jobId,
                     status: 'queued',
-                    message: 'Job đã được tạo thành công và đang được xử lý bằng AI.'
+                    message: userPlan === 'premium'
+                        ? 'Job đã được tạo thành công và đang được ưu tiên xử lý trước (VIP Priority).'
+                        : 'Job đã được tạo thành công và đang được xử lý bằng AI.'
                 });
 
             } catch (err) {
@@ -1138,16 +1194,16 @@ const server = http.createServer((req, res) => {
                 {
                     sku: 'pro_monthly',
                     name: 'Pro',
-                    price: 49000,
+                    price: 149000,
                     quota_seconds: 36000,
-                    features: ['600 phút/tháng', 'Hàng đợi ưu tiên', 'Video tới 200MB', 'Lịch sử không giới hạn']
+                    features: ['10 giờ (600 phút)/tháng', 'Hàng đợi ưu tiên', 'Video tới 200MB', 'Lịch sử không giới hạn']
                 },
                 {
                     sku: 'premium_monthly',
                     name: 'Premium VIP',
-                    price: 99000,
-                    quota_seconds: 0, // 0 = unlimited
-                    features: ['Không giới hạn', 'VIP Priority', 'Video tới 500MB', 'Hỗ trợ 24/7']
+                    price: 449000,
+                    quota_seconds: 126000,
+                    features: ['Ưu tiên xử lý cao nhất (VIP Priority #1)', '35 giờ (2.100 phút)/tháng', 'Video tới 500MB', 'Hỗ trợ 24/7']
                 },
                 {
                     sku: 'topup_1h',
@@ -1453,40 +1509,6 @@ const server = http.createServer((req, res) => {
     }
 
     // ═══════════════════════════════════════════════════
-    // BILLING DEMO: POST /api/v1/billing/confirm-demo
-    // Manual payment confirmation for testing (dev only)
-    // ═══════════════════════════════════════════════════
-    if (pathname === '/api/v1/billing/confirm-demo' && req.method === 'POST') {
-        const authUser = getAuthUser(req);
-        if (!authUser) return sendJson(res, 401, { detail: 'Yêu cầu đăng nhập.' });
-
-        let bodyStr = '';
-        req.on('data', c => bodyStr += c);
-        req.on('end', () => {
-            try {
-                const data = JSON.parse(bodyStr || '{}');
-                const payment = pendingPayments.get(data.payment_id);
-                if (!payment || payment.user_email !== authUser.email) {
-                    return sendJson(res, 404, { detail: 'Không tìm thấy giao dịch.' });
-                }
-                if (payment.status === 'completed') {
-                    return sendJson(res, 200, { message: 'Giao dịch này đã được xác nhận rồi.' });
-                }
-                activatePayment(data.payment_id, payment);
-                console.log(`[Demo Payment] Manually confirmed payment ${payment.payment_ref} for ${authUser.email}`);
-                return sendJson(res, 200, {
-                    message: `✅ Demo: Đã xác nhận thanh toán ${payment.payment_ref}. Quota đã được cộng!`,
-                    payment_ref: payment.payment_ref,
-                    quota_added_seconds: payment.quota_seconds
-                });
-            } catch (e) {
-                return sendJson(res, 400, { detail: 'Dữ liệu không hợp lệ.' });
-            }
-        });
-        return;
-    }
-
-    // ═══════════════════════════════════════════════════
     // BILLING API ROUTE: POST /api/v1/billing/upgrade (legacy compat)
     // ═══════════════════════════════════════════════════
     if (pathname === '/api/v1/billing/upgrade' && req.method === 'POST') {
@@ -1497,7 +1519,7 @@ const server = http.createServer((req, res) => {
                 const data = JSON.parse(bodyStr || '{}');
                 const targetPlan = (data.plan || 'pro').toLowerCase();
                 if (targetPlan === 'pro') serverQuota.limitSeconds = 36000;
-                else if (targetPlan === 'premium') serverQuota.limitSeconds = 360000;
+                else if (targetPlan === 'premium') serverQuota.limitSeconds = 126000;
                 serverQuota.usedSeconds = 0;
                 return sendJson(res, 200, {
                     message: `Nâng cấp thành công gói ${targetPlan.toUpperCase()}`,

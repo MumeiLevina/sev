@@ -56,7 +56,7 @@ ALLOWED_EXTENSIONS = {
 # ── Quota (seconds) ──
 FREE_QUOTA_SECONDS = int(os.getenv("FREE_QUOTA_SECONDS", "3600"))
 PRO_QUOTA_SECONDS = int(os.getenv("PRO_QUOTA_SECONDS", "36000"))
-PREMIUM_QUOTA_SECONDS = int(os.getenv("PREMIUM_QUOTA_SECONDS", "0"))  # 0 = unlimited
+PREMIUM_QUOTA_SECONDS = int(os.getenv("PREMIUM_QUOTA_SECONDS", "126000"))  # 126000 = 35 hours (35 * 3600)
 
 # ── Whisper API ──
 WHISPER_MODEL = "whisper-1"

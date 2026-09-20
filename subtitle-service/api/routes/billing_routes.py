@@ -50,7 +50,7 @@ def get_plans():
             ),
             PlanInfo(
                 name="Chuyên Nghiệp (Pro)",
-                price_vnd=99000,
+                price_vnd=149000,
                 quota_seconds=PRO_QUOTA_SECONDS,
                 features=[
                     "10 giờ (600 phút) bóc sub tốc độ cao",
@@ -64,12 +64,12 @@ def get_plans():
             ),
             PlanInfo(
                 name="Doanh Nghiệp (Premium VIP)",
-                price_vnd=249000,
-                quota_seconds=PREMIUM_QUOTA_SECONDS,  # 0 = unlimited
+                price_vnd=449000,
+                quota_seconds=PREMIUM_QUOTA_SECONDS,
                 features=[
-                    "Không giới hạn thời lượng sử dụng (Unlimited)",
+                    "Ưu tiên xử lý cao nhất (VIP Priority — Luôn chạy trước)",
+                    "35 giờ (2.100 phút) thời lượng bóc sub tốc độ cao",
                     "Xử lý song song đa luồng tối đa tốc độ",
-                    "Ưu tiên hàng đợi cao nhất (VIP Priority)",
                     "Dung lượng tệp lên tới 500MB",
                     "Tự động nhận diện đa ngôn ngữ thông minh",
                     "Hỗ trợ kỹ thuật 24/7 riêng biệt",
@@ -152,10 +152,10 @@ def upgrade_plan(
         )
 
     price_map = {
-        "pro": 99000,
-        "premium": 249000,
+        "pro": 149000,
+        "premium": 449000,
     }
-    amount = price_map.get(body.plan, 99000)
+    amount = price_map.get(body.plan, 149000)
     tx_id = uuid.uuid4()
 
     # In a real environment with webhook, status would be PENDING until IPN webhook fires.
