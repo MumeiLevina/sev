@@ -19,20 +19,26 @@ const PORT = parseInt(process.env.PORT, 10) || 3000;
 const ROOT_DIR = __dirname;
 const ENV_PATH = path.join(ROOT_DIR, 'subtitle-service', '.env');
 
-// ── Read Environment Variables from subtitle-service/.env ──
+// ── Read Environment Variables from .env and subtitle-service/.env ──
 function loadEnv() {
     const env = {};
-    if (fs.existsSync(ENV_PATH)) {
-        const content = fs.readFileSync(ENV_PATH, 'utf-8');
-        content.split('\n').forEach(line => {
-            const trimmed = line.trim();
-            if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
-                const idx = trimmed.indexOf('=');
-                const key = trimmed.substring(0, idx).trim();
-                const val = trimmed.substring(idx + 1).trim().replace(/^["']|["']$/g, '');
-                env[key] = val;
-            }
-        });
+    const envPaths = [
+        path.join(ROOT_DIR, '.env'),
+        ENV_PATH
+    ];
+    for (const p of envPaths) {
+        if (fs.existsSync(p)) {
+            const content = fs.readFileSync(p, 'utf-8');
+            content.split('\n').forEach(line => {
+                const trimmed = line.trim();
+                if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+                    const idx = trimmed.indexOf('=');
+                    const key = trimmed.substring(0, idx).trim();
+                    const val = trimmed.substring(idx + 1).trim().replace(/^["']|["']$/g, '');
+                    if (val) env[key] = val;
+                }
+            });
+        }
     }
     return env;
 }
@@ -204,24 +210,35 @@ if (DATABASE_URL) {
 function syncUserToSupabase(email, account) {
     if (!pgPool || !account || !account.user) return;
     const u = account.user;
-    const userId = (u.id && u.id.length === 36) ? u.id : crypto.randomUUID();
     pgPool.query(`
-        INSERT INTO users (id, email, password_hash, display_name, plan, quota_used_seconds, quota_limit_seconds)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        ON CONFLICT (email) DO UPDATE SET
-            password_hash = EXCLUDED.password_hash,
-            display_name = EXCLUDED.display_name,
-            quota_used_seconds = EXCLUDED.quota_used_seconds,
-            quota_limit_seconds = EXCLUDED.quota_limit_seconds;
+        UPDATE users
+        SET password_hash = $1, display_name = $2, plan = $3, quota_used_seconds = $4, quota_limit_seconds = $5
+        WHERE LOWER(email) = LOWER($6);
     `, [
-        userId,
-        email.toLowerCase(),
         account.passwordHash || '',
         u.display_name || email.split('@')[0],
         u.plan || 'free',
         u.quota_used_seconds || 0,
-        u.quota_limit_seconds || 3600
-    ]).catch(err => console.warn('[Supabase Cloud Sync Error]:', err.message));
+        u.quota_limit_seconds || 3600,
+        email
+    ]).then(res => {
+        if (res && res.rowCount === 0) {
+            const userId = (u.id && u.id.length === 36) ? u.id : crypto.randomUUID();
+            return pgPool.query(`
+                INSERT INTO users (id, email, password_hash, display_name, plan, quota_used_seconds, quota_limit_seconds)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                ON CONFLICT DO NOTHING;
+            `, [
+                userId,
+                email.toLowerCase(),
+                account.passwordHash || '',
+                u.display_name || email.split('@')[0],
+                u.plan || 'free',
+                u.quota_used_seconds || 0,
+                u.quota_limit_seconds || 3600
+            ]);
+        }
+    }).catch(err => console.warn('[Supabase Cloud Sync Error]:', err.message));
 }
 
 function saveUsersDb(syncedEmail) {
@@ -239,12 +256,30 @@ function saveUsersDb(syncedEmail) {
     }
 }
 
+let lastDbMtime = 0;
+function checkReloadUsersDb() {
+    try {
+        if (fs.existsSync(USERS_DB_FILE)) {
+            const stat = fs.statSync(USERS_DB_FILE);
+            if (stat.mtimeMs > lastDbMtime) {
+                const raw = fs.readFileSync(USERS_DB_FILE, 'utf-8');
+                const data = JSON.parse(raw);
+                for (const [k, v] of Object.entries(data)) {
+                    localUsers.set(k.toLowerCase(), v);
+                }
+                lastDbMtime = stat.mtimeMs;
+            }
+        }
+    } catch (_) {}
+}
+
 function getAuthUser(req) {
     const authHeader = req.headers['authorization'] || '';
     if (!authHeader.startsWith('Bearer ')) return null;
     const token = authHeader.substring(7).trim();
     const payload = verifyJwt(token);
     if (!payload || !payload.email) return null;
+    checkReloadUsersDb();
     const account = localUsers.get(payload.email.toLowerCase());
     return account ? account.user : null;
 }
@@ -1198,10 +1233,11 @@ const server = http.createServer((req, res) => {
                 console.log(`[Payment] Created payment ${paymentRef} for user ${authUser.email}: ${sku} ${amount}đ via ${payment_method}`);
 
                 // ── Try to create real PayOS payment link ──
-                const PAYOS_CLIENT_ID = process.env.PAYOS_CLIENT_ID || envVars.PAYOS_CLIENT_ID;
-                const PAYOS_API_KEY = process.env.PAYOS_API_KEY || envVars.PAYOS_API_KEY;
-                const PAYOS_CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY || envVars.PAYOS_CHECKSUM_KEY;
-                const BASE_URL = process.env.BASE_URL || envVars.BASE_URL || 'https://kinetictech.icu';
+                const currentEnv = loadEnv();
+                const PAYOS_CLIENT_ID = process.env.PAYOS_CLIENT_ID || currentEnv.PAYOS_CLIENT_ID || envVars.PAYOS_CLIENT_ID;
+                const PAYOS_API_KEY = process.env.PAYOS_API_KEY || currentEnv.PAYOS_API_KEY || envVars.PAYOS_API_KEY;
+                const PAYOS_CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY || currentEnv.PAYOS_CHECKSUM_KEY || envVars.PAYOS_CHECKSUM_KEY;
+                const BASE_URL = process.env.BASE_URL || currentEnv.BASE_URL || envVars.BASE_URL || 'https://kinetictech.icu';
 
                 let checkoutUrl = null;
                 let qrCode = null;
@@ -1345,7 +1381,8 @@ const server = http.createServer((req, res) => {
                 console.log('[PayOS Webhook] Received:', JSON.stringify(data).substring(0, 200));
 
                 // Verify PayOS webhook signature
-                const PAYOS_CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY || envVars.PAYOS_CHECKSUM_KEY;
+                const currentEnv = loadEnv();
+                const PAYOS_CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY || currentEnv.PAYOS_CHECKSUM_KEY || envVars.PAYOS_CHECKSUM_KEY;
                 if (PAYOS_CHECKSUM_KEY && data.signature) {
                     const webhookData = data.data || {};
                     const rawStr = Object.keys(webhookData).sort()
