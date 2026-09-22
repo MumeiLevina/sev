@@ -46,6 +46,7 @@
         'convert-pressure.html':   { d: 'Chuyển đổi áp suất: Pascal, Bar, Atm, mmHg, PSI, Torr. Công cụ trực tuyến chính xác.' },
         'convert-frequency.html':  { d: 'Chuyển đổi tần số: Hz, kHz, MHz, GHz, RPM. Công cụ trực tuyến miễn phí.' },
         'compressor.html':         { d: 'Nén file ảnh và tài liệu trực tuyến miễn phí. Giảm dung lượng PNG, JPG, PDF mà vẫn giữ chất lượng.' },
+        'bg-remover.html':         { d: 'Xóa nền ảnh thời trang và sản phẩm bằng AI. Tách nền trong suốt PNG hoặc nền trắng #FFFFFF chuẩn e-commerce.' },
         'file-converter.html':     { d: 'Chuyển đổi định dạng file trực tuyến: ảnh, PDF, Word, Excel. Không cần cài phần mềm.' },
         'pdf-extractor.html':      { d: 'Trích xuất văn bản và tách trang PDF trực tuyến. Miễn phí, bảo mật, không cần đăng ký.' },
         'subtitle-extractor.html': { d: 'Bóc sub video và audio tự động bằng AI Whisper. Tách phụ đề, gán timestamp chính xác, xuất file SRT, VTT, TXT với 1 giờ miễn phí cho tài khoản mới.' },

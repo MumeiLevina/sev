@@ -14,6 +14,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const sharp = require('sharp');
 
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 const ROOT_DIR = __dirname;
@@ -50,6 +51,13 @@ if (OPENAI_API_KEY) {
     console.log('✓ OpenAI API Key loaded successfully from subtitle-service/.env');
 } else {
     console.warn('⚠️ Warning: OPENAI_API_KEY not found in subtitle-service/.env. Local AI transcription will be in demo mode.');
+}
+
+const BACKGROUND_REMOVAL_API_KEY = process.env.BACKGROUND_REMOVAL_API_KEY || envVars.BACKGROUND_REMOVAL_API_KEY || '';
+if (BACKGROUND_REMOVAL_API_KEY) {
+    console.log('✓ Background Removal API Key loaded successfully.');
+} else {
+    console.log('ℹ️ Notice: BACKGROUND_REMOVAL_API_KEY not configured. Smart local engine active.');
 }
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY || envVars.JWT_SECRET_KEY || 'kinetic-tech-jwt-secret-key-production-2026';
@@ -565,6 +573,196 @@ async function handleTranscribeJob(jobId, filePart, language, userEmail) {
     }
 }
 
+// ── Image Background Removal Engine ──
+async function processBackgroundRemoval(fileBuf, contentType, requestedBg = 'transparent') {
+    // 1. Rotate based on EXIF orientation and read metadata
+    const rotated = sharp(fileBuf).rotate();
+    const meta = await rotated.metadata();
+
+    if (!meta || !meta.width || !meta.height) {
+        throw new Error('Dữ liệu ảnh không hợp lệ.');
+    }
+
+    // 2. Resize down to max 2048px on longest side if necessary (preserves aspect ratio)
+    const longestSide = Math.max(meta.width, meta.height);
+    let normalizedPipeline = rotated;
+    if (longestSide > 2048) {
+        normalizedPipeline = normalizedPipeline.resize({
+            width: 2048,
+            height: 2048,
+            fit: 'inside',
+            withoutEnlargement: true
+        });
+    }
+
+    const normalizedBuffer = await normalizedPipeline.png().toBuffer();
+    const normalizedMeta = await sharp(normalizedBuffer).metadata();
+    const { width, height } = normalizedMeta;
+
+    let transparentPngBuffer = null;
+
+    // 3. Try Remote API if key is configured
+    if (BACKGROUND_REMOVAL_API_KEY) {
+        try {
+            const formData = new FormData();
+            const fileBlob = new Blob([normalizedBuffer], { type: 'image/png' });
+            formData.append('image_file', fileBlob, 'image.png');
+            formData.append('size', 'auto');
+
+            const apiRes = await fetch('https://api.remove.bg/v1.0/removebg', {
+                method: 'POST',
+                headers: {
+                    'X-Api-Key': BACKGROUND_REMOVAL_API_KEY
+                },
+                body: formData
+            });
+
+            if (apiRes.ok) {
+                transparentPngBuffer = Buffer.from(await apiRes.arrayBuffer());
+            } else {
+                const errText = await apiRes.text();
+                console.warn(`[Remote Remove.bg API Warning (${apiRes.status})]: ${errText}. Using local smart engine.`);
+            }
+        } catch (apiErr) {
+            console.warn('[Remote Background Removal Warning]:', apiErr.message, '. Using local smart engine.');
+        }
+    }
+
+    // 4. Smart Local Segmentation Engine (Fast, zero external cost, runs in RAM)
+    if (!transparentPngBuffer) {
+        const { data } = await sharp(normalizedBuffer).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+
+        let rSum = 0, gSum = 0, bSum = 0, count = 0;
+        const cornerSize = Math.max(2, Math.min(10, Math.floor(Math.min(width, height) / 10)));
+        const samplePixel = (x, y) => {
+            const idx = (y * width + x) * 4;
+            rSum += data[idx];
+            gSum += data[idx + 1];
+            bSum += data[idx + 2];
+            count++;
+        };
+
+        for (let x = 0; x < cornerSize; x++) {
+            for (let y = 0; y < cornerSize; y++) {
+                samplePixel(x, y); // top-left
+                samplePixel(width - 1 - x, y); // top-right
+                samplePixel(x, height - 1 - y); // bottom-left
+                samplePixel(width - 1 - x, height - 1 - y); // bottom-right
+            }
+        }
+
+        const bgR = rSum / count;
+        const bgG = gSum / count;
+        const bgB = bSum / count;
+
+        let varSum = 0;
+        for (let x = 0; x < cornerSize; x++) {
+            for (let y = 0; y < cornerSize; y++) {
+                const idx1 = (y * width + x) * 4;
+                const d1 = Math.sqrt((data[idx1] - bgR)**2 + (data[idx1+1] - bgG)**2 + (data[idx1+2] - bgB)**2);
+                varSum += d1;
+            }
+        }
+        const avgDev = varSum / (cornerSize * cornerSize);
+        const lowThresh = Math.max(16, avgDev * 1.8);
+        const highThresh = lowThresh + 28;
+
+        // Flood fill from all 4 borders to isolate exterior background from subject
+        const visited = new Uint8Array(width * height);
+        const queue = [];
+
+        for (let x = 0; x < width; x++) {
+            queue.push(x, 0);
+            queue.push(x, height - 1);
+            visited[0 * width + x] = 1;
+            visited[(height - 1) * width + x] = 1;
+        }
+        for (let y = 1; y < height - 1; y++) {
+            queue.push(0, y);
+            queue.push(width - 1, y);
+            visited[y * width + 0] = 1;
+            visited[y * width + (width - 1)] = 1;
+        }
+
+        let head = 0;
+        while (head < queue.length) {
+            const cx = queue[head++];
+            const cy = queue[head++];
+            const cidx = (cy * width + cx) * 4;
+
+            const dist = Math.sqrt((data[cidx] - bgR)**2 + (data[cidx+1] - bgG)**2 + (data[cidx+2] - bgB)**2);
+            if (dist <= highThresh) {
+                const neighbors = [
+                    [cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]
+                ];
+                for (const [nx, ny] of neighbors) {
+                    if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                        const npos = ny * width + nx;
+                        if (!visited[npos]) {
+                            visited[npos] = 1;
+                            const nidx = npos * 4;
+                            const ndist = Math.sqrt((data[nidx] - bgR)**2 + (data[nidx+1] - bgG)**2 + (data[nidx+2] - bgB)**2);
+                            if (ndist <= highThresh) {
+                                queue.push(nx, ny);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Apply alpha matting to exterior background pixels
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const pos = y * width + x;
+                const idx = pos * 4;
+                if (visited[pos]) {
+                    const dist = Math.sqrt((data[idx] - bgR)**2 + (data[idx+1] - bgG)**2 + (data[idx+2] - bgB)**2);
+                    if (dist <= lowThresh) {
+                        data[idx + 3] = 0; // True transparent alpha
+                    } else if (dist <= highThresh) {
+                        const alphaRatio = (dist - lowThresh) / (highThresh - lowThresh);
+                        data[idx + 3] = Math.round(alphaRatio * 255);
+                    }
+                }
+            }
+        }
+
+        transparentPngBuffer = await sharp(data, {
+            raw: { width, height, channels: 4 }
+        }).png().toBuffer();
+    }
+
+    // 5. Mode composition: Transparent or White #FFFFFF
+    const bg = (requestedBg || 'transparent').toLowerCase() === 'white' ? 'white' : 'transparent';
+    let processedBuffer = transparentPngBuffer;
+    let jpgBuffer = null;
+
+    if (bg === 'white') {
+        // Flatten subject over pure #FFFFFF
+        processedBuffer = await sharp(transparentPngBuffer)
+            .flatten({ background: { r: 255, g: 255, b: 255 } })
+            .png()
+            .toBuffer();
+
+        jpgBuffer = await sharp(transparentPngBuffer)
+            .flatten({ background: { r: 255, g: 255, b: 255 } })
+            .jpeg({ quality: 95 })
+            .toBuffer();
+    }
+
+    return {
+        background: bg,
+        width,
+        height,
+        originalUrl: `data:${contentType || 'image/png'};base64,${normalizedBuffer.toString('base64')}`,
+        processedUrl: `data:image/png;base64,${processedBuffer.toString('base64')}`,
+        jpgUrl: jpgBuffer ? `data:image/jpeg;base64,${jpgBuffer.toString('base64')}` : null,
+        processedSize: processedBuffer.length,
+        originalSize: fileBuf.length
+    };
+}
+
 // ── HTTP Server Request Handler ──
 const server = http.createServer((req, res) => {
     // Handle CORS preflight
@@ -930,6 +1128,81 @@ const server = http.createServer((req, res) => {
             duration_ms: job.duration_ms || (Date.now() - job.created_at),
             result: job.status === 'completed' ? job.result : null
         });
+    }
+
+    // ═══════════════════════════════════════════════════
+    // IMAGE BACKGROUND REMOVER API: POST /api/v1/remove-background & /api/remove-background
+    // ═══════════════════════════════════════════════════
+    if ((pathname === '/api/v1/remove-background' || pathname === '/api/remove-background') && req.method === 'POST') {
+        const contentType = req.headers['content-type'] || '';
+        const boundaryMatch = /boundary=([^\s;]+)/i.exec(contentType);
+
+        if (!boundaryMatch) {
+            return sendJson(res, 400, { success: false, detail: 'Định dạng yêu cầu phải là multipart/form-data.' });
+        }
+
+        const boundary = boundaryMatch[1];
+        const chunks = [];
+        let totalLen = 0;
+        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+        req.on('data', chunk => {
+            totalLen += chunk.length;
+            chunks.push(chunk);
+        });
+
+        req.on('end', async () => {
+            try {
+                const bodyBuf = Buffer.concat(chunks);
+                const parts = parseMultipart(bodyBuf, boundary);
+
+                const filePart = parts.find(p => p.name === 'image' || (p.filename && p.data && p.data.length > 0));
+                const bgPart = parts.find(p => p.name === 'background');
+
+                if (!filePart || !filePart.data || filePart.data.length === 0) {
+                    return sendJson(res, 400, { success: false, detail: 'Không tìm thấy tệp ảnh tải lên.' });
+                }
+
+                if (filePart.data.length > MAX_FILE_SIZE) {
+                    return sendJson(res, 400, { success: false, detail: 'Ảnh không được vượt quá 10MB.' });
+                }
+
+                // Validate MIME type & file signatures
+                const mime = (filePart.contentType || '').toLowerCase();
+                const fn = (filePart.filename || '').toLowerCase();
+                const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+                const allowedExts = ['.jpg', '.jpeg', '.png', '.webp'];
+                const hasValidExt = allowedExts.some(ext => fn.endsWith(ext));
+                const hasValidMime = allowedMimes.includes(mime);
+
+                const isJpeg = filePart.data.length >= 2 && filePart.data[0] === 0xFF && filePart.data[1] === 0xD8;
+                const isPng = filePart.data.length >= 8 && filePart.data[0] === 0x89 && filePart.data[1] === 0x50 && filePart.data[2] === 0x4E && filePart.data[3] === 0x47;
+                const isRiff = filePart.data.length >= 12 && filePart.data[0] === 0x52 && filePart.data[1] === 0x49 && filePart.data[2] === 0x46 && filePart.data[3] === 0x46;
+                const isWebp = isRiff && filePart.data.subarray(8, 12).toString('ascii') === 'WEBP';
+
+                if (!isJpeg && !isPng && !isWebp && !hasValidMime && !hasValidExt) {
+                    return sendJson(res, 400, { success: false, detail: 'Định dạng ảnh không được hỗ trợ.' });
+                }
+
+                const requestedBg = bgPart ? bgPart.data.toString('utf-8').trim().toLowerCase() : 'transparent';
+
+                const result = await processBackgroundRemoval(filePart.data, filePart.contentType, requestedBg);
+
+                return sendJson(res, 200, {
+                    success: true,
+                    ...result,
+                    message: 'Xóa nền ảnh thành công!'
+                });
+
+            } catch (err) {
+                console.error('[Remove Background Error]:', err);
+                return sendJson(res, 500, {
+                    success: false,
+                    detail: 'Không thể xóa nền ảnh. Vui lòng thử lại.'
+                });
+            }
+        });
+        return;
     }
 
     // ═══════════════════════════════════════════════════
