@@ -43,8 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // BACKEND API CLIENT & ASYNC JOB CONTROLLER
     // ==========================================
-    // Relative path /api/v1 routes directly to dev-server.js on both Render (kinetictech.icu) and Localhost
-    const API_BASE = window.PDF_API_URL || '/api/v1';
+    const currentDomain = location.hostname.replace(/^www\./, '');
+    const API_BASE = window.PDF_API_URL || (
+        location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+            ? (location.port === '3000' ? '/api/v1' : 'http://localhost:8080/api/v1')
+            : `https://pdf-api.${currentDomain}/api/v1`
+    );
     let isBackendOnline = false;
 
     async function checkBackendHealth() {
@@ -76,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function pollJobProgress(jobId, handlers) {
         const { percentElem, barElem, statusTextElem, stepDetailElem, downloadArea, downloadBtn, onComplete } = handlers;
-        
+
         const stepMessages = {
             'queued_in_broker': 'Đang xếp hàng trong Message Broker (Redis)...',
             'fetching_from_storage': 'Worker đang tải tài liệu từ Object Storage...',
@@ -265,10 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 alert(`Không thể kết nối đến máy chủ chuyển đổi Backend (${API_BASE}).\n\n` +
-                      `Hướng dẫn khởi chạy Backend:\n` +
-                      `1. Mở Terminal tại thư mục: pdf-converter-service\n` +
-                      `2. Chạy lệnh: docker-compose up -d\n\n` +
-                      `Chi tiết lỗi: ${err.message}`);
+                    `Hướng dẫn khởi chạy Backend:\n` +
+                    `1. Mở Terminal tại thư mục: pdf-converter-service\n` +
+                    `2. Chạy lệnh: docker-compose up -d\n\n` +
+                    `Chi tiết lỗi: ${err.message}`);
             }
         });
     }
@@ -403,10 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 alert(`Không thể kết nối đến máy chủ chuyển đổi Backend (${API_BASE}).\n\n` +
-                      `Hướng dẫn khởi chạy Backend:\n` +
-                      `1. Mở Terminal tại thư mục: pdf-converter-service\n` +
-                      `2. Chạy lệnh: docker-compose up -d\n\n` +
-                      `Chi tiết lỗi: ${err.message}`);
+                    `Hướng dẫn khởi chạy Backend:\n` +
+                    `1. Mở Terminal tại thư mục: pdf-converter-service\n` +
+                    `2. Chạy lệnh: docker-compose up -d\n\n` +
+                    `Chi tiết lỗi: ${err.message}`);
             }
         });
     }
